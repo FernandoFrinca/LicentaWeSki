@@ -4,23 +4,31 @@ import 'package:weski/Assets/Colors.dart';
 final ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
   colorScheme: const ColorScheme.light(
-    primary: Color(licentaColors.opacity | licentaColors.licenta_light_red),
-    onPrimary: Color(licentaColors.opacity | licentaColors.licenta_light_white),
-    secondary: Color(licentaColors.opacity | licentaColors.licenta_light_grey),
-    onSecondary: Color(licentaColors.opacity | licentaColors.licenta_light_black),
-    surface: Color(licentaColors.opacity | licentaColors.licenta_light_white),
-    onSurface: Color(licentaColors.opacity | licentaColors.licenta_light_black),
+
+    surface: Color(licentaColors.opacity | licentaColors.background_l),
+    onSurface: Color(licentaColors.opacity | licentaColors.colorBlack),
+
+    primary: Color(licentaColors.opacity | licentaColors.custom_l_blue),
+    onPrimary: Color(licentaColors.opacity | licentaColors.colorWhite),
+
+    secondary: Color(licentaColors.opacity | licentaColors.custom_l_GrayBlue),
+    onSecondary: Color(licentaColors.opacity | licentaColors.colorBlack),
+
+
+
   ),
 );
 
 final ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
   colorScheme: const ColorScheme.dark(
-    primary: Color(licentaColors.opacity | licentaColors.licenta_dark_red),
-    onPrimary: Color(licentaColors.opacity | licentaColors.licenta_dark_white),
-    secondary: Color(licentaColors.opacity | licentaColors.licenta_dark_grey),
-    onSecondary: Color(licentaColors.opacity | licentaColors.licenta_dark_black),
-    surface: Color(licentaColors.opacity | licentaColors.licenta_dark_black),
-    onSurface: Color(licentaColors.opacity | licentaColors.licenta_dark_white),
+    surface: Color(licentaColors.opacity | licentaColors.background_d),
+    onSurface: Color(licentaColors.opacity | licentaColors.colorWhite),
+
+    primary: Color(licentaColors.opacity | licentaColors.custom_l_blue),
+    onPrimary: Color(licentaColors.opacity | licentaColors.colorWhite),
+
+    secondary: Color(licentaColors.opacity | licentaColors.custom_l_GrayBlue),
+    onSecondary: Color(licentaColors.opacity | licentaColors.colorBlack),
   ),
 );

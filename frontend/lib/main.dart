@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weski/Assets/Theme.dart';
+import 'package:weski/Pages/LoginPage.dart';
 
 import 'Pages/HomePage.dart';
 
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: ThemeMode.system,
-      home: const HomePage(),
+      home:  LoginPage(),
     );
   }
 }
