@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:weski/Api/userApi.dart';
 
 import '../Assets/Colors.dart';
 import '../Assets/Theme.dart';
+import '../ConcretObjects/User.dart';
 import '../Widget/CustomTextField.dart';
+import 'HomePage.dart';
 import 'RegisterPage.dart';
 
 class LoginPage extends StatelessWidget {
@@ -10,9 +13,31 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final theme = Theme.of(context);
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    User? currentUser;
+
+    final TextEditingController _usernameController = new TextEditingController();
+    final TextEditingController _passwordController = new TextEditingController();
+
+
+
+    @override
+    void dispose() {
+      _usernameController.dispose();
+      _passwordController.dispose();
+    }
+
+    Future<User?> loginLogic() async{
+      String username = _usernameController.text;
+      String password = _passwordController.text;
+
+      return userApi.userLoginValidation(username, password);
+
+      //dispose();
+    }
 
     return Scaffold(
 
@@ -35,8 +60,9 @@ class LoginPage extends StatelessWidget {
               Container(
                 width: screenWidth * 0.8,
                 height: screenHeight * 0.08,
-                child: CustomTextFormField(
+                child: CustomTextField(
                   label: "Username",
+                  controller: _usernameController,
                   icon: Icons.person_2_outlined,
                   borderColor: theme.colorScheme.primary.value,
                   fillColor: theme.colorScheme.primary.value,
@@ -52,8 +78,9 @@ class LoginPage extends StatelessWidget {
               Container(
                 width: screenWidth * 0.8,
                 height: screenHeight * 0.08,
-                child: CustomTextFormField(
+                child: CustomTextField(
                   label: "Password",
+                  controller: _passwordController,
                   icon: Icons.vpn_key_outlined,
                   borderColor: theme.colorScheme.secondary.value,
                   fillColor: theme.colorScheme.secondary.value,
@@ -79,8 +106,19 @@ class LoginPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
+                    currentUser = await loginLogic();
+                    if(currentUser != null){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HomePage(curentUser: currentUser!),
+                        ),
+                      );
+                    }
+                    else{
 
+                    }
                   },
                   child: const Text('Log In'),
                 ),
@@ -107,6 +145,22 @@ class LoginPage extends StatelessWidget {
                   );
                 },
                 child: Text('Register now'),
+              ),
+
+              TextButton(
+                style: TextButton.styleFrom(
+                  foregroundColor: Color(licentaColors.opacity | theme.colorScheme.primary.value),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomePage(curentUser: null),
+                    ),
+                  );
+                },
+                child: Text('test->mainPage'),
               ),
             ],
           ),

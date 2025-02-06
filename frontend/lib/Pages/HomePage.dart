@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:weski/Api/skiResortAPI.dart';
+import 'package:weski/ConcretObjects/User.dart';
 import 'package:weski/Pages/friendsPage.dart';
 import 'package:weski/Widget/customDraggable.dart';
 
@@ -11,7 +12,8 @@ import '../Widget/customDrawer.dart';
 import '../Widget/customSearch.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final User? curentUser;
+  HomePage({Key? key, required this.curentUser}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -319,6 +321,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       drawer: customDrawer(
+        user: widget.curentUser!,
         screenHeight: screenHeight,
         screenWidth: screenWidth,
       ),

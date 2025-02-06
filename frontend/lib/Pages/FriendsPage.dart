@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weski/Widget/addFriends.dart';
 import 'package:weski/Widget/groupCard.dart';
 
 import '../Widget/friendCard.dart';
@@ -15,6 +16,7 @@ class _friendsPageState extends State<friendsPage> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    final TextEditingController _friendController = TextEditingController();
     double cardHeight = screenHeight * 0.21;
     double friendsHeight = screenHeight * 0.1;
     return Scaffold(
@@ -31,7 +33,12 @@ class _friendsPageState extends State<friendsPage> {
               right: 12,
             ),
             child: IconButton(onPressed:(){
-
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return addFriends(friendController: _friendController,);
+                },
+              );
             }, icon: Icon(Icons.person_add_outlined, size: 36,)),
           )
         ],

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../Assets/Colors.dart';
 
 
-class CustomTextFormField extends StatefulWidget {
+class CustomTextField extends StatefulWidget {
   final IconData icon;
   final String label;
   final int borderColor;
@@ -13,8 +13,9 @@ class CustomTextFormField extends StatefulWidget {
   final double borderRadius;
   final bool errorState;
   final bool isPasswordField;
+  final TextEditingController controller;
 
-  CustomTextFormField({
+  CustomTextField({
     super.key,
     required this.icon,
     required this.label,
@@ -25,13 +26,14 @@ class CustomTextFormField extends StatefulWidget {
     required this.borderRadius,
     required this.errorState,
     this.isPasswordField = false,
+    required this.controller
   });
 
   @override
-  State<CustomTextFormField> createState() => _CustomTextFormFieldState();
+  State<CustomTextField> createState() => _CustomTextFieldState();
 }
 
-class _CustomTextFormFieldState extends State<CustomTextFormField> {
+class _CustomTextFieldState extends State<CustomTextField> {
   bool _passwordVisible = true;
 
   @override
@@ -44,6 +46,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return TextField(
+      controller: widget.controller,
       obscureText: widget.isPasswordField && !_passwordVisible,
       style: TextStyle(color: Color(licentaColors.opacity | widget.texColor)),
       decoration: InputDecoration(
