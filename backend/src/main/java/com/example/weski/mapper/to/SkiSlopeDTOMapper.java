@@ -20,7 +20,7 @@ public class SkiSlopeDTOMapper implements Function<SkiSlope, SkiSlopeDTO> {
         SkiSlopeDTO skiSlopeDTO = new SkiSlopeDTO();
         skiSlopeDTO.setId(skiSlope.getId());
         skiSlopeDTO.setName(skiSlope.getName());
-        skiSlopeDTO.setDificulty(skiSlope.getDificulty());
+        skiSlopeDTO.setDifficulty(skiSlope.getDificulty());
         skiSlopeDTO.setEnd_altitude(skiSlope.getEnd_altitude());
         skiSlopeDTO.setStart_altitude(skiSlope.getStart_altitude());
         skiSlopeDTO.setLength(skiSlope.getLength());

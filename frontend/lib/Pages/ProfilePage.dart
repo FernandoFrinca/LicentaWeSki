@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:weski/Widget/infoWidget.dart';
 import 'package:weski/Widget/profileAvatar.dart';
 
+import '../ConcretObjects/User.dart';
 import '../Widget/customButton.dart';
 import '../Widget/customTriangle.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+
+  final User? curentUser;
+  ProfilePage({Key? key, required this.curentUser}) : super(key: key);
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -141,7 +144,7 @@ class _ProfilePageState extends State<ProfilePage> {
                      ),
                     Divider(),
                     infoWidget(
-                      selectedData: "Username",
+                      selectedData: widget.curentUser!.getUsername(),
                       selectedI: Icons.person,
                       selectediconColor: 0xFF000000,
                       selectedtextColor: 0xFF000000,
@@ -149,7 +152,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       screenW: screenWidth,
                     ),
                     infoWidget(
-                      selectedData: "E-mail",
+                      selectedData: widget.curentUser!.getEmail(),
                       selectedI: Icons.mail_rounded,
                       selectediconColor: 0xFF000000,
                       selectedtextColor: 0xFF000000,
@@ -157,7 +160,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       screenW: screenWidth,
                     ),
                     infoWidget(
-                      selectedData: "Age",
+                      selectedData:(widget.curentUser!.getAge() == null) ? 'Not Set' : widget.curentUser!.getAge().toString(),
                       selectedI: Icons.calendar_month_rounded,
                       selectediconColor: 0xFF000000,
                       selectedtextColor: 0xFF000000,
@@ -165,7 +168,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       screenW: screenWidth,
                     ),
                     infoWidget(
-                      selectedData: "Sex",
+                      selectedData: (widget.curentUser!.getGender() == null)?'Not Set':widget.curentUser!.getGender().toString(),
                       selectedI: Icons.supervised_user_circle_rounded,
                       selectediconColor: 0xFF000000,
                       selectedtextColor: 0xFF000000,
@@ -173,7 +176,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       screenW: screenWidth,
                     ),
                     infoWidget(
-                      selectedData: "Category",
+                      selectedData: widget.curentUser!.getCategory(),
                       selectedI: Icons.category_rounded,
                       selectediconColor: 0xFF000000,
                       selectedtextColor: 0xFF000000,
@@ -269,8 +272,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(top: screenHeight * 0.04, left: screenWidth * 0.02),
-                    child: const Text(
-                      "Username",
+                    child:  Text(
+                      widget.curentUser!.getUsername().toUpperCase(),
                       style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),
                     ),
                   ),
@@ -278,8 +281,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     padding: EdgeInsets.only(
                         left: screenWidth * 0.02,
                     ),
-                    child: const Text(
-                      "Snowboarder",
+                    child:  Text(
+                      widget.curentUser!.getCategory(),
                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFFF0F0F0),),
                     ),
                   ),

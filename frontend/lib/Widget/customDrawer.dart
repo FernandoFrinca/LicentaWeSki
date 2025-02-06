@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:weski/Api/skiSlopeAPI.dart';
+import 'package:weski/Api/userApi.dart';
 import 'package:weski/Pages/ProfilePage.dart';
 import 'package:weski/Widget/customButton.dart';
 import 'package:weski/Api/skiResortAPI.dart';
 
+import '../ConcretObjects/User.dart';
+
 class customDrawer extends StatelessWidget {
   final double screenWidth;
   final double screenHeight;
+  final User? user;
 
   const customDrawer({
     super.key,
     required this.screenWidth,
     required this.screenHeight,
+    required this.user,
   });
 
   @override
@@ -38,7 +43,7 @@ class customDrawer extends StatelessWidget {
                     height: screenHeight * 0.02,
                   ),
                   AutoSizeText(
-                    "Hello, Username!",
+                    "Hello, ${user?.getUsername() ?? 'Guest'}!",
                     style: TextStyle(
                       fontSize: screenWidth * 0.06,
                       fontWeight: FontWeight.bold,
@@ -72,7 +77,7 @@ class customDrawer extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ProfilePage(),
+                            builder: (context) => ProfilePage(curentUser: user,),
                           ),
                         );
                       },
@@ -106,8 +111,7 @@ class customDrawer extends StatelessWidget {
                       paddingWidth: 0.06,
                       paddingHeight: 0.01,
                       onTap: () async {
-                        final response = await skiSlopeApi.fetchSlopesfromResort(1);
-                        print('API Response: $response');
+                        await userApi.fetchFriends(1);
                       },
                       iconSize: screenWidth * 0.08,
                       paddingText: screenWidth * 0.03
