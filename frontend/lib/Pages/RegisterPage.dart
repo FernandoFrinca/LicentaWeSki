@@ -72,7 +72,6 @@ class _RegisterPageState extends State<RegisterPage> {
               SizedBox(
                 height: screenHeight * 0.07,
               ),
-              // CustomTextFormField widgets for Username, Email, Password, etc.
               Container(
                 width: screenWidth * 0.8,
                 height: screenHeight * 0.08,
@@ -144,7 +143,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   isPasswordField: true,
                 ),
               ),
-              // Dropdown Button to select category
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -178,7 +176,6 @@ class _RegisterPageState extends State<RegisterPage> {
               SizedBox(
                 height: screenHeight * 0.04,
               ),
-              // Register button
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(licentaColors.opacity |
