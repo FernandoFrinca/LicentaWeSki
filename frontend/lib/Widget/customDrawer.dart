@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:weski/Api/skiSlopeAPI.dart';
 import 'package:weski/Api/userApi.dart';
+import 'package:weski/Pages/NotificationPage.dart';
 import 'package:weski/Pages/ProfilePage.dart';
 import 'package:weski/Widget/customButton.dart';
 import 'package:weski/Api/skiResortAPI.dart';
@@ -111,7 +112,14 @@ class customDrawer extends StatelessWidget {
                       paddingWidth: 0.06,
                       paddingHeight: 0.01,
                       onTap: () async {
-                        await userApi.fetchFriends(1);
+                        //await userApi.fetchFriends(1);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            //builder: (context) => NotificationPage(curentUser: user,),
+                            builder: (context) => NotificationPage(),
+                          ),
+                        );
                       },
                       iconSize: screenWidth * 0.08,
                       paddingText: screenWidth * 0.03
