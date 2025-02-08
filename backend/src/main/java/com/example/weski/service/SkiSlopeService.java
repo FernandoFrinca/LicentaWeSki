@@ -1,9 +1,7 @@
 package com.example.weski.service;
-import com.example.weski.data.model.SkiResort;
 import com.example.weski.data.model.SkiSlope;
-import com.example.weski.dto.SkiResortDTO;
 import com.example.weski.dto.SkiSlopeDTO;
-import com.example.weski.mapper.to.SkiSlopeDTOMapper;
+import com.example.weski.mapper.to.dto.SkiSlopeDTOMapper;
 //import com.example.weski.mapper.to.SkiSlopeMapper;
 import com.example.weski.repository.SkiSlopeRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,32 +1,33 @@
 package com.example.weski.repository;
 
 import com.example.weski.data.model.Friends;
+import com.example.weski.data.model.FriendsId;
+import com.example.weski.data.model.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
-public interface FriendsRepository extends JpaRepository<Friends, Long> {
+public interface FriendsRepository extends JpaRepository<Friends, FriendsId> {
     @Query("""
-        SELECT 
-            CASE 
-                WHEN f.userId1 = :userId THEN f.userId2
-                ELSE f.userId1 END AS friend_id,
-                f.requestStatus
-        FROM Friends f 
-        WHERE :userId IN (f.userId1, f.userId2)
+        SELECT DISTINCT u
+        FROM Users u
+        WHERE u.id IN (
+            SELECT f.userId2.id
+            FROM Friends f
+            WHERE f.requestStatus = true
+              AND f.userId1.id = :userId
+        )
+        OR u.id IN (
+            SELECT f.userId1.id
+            FROM Friends f
+            WHERE f.requestStatus = true
+              AND f.userId2.id = :userId
+        )
     """)
-    List<Long> findFriendIds(@Param("userId") Long userId);
-    @Query("""
-        SELECT f.requestStatus
-        FROM Friends f 
-        WHERE :userId IN (f.userId1, f.userId2)
-    """)
-    List<Boolean> findFriendsStatus(@Param("userId") Long userId);
-    Optional<Friends> findFriendsByUserId1AndUserId2(Long userId1, Long userId2);
+    List<Users> findAllFriendsByUserId(@Param("userId") Long userId);
 
 }

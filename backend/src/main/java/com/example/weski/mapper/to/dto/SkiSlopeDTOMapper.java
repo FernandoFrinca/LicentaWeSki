@@ -1,8 +1,6 @@
-package com.example.weski.mapper.to;
+package com.example.weski.mapper.to.dto;
 
-import com.example.weski.data.model.SkiResort;
 import com.example.weski.data.model.SkiSlope;
-import com.example.weski.dto.SkiResortDTO;
 import com.example.weski.dto.SkiSlopeDTO;
 import org.locationtech.jts.geom.Coordinate;
 import org.springframework.stereotype.Component;
@@ -20,7 +18,7 @@ public class SkiSlopeDTOMapper implements Function<SkiSlope, SkiSlopeDTO> {
         SkiSlopeDTO skiSlopeDTO = new SkiSlopeDTO();
         skiSlopeDTO.setId(skiSlope.getId());
         skiSlopeDTO.setName(skiSlope.getName());
-        skiSlopeDTO.setDifficulty(skiSlope.getDificulty());
+        skiSlopeDTO.setDifficulty(skiSlope.getDifficulty());
         skiSlopeDTO.setEnd_altitude(skiSlope.getEnd_altitude());
         skiSlopeDTO.setStart_altitude(skiSlope.getStart_altitude());
         skiSlopeDTO.setLength(skiSlope.getLength());

@@ -1,4 +1,4 @@
-package com.example.weski.mapper.to;
+package com.example.weski.mapper.to.dto;
 
 import com.example.weski.data.model.SkiResort;
 import com.example.weski.dto.SkiResortDTO;
