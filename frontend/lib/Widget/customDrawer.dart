@@ -7,6 +7,7 @@ import 'package:weski/Pages/ProfilePage.dart';
 import 'package:weski/Widget/customButton.dart';
 import 'package:weski/Api/skiResortAPI.dart';
 
+import '../ConcretObjects/Friend.dart';
 import '../ConcretObjects/User.dart';
 
 class customDrawer extends StatelessWidget {
@@ -95,8 +96,8 @@ class customDrawer extends StatelessWidget {
                       screenHeight: screenHeight,
                       paddingWidth: 0.06,
                       paddingHeight: 0.01,
-                      onTap: (){
-
+                      onTap: () async {
+                        //await userApi.fetchFriends(1);
                       },
                       iconSize: screenWidth * 0.08,
                       paddingText: screenWidth * 0.03
@@ -112,12 +113,10 @@ class customDrawer extends StatelessWidget {
                       paddingWidth: 0.06,
                       paddingHeight: 0.01,
                       onTap: () async {
-                        //await userApi.fetchFriends(1);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            //builder: (context) => NotificationPage(curentUser: user,),
-                            builder: (context) => NotificationPage(),
+                            builder: (context) => NotificationPage(curentUserId:user!.id,),
                           ),
                         );
                       },

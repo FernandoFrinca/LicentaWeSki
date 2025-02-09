@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:weski/Widget/CustomSlider.dart';
 import 'package:weski/Widget/friendCard.dart';
-import '../Assets/Colors.dart';
-import '../Assets/Theme.dart';
+import '../Api/userApi.dart';
+import '../ConcretObjects/Friend.dart';
 import '../ConcretObjects/User.dart';
 import '../Widget/notificationCard.dart';
 
 class NotificationPage extends StatefulWidget {
-  const NotificationPage({super.key});
+  final int curentUserId;
+  const NotificationPage({Key? key, required this.curentUserId}) : super(key: key);
 
   @override
   _NotificationPageState createState() => _NotificationPageState();
@@ -17,7 +18,24 @@ class _NotificationPageState extends State<NotificationPage> {
   int selectedIndex = 0;
 
   List<int> notifications = List.generate(10, (index) => index);
-  List<int> requests = List.generate(10, (index) => index);
+
+  List<Friend> _requests = [];
+
+  @override
+  void initState() {
+    super.initState();
+    userApi.fetchFriendRequests(widget.curentUserId).then((fetchedRequests) {
+      setState(() {
+        _requests = fetchedRequests;
+      });
+    });
+  }
+
+  void removeFriendFromList(int index) {
+    setState(() {
+      _requests.removeAt(index);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +52,10 @@ class _NotificationPageState extends State<NotificationPage> {
           onPressed: () => Navigator.pop(context, false),
         ),
         centerTitle: true,
-        title: Text("Notifications", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+        title: const Text(
+          "Notifications",
+          style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+        ),
       ),
       body: Center(
         child: Column(
@@ -50,13 +71,13 @@ class _NotificationPageState extends State<NotificationPage> {
                 });
               },
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             selectedIndex == 0
                 ? Expanded(
               child: Container(
                 width: screenWidth * 0.9,
                 child: ScrollConfiguration(
-                  behavior: ScrollBehavior().copyWith(overscroll: false),
+                  behavior: const ScrollBehavior().copyWith(overscroll: false),
                   child: ListView.builder(
                     itemCount: notifications.length,
                     itemBuilder: (context, index) {
@@ -65,7 +86,8 @@ class _NotificationPageState extends State<NotificationPage> {
                           setState(() {
                             notifications.removeAt(index);
                           });
-                        }, cardHeight: cardHeight,
+                        },
+                        cardHeight: cardHeight,
                       );
                     },
                   ),
@@ -76,16 +98,20 @@ class _NotificationPageState extends State<NotificationPage> {
               child: Container(
                 width: screenWidth * 0.9,
                 child: ScrollConfiguration(
-                  behavior: ScrollBehavior().copyWith(overscroll: false),
+                  behavior: const ScrollBehavior().copyWith(overscroll: false),
                   child: ListView.builder(
-                    itemCount: requests.length,
+                    itemCount: _requests.length,
                     itemBuilder: (context, index) {
-                      return notificationCard(
-                        onDismiss: () {
-                          setState(() {
-                            requests.removeAt(index);
-                          });
-                        }, cardHeight: cardHeight,
+                      return friendCard(
+                        cardHeight: cardHeight,
+                        category: _requests[index].category,
+                        username: _requests[index].username,
+                        currentId: widget.curentUserId,
+                        friendId: _requests[index].id,
+                        requests: _requests,
+                        index: index,
+                        isItRequest: true,
+                        onRemove: () => removeFriendFromList(index),
                       );
                     },
                   ),
@@ -94,15 +120,13 @@ class _NotificationPageState extends State<NotificationPage> {
             ),
             SizedBox(
               width: screenWidth * 0.95,
-              child: Divider(
+              child: const Divider(
                 thickness: 2,
                 color: Colors.black26,
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(
-                  bottom: 8.0
-              ),
+              padding: const EdgeInsets.only(bottom: 8.0),
               child: Container(
                 width: screenWidth,
                 height: 60,
@@ -113,11 +137,11 @@ class _NotificationPageState extends State<NotificationPage> {
                         notifications.clear();
                       });
                     },
-                    icon: Icon(Icons.delete),
-                    label: Text("Delete all notifications"),
+                    icon: const Icon(Icons.delete),
+                    label: const Text("Delete all notifications"),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
-                      foregroundColor: Colors.white
+                      foregroundColor: Colors.white,
                     ),
                   ),
                 ),

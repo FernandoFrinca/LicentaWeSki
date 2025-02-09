@@ -2,16 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:weski/Widget/addFriends.dart';
 import 'package:weski/Widget/groupCard.dart';
 
+import '../ConcretObjects/Friend.dart';
 import '../Widget/friendCard.dart';
 
-class friendsPage extends StatefulWidget {
-  const friendsPage({super.key});
+
+class FriendsPage extends StatefulWidget {
+
+  final int curentUserId;
+  final List<Friend> friends;
+
+  const FriendsPage({Key? key, required this.curentUserId, required this.friends}) : super(key: key);
 
   @override
-  State<friendsPage> createState() => _friendsPageState();
+  State<FriendsPage> createState() => _FriendsPageState();
 }
 
-class _friendsPageState extends State<friendsPage> {
+class _FriendsPageState extends State<FriendsPage> {
+
+  void removeFriendFromList(int index) {
+    setState(() {
+      widget.friends.removeAt(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -22,24 +35,24 @@ class _friendsPageState extends State<friendsPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-        icon: const Icon(Icons.arrow_back_rounded),
-        onPressed: () => Navigator.pop(context, false),
+          icon: const Icon(Icons.arrow_back_rounded),
+          onPressed: () => Navigator.pop(context, false),
         ),
         centerTitle: true,
-        title: Text("Friends", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),),
+        title: const Text("Friends", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),),
         actions: [
           Padding(
-            padding: EdgeInsets.only(
+            padding: const EdgeInsets.only(
               right: 12,
             ),
             child: IconButton(onPressed:(){
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return addFriends(friendController: _friendController,);
+                  return addFriends(friendController: _friendController, currentUserId: widget.curentUserId,);
                 },
               );
-            }, icon: Icon(Icons.person_add_outlined, size: 36,)),
+            }, icon: const Icon(Icons.person_add_outlined, size: 36,)),
           )
         ],
       ),
@@ -74,18 +87,24 @@ class _friendsPageState extends State<friendsPage> {
                 child: Text("Your friends:", style: TextStyle(fontSize: 32),),
               ),
               Expanded(
-                child: ListView(
+                child:
+                ListView.builder(
+                  itemCount: widget.friends.length,
                   scrollDirection: Axis.vertical,
                   padding: const EdgeInsets.all(8.0),
-                  children: [
-                    friendCard(cardHeight: friendsHeight,),
-                    friendCard(cardHeight: friendsHeight,),
-                    friendCard(cardHeight: friendsHeight,),
-                    friendCard(cardHeight: friendsHeight,),
-                    friendCard(cardHeight: friendsHeight,),
-                    friendCard(cardHeight: friendsHeight,),
-                    friendCard(cardHeight: friendsHeight,),
-                  ],
+                  itemBuilder: (context, index) {
+                    return friendCard(
+                      cardHeight: friendsHeight,
+                      username: widget.friends[index].username,
+                      category: widget.friends[index].category,
+                      currentId: widget.curentUserId,
+                      friendId: widget.friends[index].id,
+                      index: index,
+                      requests: [],
+                      isItRequest: false,
+                      onRemove: () => removeFriendFromList(index),
+                    );
+                  },
                 ),
               ),
             ],
@@ -99,7 +118,7 @@ class _friendsPageState extends State<friendsPage> {
                 onPressed: ()  {
 
                 },
-                fillColor: Color(0xFF007EA7),
+                fillColor: const Color(0xFF007EA7),
                 shape: const CircleBorder(),
                 elevation: 5,
                 constraints: BoxConstraints(

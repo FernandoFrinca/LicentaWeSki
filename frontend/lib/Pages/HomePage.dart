@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:weski/Api/skiResortAPI.dart';
+import 'package:weski/Api/userApi.dart';
 import 'package:weski/ConcretObjects/User.dart';
-import 'package:weski/Pages/friendsPage.dart';
 import 'package:weski/Widget/customDraggable.dart';
 
+import '../ConcretObjects/Friend.dart';
 import '../Widget/customDrawer.dart';
 import '../Widget/customSearch.dart';
+import 'FriendsPage.dart';
 
 class HomePage extends StatefulWidget {
   final User? curentUser;
@@ -221,10 +223,11 @@ class _HomePageState extends State<HomePage> {
                       Padding(
                         padding: EdgeInsets.only(right: screenWidth * 0.06),
                         child: RawMaterialButton(
-                          onPressed: () {
+                          onPressed: () async {
+                            List<Friend> friends = await userApi.fetchFriends(widget.curentUser!.id);
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const friendsPage()),
+                              MaterialPageRoute(builder: (context) => FriendsPage(curentUserId:widget.curentUser!.id, friends: friends, )),
                             );
                           },
                           fillColor: Colors.white,
