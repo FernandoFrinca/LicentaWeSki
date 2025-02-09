@@ -28,4 +28,8 @@ public class Friends {
 
     @Column(name = "request_status", nullable = false)
     private boolean requestStatus = false;
+
+    @Column(name = "sender", nullable = false)
+    private Long sender;
+
 }

@@ -1,18 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:weski/Api/userApi.dart';
 import 'package:weski/Widget/CustomTextField.dart';
 
-class addFriends extends StatelessWidget {
-
+class addFriends extends StatefulWidget {
   final TextEditingController friendController;
+  final int currentUserId;
+
   const addFriends({
-    super.key,
+    Key? key,
     required this.friendController,
-  });
-  //color: Color(0xFF007EA7),
+    required this.currentUserId,
+  }) : super(key: key);
+
+  @override
+  State<addFriends> createState() => _AddFriendsState();
+}
+
+class _AddFriendsState extends State<addFriends> {
+  String? errorMessage;
+    //final TextEditingController _friendController = TextEditingController();
+  @override
+  void dispose() {
+    widget.friendController.clear();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    //final TextEditingController _friendController = TextEditingController();
     return Dialog(
        child: Container(
          height: 200,
@@ -27,7 +43,7 @@ class addFriends extends StatelessWidget {
                width: 320,
                child: CustomTextField(
                    label: "Username",
-                   controller: friendController,
+                   controller: widget.friendController,
                    icon: Icons.person_2_outlined,
                    borderColor: theme.colorScheme.onPrimary.value,
                    fillColor: theme.colorScheme.secondary.value,
@@ -37,22 +53,40 @@ class addFriends extends StatelessWidget {
                    errorState: false,
                ),
              ),
+             SizedBox(
+               height: 15,
+               child: errorMessage != null
+                   ? Text(
+                 errorMessage!,
+                 style: const TextStyle(color: Colors.red),
+               )
+                   : null,
+             ),
              Padding(
                padding: const EdgeInsets.only(
-                 top: 16,
+                 top: 10,
                ),
                child: ElevatedButton(
                  style: ElevatedButton.styleFrom(
                    backgroundColor: theme.colorScheme.primary,
                  ),
-                 onPressed: () {},
+                 onPressed: () async {
+                   if(await userApi.addFriendByUsername(widget.currentUserId,widget.friendController.text) == false){
+                     setState(() {
+                       errorMessage = "Eroare la adăugarea userului!";
+                     });
+                   }else{
+                     setState(() {
+                       widget.friendController.clear();
+                     });
+                   }
+                 },
                  child: const Text(
                    "Add",
                    style: TextStyle(color: Colors.white),
                  ),
                ),
              )
-
            ],
          ),
        ),

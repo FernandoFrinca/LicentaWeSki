@@ -38,6 +38,11 @@ public class UsersController {
         return friendsService.getFriendsForUser(userId);
     }
 
+    @GetMapping("/{userId}/requests")
+    public List<FriendDTO> getRequests(@PathVariable Long userId) {
+        return friendsService.getRequestsForUser(userId);
+    }
+
     @PostMapping("/post")
     public ResponseEntity<UsersDTO> createUser(@RequestBody UsersDTO usersDTO) {
         UsersDTO savedUser = usersService.createUser(usersDTO);
@@ -54,5 +59,19 @@ public class UsersController {
         friendsService.addFriendToUser(currentUserId, friendUsername);
         return ResponseEntity.ok("Prieten adăugat cu succes!");
     }
+
+
+    @PutMapping("{idUser1}/requestResponse/{idUser2}/{status}")
+    public ResponseEntity<?> requestResponse(@PathVariable("idUser1") Long idUser1, @PathVariable("idUser2") Long idUser2,@PathVariable ("status") boolean status) {
+        friendsService.respondRequestUser1AndUser2(status,idUser1,idUser2);
+        return ResponseEntity.ok("Cerere Raspunsa");
+    }
+
+    @DeleteMapping("{idUser}/deleteFriend/{idFriend}")
+    public ResponseEntity<?> deleteFriend(@PathVariable("idUser") Long idUser,@PathVariable("idFriend") Long idFriend) {
+        friendsService.removeFriendFromUser(idUser,idFriend);
+        return ResponseEntity.ok("Prienten Sters");
+    }
+
 
 }

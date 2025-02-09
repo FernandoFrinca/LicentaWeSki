@@ -39,20 +39,61 @@ public class FriendsService {
         return friendDTOs;
     }
 
+    public List<FriendDTO> getRequestsForUser(Long userId) {
+        List<Users> requests = friendsRepository.findAllRequestsByUserIdAndSenderIsNotAndUserId(userId);
+        List<FriendDTO> friendDTOs = new ArrayList<>();
+        for (Users request : requests) {
+            FriendDTO friendDTO = new FriendDTO();
+            friendDTO.setId(request.getId());
+            friendDTO.setUsername(request.getUsername());
+            friendDTO.setCategory(request.getCategory());
+            friendDTOs.add(friendDTO);
+        }
+        return friendDTOs;
+    }
+
+
+    public void respondRequestUser1AndUser2(boolean status, Long requestId, Long userId) {
+        if(userId > requestId) {
+            Long aux = requestId;
+            requestId = userId;
+            userId = aux;
+        }
+        if(status) {
+            friendsRepository.updateRequestStatusForIds(userId,requestId, status);
+        }else {
+            friendsRepository.deleteByUserId1AndUserId2(userId,requestId);
+        }
+    }
+
+
+
     public void addFriendToUser(Long userId, String friend) {
         Users friendUser_obj = usersRepository.findByUsername(friend).orElseThrow(() -> new NotFoundException("Username not found"));
         Users currentUser_obj = usersRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
 
-        if (friendUser_obj != null && currentUser_obj != null) {
-            long friendId = friendUser_obj.getId();
-            long currentUserId = currentUser_obj.getId();
+        long friendId = friendUser_obj.getId();
+        long currentUserId = currentUser_obj.getId();
 
-            Friends friends_obj = Friends.builder()
-                    .id(new FriendsId(currentUserId, friendId))
-                    .userId1(currentUser_obj)
-                    .userId2(friendUser_obj)
-                    .build();
-            friendsRepository.save(friends_obj);
+        if (friendsRepository.existsById(new FriendsId(currentUserId, friendId))) {
+            throw new NotFoundException("Already friends!");
         }
+
+        Friends friends_obj = Friends.builder()
+                .id(new FriendsId(currentUserId, friendId))
+                .userId1(currentUser_obj)
+                .userId2(friendUser_obj)
+                .sender(userId)
+                .build();
+        friendsRepository.save(friends_obj);
+    }
+
+    public void removeFriendFromUser(Long userId, Long friendId) {
+        if(userId > friendId) {
+            Long aux = friendId;
+            friendId = userId;
+            userId = aux;
+        }
+        friendsRepository.deleteByUserId1AndUserId2(userId,friendId);
     }
 }
