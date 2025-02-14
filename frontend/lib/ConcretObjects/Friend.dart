@@ -14,5 +14,8 @@ class Friend {
   String getCategory(){
     return category;
   }
-
+  @override
+  String toString() {
+    return 'id: $id, username: $username, category: $category';
+  }
 }

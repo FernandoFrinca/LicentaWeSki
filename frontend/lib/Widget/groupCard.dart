@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 class groupCard extends StatelessWidget {
 
   final double cardHeight;
+  final String groupName;
 
   const groupCard({
     super.key,
     required this.cardHeight,
+    required this.groupName,
   });
 
   @override
@@ -49,9 +51,9 @@ class groupCard extends StatelessWidget {
                 bottom: cardHeight * 0.1,
                 left: 10,
                 right: 10,
-                child: const Text(
-                  "Group name ",
-                  style: TextStyle(
+                child: Text(
+                  "Group $groupName ",
+                  style: const TextStyle(
                     fontSize: 24,
                     color: Colors.white,
                   ),
