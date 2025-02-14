@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:weski/Api/groupApi.dart';
 import 'package:weski/Widget/addFriends.dart';
+import 'package:weski/Widget/createGroup.dart';
 import 'package:weski/Widget/groupCard.dart';
 
 import '../ConcretObjects/Friend.dart';
+import '../ConcretObjects/Group.dart';
 import '../Widget/friendCard.dart';
 
 
@@ -10,14 +13,24 @@ class FriendsPage extends StatefulWidget {
 
   final int curentUserId;
   final List<Friend> friends;
+  final List<Group> groups;
 
-  const FriendsPage({Key? key, required this.curentUserId, required this.friends}) : super(key: key);
+  const FriendsPage({Key? key, required this.curentUserId, required this.friends, required this.groups}) : super(key: key);
 
   @override
   State<FriendsPage> createState() => _FriendsPageState();
 }
 
 class _FriendsPageState extends State<FriendsPage> {
+
+  late List<Group> groups;
+
+  @override
+  void initState() {
+    super.initState();
+    groups = List.from(widget.groups);
+  }
+
 
   void removeFriendFromList(int index) {
     setState(() {
@@ -30,6 +43,7 @@ class _FriendsPageState extends State<FriendsPage> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     final TextEditingController _friendController = TextEditingController();
+    final TextEditingController _groupController = TextEditingController();
     double cardHeight = screenHeight * 0.21;
     double friendsHeight = screenHeight * 0.1;
     return Scaffold(
@@ -69,15 +83,17 @@ class _FriendsPageState extends State<FriendsPage> {
               ),
               SizedBox(
                 height: cardHeight,
-                child: ListView(
+                child:
+                ListView.builder(
+                  itemCount: groups.length,
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.all(8.0),
-                  children: [
-                    groupCard(cardHeight: cardHeight,),
-                    groupCard(cardHeight: cardHeight,),
-                    groupCard(cardHeight: cardHeight,),
-                    groupCard(cardHeight: cardHeight,),
-                  ],
+                  itemBuilder: (context, index) {
+                    return groupCard(
+                      cardHeight: cardHeight,
+                      groupName: groups[index].name,
+                    );
+                  },
                 ),
               ),
               const Padding(
@@ -115,8 +131,24 @@ class _FriendsPageState extends State<FriendsPage> {
             child: Padding(
               padding: EdgeInsets.only(right: screenWidth * 0.015,),
               child: RawMaterialButton(
-                onPressed: ()  {
-
+                onPressed: ()  async {
+                  final newGroupId = await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return  createGroup(
+                        groupController: _groupController,
+                        currentUserId: widget.curentUserId,
+                        friends: widget.friends,
+                        cardHeigh: cardHeight,
+                      );
+                    },
+                  );
+                  if (newGroupId != null) {
+                    Group? newGroup = await groupApi.fetchGroup(newGroupId);
+                    setState(() {
+                      groups.add(newGroup!);
+                    });
+                  }
                 },
                 fillColor: const Color(0xFF007EA7),
                 shape: const CircleBorder(),

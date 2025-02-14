@@ -3,8 +3,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:weski/Api/groupApi.dart';
 import 'package:weski/Api/skiResortAPI.dart';
 import 'package:weski/Api/userApi.dart';
+import 'package:weski/ConcretObjects/Group.dart';
 import 'package:weski/ConcretObjects/User.dart';
 import 'package:weski/Widget/customDraggable.dart';
 
@@ -105,6 +107,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _loadMarkers();
     getCurrentLocation();
+
   }
 
   Set<Polyline> displayed_polylines = {};
@@ -127,6 +130,7 @@ class _HomePageState extends State<HomePage> {
   }
   Future<void> _loadMarkers() async {
     final markers = await skiResortApi.fetchResorts(_controller, _updatePolylines);
+    print(markers);
     if (markers != null) {
       setState(() {
         markers_list = markers;
@@ -225,9 +229,10 @@ class _HomePageState extends State<HomePage> {
                         child: RawMaterialButton(
                           onPressed: () async {
                             List<Friend> friends = await userApi.fetchFriends(widget.curentUser!.id);
+                            List<Group> groups = await groupApi.fetchUserGroups(widget.curentUser!.id);
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => FriendsPage(curentUserId:widget.curentUser!.id, friends: friends, )),
+                              MaterialPageRoute(builder: (context) => FriendsPage(curentUserId:widget.curentUser!.id, friends: friends, groups: groups, )),
                             );
                           },
                           fillColor: Colors.white,
