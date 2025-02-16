@@ -73,5 +73,14 @@ public class UsersController {
         return ResponseEntity.ok("Prienten Sters");
     }
 
+    @PatchMapping("{idUser}/resetPassword/{password}/{verifyPassword}")
+    public void resetPassword(@PathVariable("idUser") Long idUser, @PathVariable("password") String password, @PathVariable("verifyPassword") String verifyPassword) {
+        usersService.resetPassword(idUser,password,verifyPassword);
+    }
+
+    @PatchMapping("{idUser}/updateData")
+    public  void updateData(@PathVariable("idUser") Long idUser, @RequestBody UsersDTO usersDTO) {
+        usersService.updateUser(idUser,usersDTO);
+    }
 
 }

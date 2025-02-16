@@ -25,6 +25,8 @@ public class UserDTOtoEntityMapper implements Function<UsersDTO, Users> {
         users.setPassword(encoderPass.encode(usersDTO.getPassword()));
         users.setEmail(usersDTO.getEmail());
         users.setCategory(usersDTO.getCategory());
+        users.setGender(usersDTO.getGender());
+        users.setAge(usersDTO.getAge());
         return users;
     }
 

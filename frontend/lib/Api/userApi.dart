@@ -7,8 +7,8 @@ import 'package:weski/ConcretObjects/Friend.dart';
 import '../ConcretObjects/User.dart';
 
 class userApi {
-  static const String url = "http://192.168.0.193:8080/api/users"; // camin
-  //static const String url = "http://192.168.0.105:8080/api/users"; //acasa
+  //static const String url = "http://192.168.0.193:8080/api/users"; // camin
+  static const String url = "http://192.168.0.105:8080/api/users"; //acasa
 
   static Future<List?> fetchAllUsers() async {
     final endpointUrl = Uri.parse('$url/getAll');
@@ -94,6 +94,47 @@ class userApi {
         return null;
       }
   }
+
+  static Future<void> resetPassword(int userId,String password, String verifyPassword)async {
+    final endpointUrl = Uri.parse('$url/$userId/resetPassword/$password/$verifyPassword');
+    try {
+      final response = await http.patch(endpointUrl);
+      print('Status code: ${response.statusCode}');
+    }
+    catch(e){
+      return;
+    }
+  }
+
+  static Future<void> updateUser(int idUser, User user) async {
+    final endpointUrl = Uri.parse('$url/$idUser/updateData');
+    try {
+      Map<String, String> headers = {
+        "Content-Type": "application/json",
+      };
+      final encodedBody = {
+        "username": user.username,
+        "email": user.email,
+        "category": user.category,
+        "age": user.age,
+        "gender": user.gender
+      };
+
+      final response = await http.patch(
+        endpointUrl,
+        headers: headers,
+        body: jsonEncode(encodedBody),
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('eroare la user: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('catch updateUser: $e');
+      rethrow;
+    }
+  }
+
 
   static Future<List<Friend>> fetchFriends(int id)async {
     final endpointUrl = Uri.parse('$url/$id/friends');

@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:weski/Api/groupApi.dart';
 import 'package:weski/Pages/NotificationPage.dart';
 import 'package:weski/Pages/ProfilePage.dart';
 import 'package:weski/Widget/customButton.dart';
@@ -94,7 +95,13 @@ class customDrawer extends StatelessWidget {
                       paddingWidth: 0.06,
                       paddingHeight: 0.01,
                       onTap: () async {
-
+                          //await groupApi.fetchGroup(21);
+                          //await groupApi.createGroup(groupName, userId);
+                          //await groupApi.fetchUserGroups(id);
+                          //await groupApi.addUserToGroup(userId, groupId);
+                          //await groupApi.addUsersToGroup(groupId, users);
+                          //await groupApi.removeUserFromGroup(groupId, userId);
+                          //await groupApi.removeGroup(groupId);
                       },
                       iconSize: screenWidth * 0.08,
                       paddingText: screenWidth * 0.03

@@ -11,6 +11,8 @@ public class UsersDTO {
     private String password;
     private String email;
     private String category;
+    private Integer age;
+    private Integer gender;
     private Long id;
 }
 

@@ -60,4 +60,40 @@ public class UsersService {
 
         return usersMapper.apply(user);
     }
+
+    public void resetPassword(Long userId, String newPassword ,String confirmPassword) {
+        if (newPassword.equals(confirmPassword)) {
+            Users user = usersRepository.findById(userId).orElse(null);
+            if (user == null) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found");
+            }
+            user.setPassword(passEncoder.encode(newPassword));
+            usersRepository.save(user);
+        }
+    }
+
+    public void updateUser(Long userId, UsersDTO dto) {
+        Users user = usersRepository.findById(userId).orElse(null);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found");
+        }
+
+        if (dto.getUsername() != null) {
+            user.setUsername(dto.getUsername());
+        }
+        if (dto.getEmail() != null) {
+            user.setEmail(dto.getEmail());
+        }
+        if (dto.getCategory() != null) {
+            user.setCategory(dto.getCategory());
+        }
+        if (dto.getAge() != null) {
+            user.setAge(dto.getAge());
+        }
+        if (dto.getGender() != null) {
+            user.setGender(dto.getGender());
+        }
+
+        usersRepository.save(user);
+    }
 }
