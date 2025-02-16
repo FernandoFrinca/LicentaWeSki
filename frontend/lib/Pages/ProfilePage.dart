@@ -1,11 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:weski/Pages/EditProfilePage.dart';
 import 'package:weski/Widget/infoWidget.dart';
 import 'package:weski/Widget/profileAvatar.dart';
 
 import '../ConcretObjects/User.dart';
 import '../Widget/customButton.dart';
 import '../Widget/customTriangle.dart';
+import 'NotificationPage.dart';
 
 class ProfilePage extends StatefulWidget {
 
@@ -168,7 +170,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       screenW: screenWidth,
                     ),
                     infoWidget(
-                      selectedData: (widget.curentUser!.getGender() == null)?'Not Set':widget.curentUser!.getGender().toString(),
+                      selectedData: (widget.curentUser!.getGender() == 2)?'Not Set':widget.curentUser!.getGender().toString(),
                       selectedI: Icons.supervised_user_circle_rounded,
                       selectediconColor: 0xFF000000,
                       selectedtextColor: 0xFF000000,
@@ -195,7 +197,12 @@ class _ProfilePageState extends State<ProfilePage> {
                         paddingWidth: 0.03,
                         paddingHeight: 0.01,
                         onTap: (){
-
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) =>
+                                  editProfilePage(curentUser: widget.curentUser),
+                              ),
+                          );
                         },
                         iconSize: screenWidth * 0.08,
                         paddingText: screenWidth * 0.01
@@ -211,12 +218,17 @@ class _ProfilePageState extends State<ProfilePage> {
                         paddingWidth: 0.03,
                         paddingHeight: 0.01,
                         onTap: (){
-
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NotificationPage(curentUserId:widget.curentUser!.id,),
+                            ),
+                          );
                         },
                         iconSize: screenWidth * 0.08,
                         paddingText: screenWidth * 0.01
                     ),
-                    customButton(
+/*                    customButton(
                         data: "Change Password",
                         icon: Icons.password_rounded,
                         iconColor: 0xFFF20000,
@@ -231,7 +243,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         },
                         iconSize: screenWidth * 0.08,
                         paddingText: screenWidth * 0.01
-                    ),
+                    ),*/
                     Spacer(),
                     Divider(color: Colors.grey.shade300, thickness: 1.0),
                     Row(

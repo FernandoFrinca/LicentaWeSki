@@ -6,8 +6,8 @@ import 'package:weski/ConcretObjects/Group.dart';
 import '../ConcretObjects/Friend.dart';
 
 class groupApi {
-  static const String url = "http://192.168.0.193:8080/api/group"; // camin
-  //static const String url = "http://192.168.0.105:8080/api/users"; //acasa
+  //static const String url = "http://192.168.0.193:8080/api/group"; // camin
+  static const String url = "http://192.168.0.105:8080/api/group"; //acasa
 
   static Future<List<Group>> fetchUserGroups(int id)async {
     final endpointUrl = Uri.parse('$url/getUserGroups/$id');
@@ -82,6 +82,10 @@ class groupApi {
     final response = await http.post(endpointUrl);
     try {
       if(response.statusCode == 200){
+        print("\n");
+        print(groupName);
+        print(userId);
+        print("\n");
         final groupId = int.parse(response.body);
         print("Grup creat cu succes: $groupId");
         return groupId;

@@ -22,6 +22,8 @@ public class Users {
     private String password;
     private String email;
     private String category;
+    private int gender;
+    private int age;
 
     @ManyToMany()
     @JoinTable( name = "group_user",

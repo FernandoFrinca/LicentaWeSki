@@ -91,7 +91,9 @@ class _FriendsPageState extends State<FriendsPage> {
                   itemBuilder: (context, index) {
                     return groupCard(
                       cardHeight: cardHeight,
-                      groupName: groups[index].name,
+                      groupName: groups[index].name, onTap: () {
+                        print("apasat");
+                    },
                     );
                   },
                 ),

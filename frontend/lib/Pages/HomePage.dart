@@ -17,7 +17,7 @@ import 'FriendsPage.dart';
 
 class HomePage extends StatefulWidget {
   final User? curentUser;
-  HomePage({Key? key, required this.curentUser}) : super(key: key);
+  const HomePage({super.key, required this.curentUser});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
   late int mapTypeIndex = 0;
   LocationData? currentLocation;
   double _currentZoom = 15.0;
-  final LatLng _initialPosition = const LatLng(45.3219, 23.2363);
+  //final LatLng _initialPosition = const LatLng(45.3219, 23.2363);
   Set<Polyline> set_polylines = {};
   LatLng? _lastLocation;
   late Set<Marker> markers_list = {};
@@ -130,7 +130,6 @@ class _HomePageState extends State<HomePage> {
   }
   Future<void> _loadMarkers() async {
     final markers = await skiResortApi.fetchResorts(_controller, _updatePolylines);
-    print(markers);
     if (markers != null) {
       setState(() {
         markers_list = markers;
