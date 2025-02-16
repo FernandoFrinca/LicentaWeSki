@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weski/Api/groupApi.dart';
+import 'package:weski/Pages/GroupPage.dart';
 import 'package:weski/Widget/addFriends.dart';
 import 'package:weski/Widget/createGroup.dart';
 import 'package:weski/Widget/groupCard.dart';
@@ -91,9 +92,10 @@ class _FriendsPageState extends State<FriendsPage> {
                   itemBuilder: (context, index) {
                     return groupCard(
                       cardHeight: cardHeight,
-                      groupName: groups[index].name, onTap: () {
-                        print("apasat");
-                    },
+                      groupName: groups[index].name,
+                      onTap: () {
+                        Navigator.push(context,MaterialPageRoute(builder:(context) => groupPage(group: groups[index], currentUser: widget.curentUserId,)));
+                      },
                     );
                   },
                 ),
