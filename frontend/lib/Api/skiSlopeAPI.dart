@@ -8,7 +8,7 @@ class skiSlopeApi {
   static const String urlSlopesByResort = "http://192.168.0.105:8080/api/ski-resorts"; //acasa
 
   static Future<List?> fetchSlopesfromResort(int id) async {
-    final endpointUrl = Uri.parse('$urlSlopesByResort/getByResort?resortId=$id');
+    final endpointUrl = Uri.parse('$urlSlopesByResort/getByResort/$id');
     try {
       final response = await http.get(endpointUrl);
       if (response.statusCode == 200) {
@@ -25,6 +25,7 @@ class skiSlopeApi {
     }
   }
 
+
   static List processData(List<dynamic> unprocessedData) {
     List<dynamic> finalList = [];
 
@@ -37,41 +38,48 @@ class skiSlopeApi {
           finalCoordonates.add(LatLng(cord[1], cord[0]));
         }
         finalList.add(finalCoordonates);
-        finalList.add(element['dificulty'] as String);
+        finalList.add(element['difficulty'] as String);
       }
     }
     return finalList;
   }
 
-  static Future<Set<Polyline>> createPolyLines(int id) async{
+  static Future<Set<Polyline>> createPolyLines(int id) async {
     List<dynamic>? slopes = await fetchSlopesfromResort(id);
     Set<Polyline> listPolylines = {};
-
-    print(slopes);
 
     if (slopes == null) {
       print("Slopes null ID: $id");
       return {};
     }
 
+    if (slopes.length % 3 != 0) {
+      print("Structura datelor nu este corectă. Numărul de elemente nu este multiplu de 3.");
+      return {};
+    }
+
     for (int i = 0; i < slopes.length; i += 3) {
-      String name = slopes[i];
-      String difficulty  = slopes [i+2];
-      int color = 0xFF0000FF;
-      List<LatLng> coord = List<LatLng>.from(slopes[i + 1]);
+      try {
+        String name = slopes[i] as String;
+        List<LatLng> coord = List<LatLng>.from(slopes[i + 1]);
+        String difficulty = slopes[i + 2] as String;
 
-      if(difficulty == "advanced"){
-        color=0xFF000000;
+        int color = 0xFF0000FF;
+        if (difficulty.toLowerCase() == "advanced") {
+          color = 0xFF000000;
+        }
+
+        listPolylines.add(
+          Polyline(
+            polylineId: PolylineId(name),
+            points: coord,
+            color: Color(color),
+            width: 5,
+          ),
+        );
+      } catch (e) {
+        print("Eroare la procesarea elementelor pentru polilinie: $e");
       }
-
-      listPolylines.add(
-        Polyline(
-          polylineId: PolylineId(name),
-          points: coord,
-          color: Color(color),
-          width: 5,
-        ),
-      );
     }
     return listPolylines;
   }

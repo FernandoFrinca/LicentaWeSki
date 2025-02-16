@@ -2,13 +2,15 @@ package com.example.weski.service;
 import com.example.weski.data.model.SkiSlope;
 import com.example.weski.dto.SkiSlopeDTO;
 import com.example.weski.mapper.to.dto.SkiSlopeDTOMapper;
-//import com.example.weski.mapper.to.SkiSlopeMapper;
+/*import com.example.weski.mapper.to.SkiSlopeMapper;*/
 import com.example.weski.repository.SkiSlopeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class SkiSlopeService {
     private final SkiSlopeRepository skiSlopeRepository;
@@ -22,7 +24,9 @@ public class SkiSlopeService {
 
     public List<SkiSlopeDTO> getAllSkiSlopes() {
         List<SkiSlope> skiSlopeList = skiSlopeRepository.findAll();
-        return Collections.singletonList(skiSlopeMapper.apply((SkiSlope) skiSlopeList));
+        return skiSlopeList.stream()
+                .map(skiSlopeMapper)
+                .collect(Collectors.toList());
     }
 
 }

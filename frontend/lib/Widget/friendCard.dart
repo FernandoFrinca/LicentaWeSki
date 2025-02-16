@@ -12,6 +12,7 @@ class friendCard extends StatefulWidget {
   final List<Friend> requests;
   final int index;
   final VoidCallback onRemove;
+  final isOnlyDisplay ;
 
   const friendCard({
     super.key,
@@ -24,6 +25,7 @@ class friendCard extends StatefulWidget {
     required this.requests,
     required this.index,
     required this.onRemove,
+     this.isOnlyDisplay = false,
   });
 
   @override
@@ -88,73 +90,83 @@ class _friendCardState extends State<friendCard> {
                 ],
               ),
             ),
-            widget.isItRequest
-                ? Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    userApi.respondeRequest(widget.currentId, widget.friendId, false);
-                    widget.onRemove();
-                  },
-                  icon: const Icon(Icons.close_outlined, color: Colors.redAccent),
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  visualDensity: VisualDensity.compact,
-                ),
-                IconButton(
-                  onPressed: () {
-                    userApi.respondeRequest(widget.currentId, widget.friendId, true);
-                    widget.onRemove();
-                  },
-                  icon: const Icon(Icons.check, color: Colors.greenAccent),
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  visualDensity: VisualDensity.compact,
-                ),
-              ],
-            )
-            :Row(
-              children: [
-                IconButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(2.0),
-                              child: Text("Confirm Removal", style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),),
+            widget.isOnlyDisplay == true? SizedBox() : (
+              widget.isItRequest
+                  ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      userApi.respondeRequest(
+                          widget.currentId, widget.friendId, false);
+                      widget.onRemove();
+                    },
+                    icon: const Icon(
+                        Icons.close_outlined, color: Colors.redAccent),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    visualDensity: VisualDensity.compact,
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      userApi.respondeRequest(
+                          widget.currentId, widget.friendId, true);
+                      widget.onRemove();
+                    },
+                    icon: const Icon(Icons.check, color: Colors.greenAccent),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    visualDensity: VisualDensity.compact,
+                  ),
+                ],
+              )
+                  : Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(2.0),
+                                child: Text("Confirm Removal", style: TextStyle(
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.bold),),
+                              ),
                             ),
-                          ),
-                          content: const Text("Are you sure you want to remove your friend?"),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text("Cancel"),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                                userApi.removeFriend(widget.currentId, widget.friendId);
-                                widget.onRemove();
-                              },
-                              child: const Text("Remove"),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                  icon: const Icon(Icons.close_outlined, color: Colors.redAccent),
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  visualDensity: VisualDensity.compact,
-                ),
-              ],
+                            content: const Text(
+                                "Are you sure you want to remove your friend?"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text("Cancel"),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  userApi.removeFriend(
+                                      widget.currentId, widget.friendId);
+                                  widget.onRemove();
+                                },
+                                child: const Text("Remove"),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    icon: const Icon(
+                        Icons.close_outlined, color: Colors.redAccent),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    visualDensity: VisualDensity.compact,
+                  ),
+                ],
+              )
             )
           ],
         ),

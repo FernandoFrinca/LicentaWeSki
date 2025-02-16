@@ -2,10 +2,7 @@ package com.example.weski.controller;
 
 import com.example.weski.service.SkiResortService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.example.weski.dto.SkiResortDTO;
 
 import java.util.List;
@@ -26,8 +23,8 @@ public class SkiResortController {
         return skiResortService.getAllSkiResorts();
     }
 
-    @GetMapping("/getByResort")
-    public SkiResortDTO getResortById(@RequestParam Long resortId) {
+    @GetMapping("/getByResort/{resortId}")
+    public SkiResortDTO getResortById(@PathVariable Long resortId) {
         return skiResortService.getResortById(resortId);
     }
 }

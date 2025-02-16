@@ -25,6 +25,8 @@ class skiResortApi {
     Set<Marker> finalSet = {};
     BitmapDescriptor customMarkerIcon = await _loadCustomMarkerIcon();
 
+    print("\n\n\nid poliline intrare:");
+
     for (int i = 0; i < list.length; i += 4) {
       int id = list[i] as int;
       String name = list[i + 1] as String;
@@ -38,6 +40,8 @@ class skiResortApi {
           infoWindow: InfoWindow(title: name),
           icon: customMarkerIcon,
           onTap: () async {
+            print("\n\n\nid poliline:");
+            print(id);
             Set<Polyline> listPolylines = await skiSlopeApi.createPolyLines(id) as Set<Polyline>;
 
             updatePolylines(listPolylines);
