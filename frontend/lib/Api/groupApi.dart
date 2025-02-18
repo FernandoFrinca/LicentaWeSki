@@ -7,7 +7,7 @@ import '../ConcretObjects/Friend.dart';
 
 class groupApi {
   //static const String url = "http://192.168.0.193:8080/api/group"; // camin
-  static const String url = "http://192.168.0.105:8080/api/group"; //acasa
+  static const String url = "http://192.168.0.102:8080/api/group"; //acasa
 
   static Future<List<Group>> fetchUserGroups(int id)async {
     final endpointUrl = Uri.parse('$url/getUserGroups/$id');

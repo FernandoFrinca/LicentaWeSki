@@ -8,7 +8,7 @@ import 'package:weski/Api/skiSlopeAPI.dart';
 
 class skiResortApi {
   //static const String url = 'http://192.168.0.193:8080/api/ski-resorts'; //camin
-  static const String url = "http://192.168.0.105:8080/api/ski-resorts"; //acasa
+  static const String url = "http://192.168.0.102:8080/api/ski-resorts"; //acasa
 
   static Future<BitmapDescriptor> _loadCustomMarkerIcon() async {
     return await BitmapDescriptor.fromAssetImage(

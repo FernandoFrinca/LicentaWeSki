@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:weski/ConcretObjects/NotificationModel.dart';
 
 class notificationCard extends StatelessWidget {
 
   final double cardHeight;
   final VoidCallback onDismiss;
+  final NotificationModel notification;
 
   const notificationCard({
     super.key,
     required this.cardHeight,
     required this.onDismiss,
+    required this.notification
   });
 
   @override
@@ -29,7 +32,7 @@ class notificationCard extends StatelessWidget {
             color: Colors.red,
             borderRadius: BorderRadius.circular(15),
           ),
-          child: Align(
+          child: const Align(
             alignment: Alignment.centerRight,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
@@ -49,7 +52,7 @@ class notificationCard extends StatelessWidget {
           child: Row(
             children: [
               Padding(
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   left: 10.0,
                   right: 5.0,
                 ),
@@ -58,35 +61,34 @@ class notificationCard extends StatelessWidget {
                   height: cardHeight * 0.8,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    color: Colors.white,
+                    color: Color(notification.backgroundColor),
                   ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
-                    child: Image.asset(
-                      "assets/ski.jpeg",
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
-                    ),
-                  ),
+                  child: Icon(notification.iconData, size: 50, color: Color(notification.iconColor | 0xFF000000),)
                 ),
               ),
-              const Expanded(
+              Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(top: 10.0, left: 10.0),
+                      padding: const EdgeInsets.only(top: 10.0, left: 10.0),
                       child: Text(
-                        "Username",
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        notification.content,
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10.0),
+                      child: Text(
+                        "Send by: ${notification.senderName} ",
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(bottom: 10.0, left: 10.0),
                       child: Text(
-                        "data",
+                        "Group: ${notification.groupName} ",
                         style: TextStyle(fontSize: 16, color: Colors.grey),
                       ),
                     ),

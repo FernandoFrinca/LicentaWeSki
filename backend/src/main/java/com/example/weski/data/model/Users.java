@@ -31,4 +31,13 @@ public class Users {
                 inverseJoinColumns = @JoinColumn(name = "group_id") )
     @JsonIgnore
     private Set<Group> groupsAssigned = new HashSet<>();
+
+/*    @ManyToMany
+    @JoinTable(
+            name = "notification_user",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "notification_id")
+    )
+    @JsonIgnore
+    private Set<Notification> notificationsReceived = new HashSet<>();*/
 }
