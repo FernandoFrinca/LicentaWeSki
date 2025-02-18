@@ -8,7 +8,7 @@ import '../ConcretObjects/User.dart';
 
 class userApi {
   //static const String url = "http://192.168.0.193:8080/api/users"; // camin
-  static const String url = "http://192.168.0.105:8080/api/users"; //acasa
+  static const String url = "http://192.168.0.102:8080/api/users"; //acasa
 
   static Future<List?> fetchAllUsers() async {
     final endpointUrl = Uri.parse('$url/getAll');

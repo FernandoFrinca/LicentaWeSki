@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:weski/Api/notificationApi.dart';
+import 'package:weski/ConcretObjects/NotificationModel.dart';
 import 'package:weski/Widget/CustomSlider.dart';
 import 'package:weski/Widget/friendCard.dart';
 import '../Api/userApi.dart';
@@ -16,17 +18,23 @@ class NotificationPage extends StatefulWidget {
 
 class _NotificationPageState extends State<NotificationPage> {
   int selectedIndex = 0;
-
-  List<int> notifications = List.generate(10, (index) => index);
-
+  List<NotificationModel> notifications = [];
+  List<int> deletedNotifications = [];
   List<Friend> _requests = [];
 
   @override
   void initState() {
     super.initState();
+
     userApi.fetchFriendRequests(widget.curentUserId).then((fetchedRequests) {
       setState(() {
         _requests = fetchedRequests;
+      });
+    });
+
+    notificationApi.fetchUserNotifications(widget.curentUserId).then((fetchedNotifications) {
+      setState(() {
+        notifications = fetchedNotifications;
       });
     });
   }
@@ -49,7 +57,10 @@ class _NotificationPageState extends State<NotificationPage> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_rounded),
-          onPressed: () => Navigator.pop(context, false),
+          onPressed: () async => {
+            await notificationApi.deleteNotifications(deletedNotifications),
+            Navigator.pop(context, false)
+          },
         ),
         centerTitle: true,
         title: const Text(
@@ -84,10 +95,12 @@ class _NotificationPageState extends State<NotificationPage> {
                       return notificationCard(
                         onDismiss: () {
                           setState(() {
+                            deletedNotifications.add(notifications[index].sentNotificationId);
                             notifications.removeAt(index);
                           });
                         },
                         cardHeight: cardHeight,
+                        notification: notifications[index]
                       );
                     },
                   ),
@@ -132,10 +145,14 @@ class _NotificationPageState extends State<NotificationPage> {
                 height: 60,
                 child: Center(
                   child: ElevatedButton.icon(
-                    onPressed: () {
+                    onPressed: () async {
+                      for(var notif in notifications){
+                        deletedNotifications.add(notif.sentNotificationId);
+                      }
                       setState(() {
                         notifications.clear();
                       });
+                      await notificationApi.deleteNotifications(deletedNotifications);
                     },
                     icon: const Icon(Icons.delete),
                     label: const Text("Delete all notifications"),
