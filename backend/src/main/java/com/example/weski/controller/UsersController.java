@@ -2,6 +2,7 @@ package com.example.weski.controller;
 
 import com.example.weski.data.model.Users;
 import com.example.weski.dto.FriendDTO;
+import com.example.weski.dto.StatisticDTO;
 import com.example.weski.dto.UsersDTO;
 import com.example.weski.service.FriendsService;
 import com.example.weski.service.UsersService;
@@ -19,8 +20,7 @@ public class UsersController {
     private final UsersService usersService;
 
     @Autowired
-    private  final FriendsService friendsService;
-
+    private final FriendsService friendsService;
 
 
     public UsersController(UsersService usersService, FriendsService friendsService) {
@@ -29,7 +29,7 @@ public class UsersController {
     }
 
     @GetMapping("/getAll")
-    public List<UsersDTO> getAllUsers(){
+    public List<UsersDTO> getAllUsers() {
         return usersService.getAllUsers();
     }
 
@@ -41,6 +41,16 @@ public class UsersController {
     @GetMapping("/{userId}/requests")
     public List<FriendDTO> getRequests(@PathVariable Long userId) {
         return friendsService.getRequestsForUser(userId);
+    }
+
+    @GetMapping("/getStatistics/{userId}")
+    public StatisticDTO getStatistics(@PathVariable Long userId) {
+        return usersService.getUserStatistics(userId);
+    }
+
+    @GetMapping("/getGroupStatistics/{groupId}")
+    public List<StatisticDTO> getGroupStatistics(@PathVariable("groupId") Long groupId) {
+        return usersService.getGroupStatistics(groupId);
     }
 
     @PostMapping("/post")
@@ -58,6 +68,12 @@ public class UsersController {
     public ResponseEntity<?> addFriend(@PathVariable("id") Long currentUserId, @PathVariable("username") String friendUsername) {
         friendsService.addFriendToUser(currentUserId, friendUsername);
         return ResponseEntity.ok("Prieten adăugat cu succes!");
+    }
+
+    @PostMapping("{id}/updateStatistics/{total_distance}/{max_speed}")
+    public ResponseEntity<?> updateStatistics(@PathVariable("id") Long currentUserId, @PathVariable("total_distance") double totalDistance, @PathVariable("max_speed") double maxSpeed) {
+        usersService.updateeStatistic(currentUserId, totalDistance, maxSpeed);
+        return ResponseEntity.ok("Statistici actualizate");
     }
 
 

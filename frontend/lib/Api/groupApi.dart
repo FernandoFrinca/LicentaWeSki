@@ -4,11 +4,10 @@ import 'package:http/http.dart' as http;
 import 'package:weski/ConcretObjects/Group.dart';
 
 import '../ConcretObjects/Friend.dart';
+import 'consts.dart';
 
 class groupApi {
-  //static const String url = "http://192.168.0.193:8080/api/group"; // camin
-  static const String url = "http://192.168.0.102:8080/api/group"; //acasa
-
+  static const String url = "$ipAddres/group";
   static Future<List<Group>> fetchUserGroups(int id)async {
     final endpointUrl = Uri.parse('$url/getUserGroups/$id');
     final response = await http.get(endpointUrl);

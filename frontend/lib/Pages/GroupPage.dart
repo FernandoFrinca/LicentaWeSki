@@ -1,12 +1,16 @@
+import 'dart:collection';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:weski/Api/groupApi.dart';
+import 'package:weski/ConcretObjects/Statistics.dart';
 import 'package:weski/Widget/addFriends.dart';
 import 'package:weski/Widget/createGroup.dart';
 import 'package:weski/Widget/groupCard.dart';
 import 'package:weski/Widget/shortcutCard.dart';
 
+import '../Api/userApi.dart';
 import '../ConcretObjects/Friend.dart';
 import '../ConcretObjects/Group.dart';
 import '../Widget/CustomSlider.dart';
@@ -38,11 +42,33 @@ class _groupPageState extends State<groupPage> {
 
   @override
   void initState() {
+    super.initState();
     currentGroup = widget.group;
     currentUser = widget.currentUser;
     groupMembers = currentGroup.groupMmembers;
-    super.initState();
+    for(var member in groupMembers){
+      member.max_speed = 0;
+      member.total_distance = 0;
+    }
+    fetchStatistics();
+
   }
+
+  Future<void> fetchStatistics() async {
+    List<Statistics> stats = await userApi.getGroupStatistics(currentGroup.id);
+    groupMembers = await SplayTreeSet<Friend>((a, b) => a.id.compareTo(b.id),)..addAll(groupMembers);
+    stats.sort((a, b) => a.user_id.compareTo(b.user_id));
+    for(int member = 0; member < groupMembers.length; member++){
+      groupMembers.elementAt(member).max_speed = stats[member].max_speed;
+      groupMembers.elementAt(member).total_distance = stats[member].total_distance;
+    }
+    setState(() {
+      groupMembers = SplayTreeSet<Friend>((a, b) =>
+          b.max_speed.compareTo(a.max_speed),)
+        ..addAll(groupMembers);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -94,6 +120,8 @@ class _groupPageState extends State<groupPage> {
                     category: groupMembers.elementAt(index).category,
                     imagePath: "assets/avatar.jpeg",
                     fillColor: userCardColor,
+                    total_distance: groupMembers.elementAt(index).total_distance,
+                    max_speed: groupMembers.elementAt(index).max_speed,
                   );
                 }, options: CarouselOptions(
                     autoPlay: true,

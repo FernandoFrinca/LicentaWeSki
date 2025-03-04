@@ -2,6 +2,8 @@ class Friend {
   late int id;
   late String username;
   late String category;
+  late double max_speed;
+  late double total_distance;
 
   int getId(){
     return id;
@@ -14,8 +16,9 @@ class Friend {
   String getCategory(){
     return category;
   }
+
   @override
   String toString() {
-    return 'id: $id, username: $username, category: $category';
+    return 'id: $id, username: $username, category: $category \n';
   }
 }

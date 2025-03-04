@@ -2,13 +2,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'consts.dart';
 
 class skiSlopeApi {
-  //static const String urlSlopesByResort = "http://192.168.0.193:8080/api/ski-resorts"; //camin
-  static const String urlSlopesByResort = "http://192.168.0.102:8080/api/ski-resorts"; //acasa
-
+  static const String url = "$ipAddres/ski-resorts";
   static Future<List?> fetchSlopesfromResort(int id) async {
-    final endpointUrl = Uri.parse('$urlSlopesByResort/getByResort/$id');
+    final endpointUrl = Uri.parse('$url/getByResort/$id');
     try {
       final response = await http.get(endpointUrl);
       if (response.statusCode == 200) {

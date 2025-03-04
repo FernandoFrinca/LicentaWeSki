@@ -1,10 +1,15 @@
 package com.example.weski.service;
 
 
+import com.example.weski.data.model.Group;
+import com.example.weski.data.model.Statistics;
 import com.example.weski.data.model.Users;
+import com.example.weski.dto.StatisticDTO;
 import com.example.weski.dto.UsersDTO;
 import com.example.weski.mapper.to.dto.UserDTOMapper;
 import com.example.weski.mapper.to.entity.UserDTOtoEntityMapper;
+import com.example.weski.repository.GroupRepository;
+import com.example.weski.repository.StatisticsRepository;
 import com.example.weski.repository.UsersRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,16 +30,22 @@ public class UsersService {
 
     private final UserDTOtoEntityMapper usersEntityMapper;
 
+    private final StatisticsRepository statisticsRepository;
+
+    private final GroupRepository groupRepository;
+
 
     @Autowired
     private PasswordEncoder passEncoder;
 
 
     @Autowired
-    public UsersService(UsersRepository usersRepository, UserDTOMapper usersMapper, UserDTOtoEntityMapper usersEntityMapper) {
+    public UsersService(UsersRepository usersRepository, UserDTOMapper usersMapper, UserDTOtoEntityMapper usersEntityMapper, StatisticsRepository statisticsRepository, GroupRepository groupRepository) {
         this.usersRepository = usersRepository;
         this.usersMapper = usersMapper;
         this.usersEntityMapper = usersEntityMapper;
+        this.statisticsRepository = statisticsRepository;
+        this.groupRepository = groupRepository;
     }
 
 
@@ -93,7 +105,42 @@ public class UsersService {
         if (dto.getGender() != null) {
             user.setGender(dto.getGender());
         }
-
         usersRepository.save(user);
+    }
+
+    public void updateeStatistic(Long userId, double maxSpeed, double totalDistance) {
+        Users user = usersRepository.findById(userId).orElse(null);
+        Statistics statistics = user.getStatistics();
+        if (statistics == null) {
+            statistics = new Statistics();
+            statistics.setUser(user);
+        }
+        statistics.setMax_speed(maxSpeed);
+        statistics.setTotal_distance(totalDistance);
+        statisticsRepository.save(statistics);
+    }
+
+    public StatisticDTO getUserStatistics(Long userId){
+        Users user = usersRepository.findById(userId).orElse(null);
+        Statistics statistics = user.getStatistics();
+        if(statistics == null) {
+            throw new RuntimeException("");
+        }
+        return new StatisticDTO(userId,statistics.getMax_speed(),statistics.getTotal_distance());
+    }
+
+    public List<StatisticDTO> getGroupStatistics(Long groupId){
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Group not found"));
+        List<StatisticDTO> groupMembersStatistics = new ArrayList<>();
+        for (Users user : group.getGroupMembers()) {
+            Statistics statistics = user.getStatistics();
+            if (statistics == null) {
+                groupMembersStatistics.add(new StatisticDTO(user.getId(), 0.0, 0.0));
+            } else {
+                groupMembersStatistics.add(new StatisticDTO(user.getId(), statistics.getMax_speed(), statistics.getTotal_distance()));
+            }
+        }
+        return  groupMembersStatistics;
     }
 }

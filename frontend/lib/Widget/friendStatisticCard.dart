@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 class friendStatisticCard extends StatefulWidget {
@@ -7,6 +8,8 @@ class friendStatisticCard extends StatefulWidget {
   final IconData firstIcon;
   final IconData secondIcon;
   final int fillColor;
+  final double total_distance;
+  final double max_speed;
 
   const friendStatisticCard({
     Key? key,
@@ -14,7 +17,7 @@ class friendStatisticCard extends StatefulWidget {
     required this.category,
     required this.imagePath,
     this.firstIcon = Icons.speed,
-    this.secondIcon = Icons.stacked_line_chart, required this.fillColor,
+    this.secondIcon = Icons.stacked_line_chart, required this.fillColor, required this.total_distance, required this.max_speed,
   }) : super(key: key);
 
   @override
@@ -25,7 +28,7 @@ class _friendStatisticCardState extends State<friendStatisticCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(7.0),
       child: Container(
         width: 170,
         decoration: BoxDecoration(
@@ -50,13 +53,12 @@ class _friendStatisticCardState extends State<friendStatisticCard> {
               Text(
                 widget.name,
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 4),
               Text(
                 widget.category,
                 style: const TextStyle(
@@ -65,16 +67,40 @@ class _friendStatisticCardState extends State<friendStatisticCard> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 12),
+             // const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(widget.firstIcon, color: Colors.white),
+                  Column(
+                    children: [
+                      Icon(widget.firstIcon, color: Colors.white),
+                      AutoSizeText(
+                        widget.max_speed == 0?"":
+                        "${widget.max_speed} km/h",
+                        style: TextStyle(color: Colors.white),
+                        maxLines: 1,
+                        minFontSize: 1,
+                        maxFontSize: 14,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 8),
+                  Column(
+                    children: [
+                      Icon(widget.secondIcon, color: Colors.white),
 
-                  const SizedBox(width: 16),
-                  Icon(widget.secondIcon, color: Colors.white),
+                      AutoSizeText(
+                        widget.total_distance == 0?"":
+                        "${widget.total_distance} km",
+                        style: TextStyle(color: Colors.white),
+                        maxLines: 1,
+                        minFontSize: 1,
+                        maxFontSize: 14,
+                      ),
+                    ],
+                  ),
                 ],
-              ),
+              )
             ],
           ),
         ),

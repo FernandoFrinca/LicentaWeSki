@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:weski/Assets/Colors.dart';
 
 final ThemeData lightTheme = ThemeData(
+
   brightness: Brightness.light,
   colorScheme: const ColorScheme.light(
 
@@ -13,6 +14,7 @@ final ThemeData lightTheme = ThemeData(
 
     secondary: Color(licentaColors.opacity | licentaColors.custom_l_GrayBlue),
     onSecondary: Color(licentaColors.opacity | licentaColors.colorBlack),
+
 
 
 

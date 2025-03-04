@@ -31,6 +31,8 @@ public class Users {
                 inverseJoinColumns = @JoinColumn(name = "group_id") )
     @JsonIgnore
     private Set<Group> groupsAssigned = new HashSet<>();
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Statistics statistics;
 
 /*    @ManyToMany
     @JoinTable(

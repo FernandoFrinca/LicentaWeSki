@@ -8,8 +8,22 @@ import '../Widget/CustomTextField.dart';
 import 'HomePage.dart';
 import 'RegisterPage.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  Future<User?> loginLogic() async {
+    String username = _usernameController.text;
+    String password = _passwordController.text;
+    return userApi.userLoginValidation(username, password);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +32,6 @@ class LoginPage extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     User? currentUser;
-
-    final TextEditingController _usernameController = new TextEditingController();
-    final TextEditingController _passwordController = new TextEditingController();
-
-
 
     @override
     void dispose() {
@@ -153,10 +162,18 @@ class LoginPage extends StatelessWidget {
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
                 onPressed: () {
+                  User testUser = User(
+                    id: 999,
+                    username: 'testUser',
+                    email: 'dummy@example.com',
+                    age: 30,
+                    gender: 1,
+                    category: 'Tester',
+                  );
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => HomePage(curentUser: null),
+                      builder: (context) => HomePage(curentUser: testUser),
                     ),
                   );
                 },
