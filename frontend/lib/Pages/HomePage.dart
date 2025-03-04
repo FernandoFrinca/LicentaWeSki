@@ -10,10 +10,14 @@ import 'package:weski/ConcretObjects/Group.dart';
 import 'package:weski/ConcretObjects/User.dart';
 import 'package:weski/Widget/customDraggable.dart';
 
+import '../Assets/LocationLogic.dart';
 import '../ConcretObjects/Friend.dart';
+import '../ConcretObjects/SearchElement.dart';
 import '../Widget/customDrawer.dart';
+import '../Widget/customGoogleMap.dart';
 import '../Widget/customSearch.dart';
 import 'FriendsPage.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 
 class HomePage extends StatefulWidget {
   final User? curentUser;
@@ -25,90 +29,19 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final Completer<GoogleMapController> _controller = Completer();
-  late MapType _currentMapType = MapType.normal;
-  late int mapTypeIndex = 0;
+
+  MapType _currentMapType = MapType.normal;
+  int mapTypeIndex = 0;
   LocationData? currentLocation;
   double _currentZoom = 15.0;
-  //final LatLng _initialPosition = const LatLng(45.3219, 23.2363);
   Set<Polyline> set_polylines = {};
-  LatLng? _lastLocation;
-  late Set<Marker> markers_list = {};
-
-  void getCurrentLocation() async {
-    Location location = Location();
-
-    bool serviceEnabled = await location.serviceEnabled();
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
-      if (!serviceEnabled) return;
-    }
-
-    PermissionStatus permissionGranted = await location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) return;
-    }
-
-    await location.changeSettings(
-      accuracy: LocationAccuracy.high,
-    );
-
-    location.getLocation().then((loc) {
-      setState(() {
-        currentLocation = loc;
-      });
-    });
-
-    location.onLocationChanged.listen((newLoc) async {
-      LatLng newPosition = LatLng(newLoc.latitude!, newLoc.longitude!);
-
-
-      if (_lastLocation == null || _calculateDistance(_lastLocation!, newPosition) > 5) {
-        setState(() {
-          currentLocation = newLoc;
-          _lastLocation = newPosition;
-        });
-
-        final googleMapController = await _controller.future;
-        googleMapController.animateCamera(
-          CameraUpdate.newCameraPosition(
-            CameraPosition(
-              target: newPosition,
-              zoom: _currentZoom,
-            ),
-          ),
-        );
-      }
-    });
-  }
-
-
-  double _calculateDistance(LatLng start, LatLng end) {
-    const double earthRadius = 6371000;
-    double dLat = _degreesToRadians(end.latitude - start.latitude);
-    double dLng = _degreesToRadians(end.longitude - start.longitude);
-
-    double a = sin(dLat / 2) * sin(dLat / 2) +
-        cos(_degreesToRadians(start.latitude)) *
-            cos(_degreesToRadians(end.latitude)) *
-            sin(dLng / 2) *
-            sin(dLng / 2);
-
-    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
-    return earthRadius * c;
-  }
-
-  double _degreesToRadians(double degrees) {
-    return degrees * pi / 180;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _loadMarkers();
-    getCurrentLocation();
-
-  }
+  Set<Marker> markers_list = {};
+  List<SearchElement> searchedElementsList = [];
+  ValueNotifier<double> speedNotifier = ValueNotifier<double>(0.0);
+  ValueNotifier<double> totalDistanceNotifier = ValueNotifier<double> (0.0);
+  ValueNotifier<double> averageSpeedNotifier = ValueNotifier<double> (0.0);
+  ValueNotifier<double> maxAltitudeNotifier = ValueNotifier<double> (0.0);
+  ValueNotifier<LocationData?> currentLocationNotifier = ValueNotifier(null);
 
   Set<Polyline> displayed_polylines = {};
   void hidePolyline() {
@@ -121,20 +54,63 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-
   void _updatePolylines(Set<Polyline> newPolylines) {
     setState(() {
       set_polylines = newPolylines;
       hidePolyline();
     });
   }
+
   Future<void> _loadMarkers() async {
     final markers = await skiResortApi.fetchResorts(_controller, _updatePolylines);
     if (markers != null) {
       setState(() {
         markers_list = markers;
       });
+      for(var marker in markers_list){
+        SearchElement aux = new SearchElement();
+        aux.name = marker.infoWindow.title!;
+        LatLng auxPos = marker.position;
+        aux.lat = auxPos.latitude;
+        aux.lng = auxPos.longitude;
+        searchedElementsList.add(aux);
+      }
     }
+    print("test:");
+    print(searchedElementsList);
+  }
+
+  void onCameraMove(CameraPosition cameraPosition) {
+    setState(() {
+      _currentZoom = cameraPosition.zoom;
+    });
+    hidePolyline();
+  }
+
+  void searchBarMovedCamera(double lat, double lng) async {
+    setIsTrackingFalse();
+    final GoogleMapController googleMapController = await _controller.future;
+    googleMapController.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: LatLng(lat, lng,),
+          zoom: 15,
+        ),
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadMarkers();
+    startLocationUpdates((newLoc, speed, distance, avgSpeed, maxAltitude) {
+      currentLocationNotifier.value = newLoc;
+      speedNotifier.value = speed;
+      totalDistanceNotifier.value = distance / 1000;
+      averageSpeedNotifier.value = avgSpeed;
+      maxAltitudeNotifier.value = maxAltitude;
+    }, _controller.future, _currentZoom);
   }
 
   @override
@@ -145,39 +121,31 @@ class _HomePageState extends State<HomePage> {
       body:
       Stack(
         children: [
-          currentLocation == null
-              ? const Center(child: CircularProgressIndicator())
-              : GoogleMap(
-            initialCameraPosition: CameraPosition(
-              target: LatLng(
-                currentLocation!.latitude!,
-                currentLocation!.longitude!,
-              ),
-              zoom: _currentZoom,
-            ),
-            onMapCreated: (mapController) {
-              _controller.complete(mapController);
+          ValueListenableBuilder<LocationData?>(
+            valueListenable: currentLocationNotifier,
+            builder: (context, currentLocation, child) {
+              if (currentLocation == null) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return customGoogleMap(
+                mapType: _currentMapType,
+                currentLocation: currentLocation,
+                zoom: _currentZoom,
+                markers: {
+                  Marker(
+                    markerId: const MarkerId("Current Location"),
+                    position: LatLng(
+                      currentLocation.latitude!,
+                      currentLocation.longitude!,
+                    ),
+                  ),
+                  ...markers_list,
+                },
+                polylines: displayed_polylines,
+                mapControlerCreat: (controller) => _controller.complete(controller),
+                moveCamera: onCameraMove,
+              );
             },
-            mapType: _currentMapType,
-            markers: {
-              Marker(
-                markerId: const MarkerId("Current Location"),
-                position: LatLng(
-                  currentLocation!.latitude!,
-                  currentLocation!.longitude!,
-                ),
-                //icon: _customMarkerIcon,
-              ),
-              ...markers_list,
-            },
-            polylines: displayed_polylines,
-            onCameraMove: (cameraPosition) {
-              setState(() {
-                _currentZoom = cameraPosition.zoom;
-              });
-              hidePolyline();
-            },
-
           ),
           SafeArea(
             child: Column(
@@ -186,7 +154,7 @@ class _HomePageState extends State<HomePage> {
                   padding: EdgeInsets.only(top: screenHeight * 0.01),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
                         padding: EdgeInsets.only(left: screenWidth * 0.06),
@@ -220,6 +188,8 @@ class _HomePageState extends State<HomePage> {
                           textColor: 0xFF000000,
                           screenWidth: screenWidth,
                           screenHeight: screenHeight,
+                          searchList: searchedElementsList,
+                          moveTo: searchBarMovedCamera,
                         ),
                       ),
 
@@ -258,7 +228,6 @@ class _HomePageState extends State<HomePage> {
                       padding: EdgeInsets.only(right: screenWidth * 0.06, left: screenWidth * 0.06, bottom: screenHeight * 0.165),
                       child: RawMaterialButton(
                         onPressed: () {
-                          setState(() {
                             if(mapTypeIndex == 0){
                               _currentMapType = MapType.normal;
                               mapTypeIndex = 1;
@@ -271,7 +240,6 @@ class _HomePageState extends State<HomePage> {
                               _currentMapType = MapType.satellite;
                               mapTypeIndex = 0;
                             }
-                          });
                         },
                         fillColor: Colors.white,
                         shape: const CircleBorder(),
@@ -292,6 +260,11 @@ class _HomePageState extends State<HomePage> {
                       padding: EdgeInsets.only(right: screenWidth * 0.06, bottom: screenHeight * 0.165),
                       child: RawMaterialButton(
                         onPressed: () async {
+                          if(isTracking == false) {
+                            setIsTrackingTrue();
+                          }else{
+                            setIsTrackingFalse();
+                          }
                           final googleMapController = await _controller.future;
                           googleMapController.animateCamera(
                             CameraUpdate.newCameraPosition(
@@ -300,7 +273,7 @@ class _HomePageState extends State<HomePage> {
                                   currentLocation!.latitude!,
                                   currentLocation!.longitude!,
                                 ),
-                                zoom: 19,
+                                zoom: _currentZoom,
                               ),
                             ),
                           );
@@ -312,9 +285,12 @@ class _HomePageState extends State<HomePage> {
                           minWidth: screenWidth * 0.13,
                           minHeight: screenWidth * 0.13,
                         ),
-                        child: Icon(
+                        child: isTracking == true ? Icon(
                           Icons.gps_fixed,
                           color: Colors.black,
+                          size: screenWidth * 0.07,) : Icon(
+                          Icons.gps_off_outlined,
+                          color: Colors.red,
                           size: screenWidth * 0.07,
                         ),
                       ),
@@ -324,7 +300,15 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          customDraggable(screenWidth: screenWidth, screenHeight: screenHeight)
+          customDraggable(
+            screenWidth: screenWidth,
+            screenHeight: screenHeight,
+            speedNotifier: speedNotifier,
+            averageSpeedNotifier: averageSpeedNotifier,
+            totalDistanceNotifier: totalDistanceNotifier,
+            maxAltitudeNotifier: maxAltitudeNotifier,
+            currentUser: widget.curentUser!,
+          )
         ],
       ),
       drawer: customDrawer(

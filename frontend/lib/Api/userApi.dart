@@ -4,12 +4,12 @@ import 'dart:ffi';
 import 'package:http/http.dart' as http;
 import 'package:weski/ConcretObjects/Friend.dart';
 
+import '../ConcretObjects/Statistics.dart';
 import '../ConcretObjects/User.dart';
+import 'consts.dart';
 
 class userApi {
-  //static const String url = "http://192.168.0.193:8080/api/users"; // camin
-  static const String url = "http://192.168.0.102:8080/api/users"; //acasa
-
+  static const String url = "$ipAddres/users";
   static Future<List?> fetchAllUsers() async {
     final endpointUrl = Uri.parse('$url/getAll');
     try {
@@ -230,4 +230,40 @@ class userApi {
       print('Eroare la stergere: $e');
     }
   }
+
+  static Future<void> updateStatistics(int userId, double total_distance, double max_speed) async{
+    final endpointUrl = Uri.parse('$url/$userId/updateStatistics/$total_distance/$max_speed');
+    final response = await http.post(endpointUrl);
+    try {
+      if (response.statusCode == 200) {
+        print('Statistica Updatata!');
+      } else {
+        print('Eroare la update');
+      }
+    }
+    catch(e){
+      print('Eroare la update: $e');
+    }
+  }
+
+  static Future<List<Statistics>>getGroupStatistics(int groupId)async {
+    final endpointUrl = Uri.parse('$url/getGroupStatistics/$groupId');
+    final response = await http.get(endpointUrl);
+    try {
+
+      List<dynamic> decodedBody = jsonDecode(response.body);
+      List<Statistics> statisticssList = [];
+      for(var body in decodedBody){
+        Statistics statistica = Statistics();
+        statistica.user_id = body['user_id'];
+        statistica.max_speed = body['max_speed'];
+        statistica.total_distance = body['total_distance'];
+        statisticssList.add(statistica);
+      }
+      return statisticssList;
+    }catch(e){
+      return [];
+    }
+  }
+
 }

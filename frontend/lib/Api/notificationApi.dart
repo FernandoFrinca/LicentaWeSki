@@ -2,12 +2,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:weski/ConcretObjects/NotificationModel.dart';
+import 'consts.dart';
 
 class notificationApi {
-  //static const String url = "http://192.168.0.193:8080/api/notifications"; // camin
-  static const String url = "http://192.168.0.102:8080/api/notifications"; //acasa
-
-
+  static const String url = "$ipAddres/notifications";
   static Future<void> sendNotification(int notifId, int groupId, int currentUserId)async {
     final endpointUrl = Uri.parse('$url/sentNotification/group');
     try {

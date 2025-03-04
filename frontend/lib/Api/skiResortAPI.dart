@@ -6,10 +6,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:weski/Api/skiSlopeAPI.dart';
 
-class skiResortApi {
-  //static const String url = 'http://192.168.0.193:8080/api/ski-resorts'; //camin
-  static const String url = "http://192.168.0.102:8080/api/ski-resorts"; //acasa
+import 'consts.dart';
 
+class skiResortApi {
+  static const String url = "$ipAddres/ski-resorts";
   static Future<BitmapDescriptor> _loadCustomMarkerIcon() async {
     return await BitmapDescriptor.fromAssetImage(
       ImageConfiguration(size: Size(12, 12)),

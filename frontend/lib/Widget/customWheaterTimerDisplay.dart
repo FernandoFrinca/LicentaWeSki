@@ -1,80 +1,130 @@
-
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:weski/Assets/LocationLogic.dart';
 
 
 class customWheaterTimerDisplay extends StatefulWidget {
   final int fillColor;
   final int textColor;
-  final double screenHeight;
-  final double screenWidth;
+  final ValueNotifier<Duration> duration;
 
   const customWheaterTimerDisplay({
-    super.key,
+    Key? key,
     required this.fillColor,
     required this.textColor,
-    required this.screenWidth,
-    required this.screenHeight
-  });
+    required this.duration,
+  }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _CustomWheaterTimerDisplayState();
+  _customWheaterTimerDisplayState createState() => _customWheaterTimerDisplayState();
 }
 
-class _CustomWheaterTimerDisplayState extends State<customWheaterTimerDisplay> {
+class _customWheaterTimerDisplayState extends State<customWheaterTimerDisplay> {
+  @override
+  void initState() {
+    super.initState();
+    getWeather();
+  }
+
+  String formatDuration(Duration duration) {
+    final minutes = duration.inMinutes.remainder(60).toString().padLeft(2, '0');
+    final seconds = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
+    final hours = duration.inHours.remainder(60).toString().padLeft(2, '0');
+    return '$hours:$minutes:$seconds';
+  }
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenDiagonal = sqrt(pow(screenHeight, 2) + pow(screenWidth, 2));
 
-    double displayWidth = widget.screenWidth * 0.4;
-    double displayHeight = widget.screenHeight * 0.0635;
-    Stopwatch timer;
+    double iconSize = screenDiagonal * 0.025;
+    double textSize = screenDiagonal * 0.018;
+    double dividerThickness = screenDiagonal * 0.0018;
 
-    return Container(
-      width: displayWidth,
-      height: displayHeight,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25),
-        color: Color(widget.fillColor),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-           const Expanded(
-               child: Row(
-                 mainAxisAlignment: MainAxisAlignment.center,
-                 children: [
-                   SizedBox(
-                     width: 10,
-                   ),
-                   Text(
-                    "-1*",
-                    style: TextStyle(fontSize: 24),
-                   ),
-                   Icon(
-                     Icons.sunny,
-                     color: Colors.amber,
-                     size: 30,
-                   )
-                 ],
-               ),
-           ),
-          SizedBox(
-            height: displayHeight * 0.6,
-            child: const VerticalDivider(
-              thickness: 2,
-              color: Colors.black,
-            ),
+    return ValueListenableBuilder<Duration>(
+        valueListenable: widget.duration,
+        builder: (context, durationValue, child) {
+          return Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: screenDiagonal * 0.023,
+            vertical: screenDiagonal * 0.015,
           ),
-           const Expanded(
-             child: Center(
-               child: Text(
-                "20 min",
-                style: TextStyle(fontSize: 22),
-                         ),
-             ),
-           ),
-        ],
-      ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(screenDiagonal * 0.025),
+            color: Color(widget.fillColor),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ValueListenableBuilder<double>(
+                    valueListenable: weatherTempNotifier,
+                    builder: (context, temperature, child) {
+                      return Text(
+                        '${temperature.toStringAsFixed(0)}°C',
+                        style: TextStyle(
+                          fontSize: textSize * 0.9,
+                          color: Color(widget.textColor),
+                        ),
+                      );
+                    },
+                  ),
+                  SizedBox(width: screenDiagonal * 0.005),
+                  ValueListenableBuilder<String>(
+                    valueListenable: weatherCondNotifier,
+                    builder: (context, conditie, child) {
+                      IconData weatherIcon = Icons.wb_sunny;
+                      Color colorIconWeather;
+                      if(conditie.toLowerCase() == "clear"){
+                        weatherIcon = Icons.wb_sunny;
+                        colorIconWeather = Colors.amber;
+                      }
+                      else if(conditie.toLowerCase() == "clouds"){
+                        weatherIcon = Icons.wb_cloudy;
+                        colorIconWeather = Colors.white30;
+                      }
+                      else if(conditie.toLowerCase() == "rain"){
+                        weatherIcon = Icons.grain;
+                        colorIconWeather = Colors.lightBlue;
+                      }
+                      else if(conditie.toLowerCase() == "snow"){
+                        weatherIcon = Icons.cloudy_snowing;
+                        colorIconWeather = Colors.amber;
+                      }
+                      return Icon(
+                        weatherIcon,
+                        color: Colors.amber,
+                        size: iconSize * 0.9,
+                      );
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: iconSize,
+                child: VerticalDivider(
+                  thickness: dividerThickness,
+                  color: Colors.black,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: screenDiagonal * 0.005),
+                child: Text(
+                  formatDuration(durationValue),
+                  style: TextStyle(
+                    fontSize: textSize,
+                    color: Color(widget.textColor),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          );
+        },
     );
   }
 }

@@ -41,10 +41,17 @@ dependencies:
   stop_watch_timer: ^3.2.1
   http: ^1.2.2
   carousel_slider: ^5.0.0
+  sensors_plus: ^6.1.1
+  syncfusion_flutter_charts: ^28.2.6
+  weather: ^3.1.1
+#  charts_flutter_new: ^0.12.0
+#  fl_chart:
+#    path: "C:/Users/ferna/Desktop/fl_chart-main"
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
