@@ -9,7 +9,7 @@ import '../ConcretObjects/User.dart';
 import 'consts.dart';
 
 class userApi {
-  static const String url = "$ipAddres/users";
+  static const String url = "$apiAddres/users";
   static Future<List?> fetchAllUsers() async {
     final endpointUrl = Uri.parse('$url/getAll');
     try {
