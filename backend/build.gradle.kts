@@ -24,6 +24,9 @@ dependencies {
 	implementation("org.locationtech.jts:jts-core:1.19.0")
 	implementation("org.mapstruct:mapstruct:1.6.3")
 	implementation ("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-websocket")
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+	implementation("com.fasterxml.jackson.core:jackson-databind")
 
 	runtimeOnly ("org.postgresql:postgresql")
 

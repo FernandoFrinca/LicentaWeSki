@@ -19,4 +19,5 @@ public class ConfigSecurity {
         http.csrf().disable().authorizeHttpRequests().anyRequest().permitAll().and().httpBasic();
         return http.build();
     }
+
 }

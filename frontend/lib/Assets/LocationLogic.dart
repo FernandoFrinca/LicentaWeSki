@@ -4,10 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:weather/weather.dart';
+import 'package:weski/Api/locationApi.dart';
+import 'package:weski/ConcretObjects/User.dart';
 
 import '../Api/consts.dart';
+import '../Api/locationSocket.dart';
 
-// Variabile globale
 LocationData? currentLocation;
 LocationData? _lastLocationData;
 LatLng? _lastLocation;
@@ -26,6 +28,7 @@ ValueNotifier<double> weatherTempNotifier = ValueNotifier(0.0);
 ValueNotifier<String> weatherCondNotifier = ValueNotifier("clear");
 ValueNotifier<List<List<dynamic>>> weatherFiveDaysNotifier = ValueNotifier([]);
 Timer? weatherTimer;
+Timer? locationTimer;
 
 void resetData(){
   totalDistance = 0.0;
@@ -107,7 +110,6 @@ double haversineInMeters(LatLng start, LatLng end) {
   return earthRadius * c;
 }
 
-// Calcul viteza bazată pe locația curentă și anterioară
 double calculateSpeed(LocationData newLoc, LocationData? lastLoc, LatLng newPosition) {
   if (lastLoc != null && newLoc.time != null && lastLoc.time != null) {
     double timeDiffMillis = newLoc.time! - lastLoc.time!;
@@ -150,10 +152,17 @@ Future<void> updateMap(LatLng newPosition, double currentZoom, Future<GoogleMapC
   );
 }
 
+void stopLocationSaving() {
+  if (locationTimer != null) {
+    locationTimer!.cancel();
+    locationTimer = null;
+  }
+}
+
 void startLocationUpdates(
     Function(LocationData, double, double, double, double) onLocationUpdate,
     Future<GoogleMapController> googleMapControllerFuture,
-    double currentZoom) async
+    double currentZoom, int curentUserId) async
 {
 
   Location location = Location();
@@ -199,11 +208,25 @@ void startLocationUpdates(
         }
         currentSpeed = speed;
         averageSpeedCalc();
+
+        if (isRecordingNotifier.value && locationTimer == null) {
+          locationTimer = Timer.periodic(Duration(seconds: 10), (timer) async {
+            if (currentLocation != null) {
+              await locationApi.saveUserData(curentUserId,
+                  currentLocation!.latitude!,
+                  currentLocation!.longitude!);
+            }
+          });
+        }
+
+
       }
 
       currentLocation = newLoc;
       _lastLocationData = newLoc;
       _lastLocation = newPosition;
+
+      sendLocation(currentLocation!.latitude ?? 0, currentLocation!.longitude ?? 0, curentUserId);
 
       onLocationUpdate(
           newLoc,

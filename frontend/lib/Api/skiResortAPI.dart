@@ -9,7 +9,7 @@ import 'package:weski/Api/skiSlopeAPI.dart';
 import 'consts.dart';
 
 class skiResortApi {
-  static const String url = "$ipAddres/ski-resorts";
+  static const String url = "$apiAddres/ski-resorts";
   static Future<BitmapDescriptor> _loadCustomMarkerIcon() async {
     return await BitmapDescriptor.fromAssetImage(
       ImageConfiguration(size: Size(12, 12)),

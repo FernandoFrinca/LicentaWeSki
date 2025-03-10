@@ -5,7 +5,7 @@ import 'package:weski/ConcretObjects/NotificationModel.dart';
 import 'consts.dart';
 
 class notificationApi {
-  static const String url = "$ipAddres/notifications";
+  static const String url = "$apiAddres/notifications";
   static Future<void> sendNotification(int notifId, int groupId, int currentUserId)async {
     final endpointUrl = Uri.parse('$url/sentNotification/group');
     try {

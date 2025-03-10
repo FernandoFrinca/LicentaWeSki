@@ -7,7 +7,7 @@ import '../ConcretObjects/Friend.dart';
 import 'consts.dart';
 
 class groupApi {
-  static const String url = "$ipAddres/group";
+  static const String url = "$apiAddres/group";
   static Future<List<Group>> fetchUserGroups(int id)async {
     final endpointUrl = Uri.parse('$url/getUserGroups/$id');
     final response = await http.get(endpointUrl);

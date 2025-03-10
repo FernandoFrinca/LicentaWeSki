@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:weski/Api/groupApi.dart';
+import 'package:weski/Api/locationApi.dart';
 import 'package:weski/Api/notificationApi.dart';
 import 'package:weski/Api/userApi.dart';
 import 'package:weski/Pages/NotificationPage.dart';
@@ -106,6 +107,9 @@ class customDrawer extends StatelessWidget {
                           //await groupApi.removeGroup(groupId);
                           //await notificationApi.fetchAvalibleNotifications();
                           //await userApi.updateStatistics(1, 20, 20);
+                          //await locationApi.saveUserData(1,43.445, 45.667);
+                          //await locationApi.createUserPolylineTrack(1);
+                          //await locationApi.celarTrackData(1);
                       },
                       iconSize: screenWidth * 0.08,
                       paddingText: screenWidth * 0.03

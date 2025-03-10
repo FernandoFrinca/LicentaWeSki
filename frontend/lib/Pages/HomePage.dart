@@ -10,6 +10,7 @@ import 'package:weski/ConcretObjects/Group.dart';
 import 'package:weski/ConcretObjects/User.dart';
 import 'package:weski/Widget/customDraggable.dart';
 
+import '../Api/locationSocket.dart';
 import '../Assets/LocationLogic.dart';
 import '../ConcretObjects/Friend.dart';
 import '../ConcretObjects/SearchElement.dart';
@@ -42,6 +43,11 @@ class _HomePageState extends State<HomePage> {
   ValueNotifier<double> averageSpeedNotifier = ValueNotifier<double> (0.0);
   ValueNotifier<double> maxAltitudeNotifier = ValueNotifier<double> (0.0);
   ValueNotifier<LocationData?> currentLocationNotifier = ValueNotifier(null);
+  ValueNotifier<Polyline> userTrakNotifier = ValueNotifier(Polyline(
+    polylineId: const PolylineId("emptry"),
+    points: [],
+  ));
+
 
   Set<Polyline> displayed_polylines = {};
   void hidePolyline() {
@@ -103,6 +109,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    initSocket();
+    initWebSocket();
     _loadMarkers();
     startLocationUpdates((newLoc, speed, distance, avgSpeed, maxAltitude) {
       currentLocationNotifier.value = newLoc;
@@ -110,7 +118,7 @@ class _HomePageState extends State<HomePage> {
       totalDistanceNotifier.value = distance / 1000;
       averageSpeedNotifier.value = avgSpeed;
       maxAltitudeNotifier.value = maxAltitude;
-    }, _controller.future, _currentZoom);
+    }, _controller.future, _currentZoom, widget.curentUser!.id);
   }
 
   @override
@@ -127,25 +135,35 @@ class _HomePageState extends State<HomePage> {
               if (currentLocation == null) {
                 return const Center(child: CircularProgressIndicator());
               }
-              return customGoogleMap(
-                mapType: _currentMapType,
-                currentLocation: currentLocation,
-                zoom: _currentZoom,
-                markers: {
-                  Marker(
-                    markerId: const MarkerId("Current Location"),
-                    position: LatLng(
-                      currentLocation.latitude!,
-                      currentLocation.longitude!,
-                    ),
-                  ),
-                  ...markers_list,
+              return ValueListenableBuilder<Map<int, Marker>>(
+                valueListenable: markersNotifier,
+                builder: (context, usersMarkersMap, child) {
+                  final usersMarker = usersMarkersMap.values.toSet();
+                  return customGoogleMap(
+                    mapType: _currentMapType,
+                    currentLocation: currentLocation,
+                    zoom: _currentZoom,
+                    markers: {
+                      Marker(
+                        markerId: const MarkerId("Current Location"),
+                        position: LatLng(
+                          currentLocation.latitude!,
+                          currentLocation.longitude!,
+                        ),
+                      ),
+                      ...markers_list,
+                      ...usersMarker??{},
+                    },
+                    polylines: {
+                      ...displayed_polylines,
+                      userTrakNotifier.value!
+                    },
+                    mapControlerCreat: (controller) => _controller.complete(controller),
+                    moveCamera: onCameraMove,
+                  );
                 },
-                polylines: displayed_polylines,
-                mapControlerCreat: (controller) => _controller.complete(controller),
-                moveCamera: onCameraMove,
               );
-            },
+            }
           ),
           SafeArea(
             child: Column(
@@ -308,6 +326,7 @@ class _HomePageState extends State<HomePage> {
             totalDistanceNotifier: totalDistanceNotifier,
             maxAltitudeNotifier: maxAltitudeNotifier,
             currentUser: widget.curentUser!,
+            userTrackPolylineNotifier: userTrakNotifier
           )
         ],
       ),

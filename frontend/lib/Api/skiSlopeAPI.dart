@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'consts.dart';
 
 class skiSlopeApi {
-  static const String url = "$ipAddres/ski-resorts";
+  static const String url = "$apiAddres/ski-resorts";
   static Future<List?> fetchSlopesfromResort(int id) async {
     final endpointUrl = Uri.parse('$url/getByResort/$id');
     try {

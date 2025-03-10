@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:weather/weather.dart';
 import 'package:weski/Api/consts.dart';
@@ -11,6 +12,7 @@ import 'package:weski/Widget/customWheaterTimerDisplay.dart';
 import 'package:weski/Widget/statisticsCard.dart';
 
 
+import '../Api/locationApi.dart';
 import '../Assets/LocationLogic.dart';
 import '../ConcretObjects/User.dart';
 import 'chartWidget.dart';
@@ -23,6 +25,7 @@ class customDraggable extends StatefulWidget{
   final ValueNotifier<double> totalDistanceNotifier;
   final ValueNotifier<double> averageSpeedNotifier;
   final ValueNotifier<double> maxAltitudeNotifier;
+  final ValueNotifier<Polyline> userTrackPolylineNotifier;
 
   const customDraggable({
     super.key,
@@ -33,6 +36,7 @@ class customDraggable extends StatefulWidget{
     required this.totalDistanceNotifier,
     required this.averageSpeedNotifier,
     required this.maxAltitudeNotifier,
+    required this.userTrackPolylineNotifier,
   });
   @override
   State<StatefulWidget> createState() => _customDraggable();
@@ -41,7 +45,8 @@ class customDraggable extends StatefulWidget{
 class _customDraggable extends State<customDraggable>{
   late String recordButtonText;
   late int recordButtonColor;
-  late bool recordState;
+  late int recordState = 0;
+  ValueNotifier<Polyline> userTrack = ValueNotifier(Polyline(polylineId: PolylineId("Empty")));
   ValueNotifier<Duration> stopwatch = ValueNotifier(Duration.zero);
   ValueNotifier<List<DistanceData>> distancePerHour = ValueNotifier([]);
 
@@ -78,14 +83,26 @@ class _customDraggable extends State<customDraggable>{
   }
 
 
-  void stopStopwatch() {
+  Future<void> stopStopwatch() async {
+    widget.userTrackPolylineNotifier.value = await locationApi.createUserPolylineTrack(widget.currentUser.id);
+    widget.userTrackPolylineNotifier.notifyListeners();
+    print("Polyline track Points: ${widget.userTrackPolylineNotifier.value.points}");
+    stopLocationSaving();
     timer?.cancel();
     timerHour?.cancel();
     resetData();
   }
 
-  void resetStopwatch() {
+  void resetStopwatch() async{
+    await locationApi.celarTrackData(widget.currentUser.id);
+    widget.userTrackPolylineNotifier.value = Polyline(polylineId: PolylineId("Empty"), points: [],);
+    widget.userTrackPolylineNotifier.notifyListeners();
     stopwatch.value = Duration.zero;
+  }
+
+  void clearDataChart(){
+    distancePerHour.value.clear();
+    distancePerHour.notifyListeners();
   }
 
 
@@ -93,7 +110,7 @@ class _customDraggable extends State<customDraggable>{
   void initState() {
     recordButtonText = "Start";
     recordButtonColor = 0xFF3AFF6F;
-    recordState = false;
+    recordState = 0;
     super.initState();
   }
 
@@ -159,20 +176,25 @@ class _customDraggable extends State<customDraggable>{
                             child:ElevatedButton(
                               onPressed: () {
                                 setState(() {
-                                  if(!recordState){
+                                  if(recordState == 0){
                                     startStopwatch();
-                                    recordState = !recordState;
+                                    recordState = 1;
                                     recordButtonText = "Stop";
                                     recordButtonColor = 0xFFFF3A3A;
                                     isRecordingNotifier.value = true;
                                   }
-                                  else{
+                                  else if(recordState == 1){
                                     stopStopwatch();
+                                    recordButtonText = "Exit";
+                                    recordButtonColor = 0xFFFF3A3A;
+                                    recordState = 2;
+                                    isRecordingNotifier.value = false;
+                                  }else{
                                     resetStopwatch();
+                                    clearDataChart();
+                                    recordState = 0;
                                     recordButtonText = "Start";
                                     recordButtonColor = 0xFF3AFF6F;
-                                    recordState = false;
-                                    isRecordingNotifier.value = false;
                                   }
                                 });
                               },
