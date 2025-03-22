@@ -14,5 +14,6 @@ public class UsersDTO {
     private Integer age;
     private Integer gender;
     private Long id;
+    private String profile_picture;
 }
 

@@ -34,6 +34,8 @@ public class Users {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Statistics statistics;
 
+    private String profile_picture;
+
 /*    @ManyToMany
     @JoinTable(
             name = "notification_user",

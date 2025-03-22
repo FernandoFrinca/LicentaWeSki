@@ -15,6 +15,9 @@ final ThemeData lightTheme = ThemeData(
     secondary: Color(licentaColors.opacity | licentaColors.custom_l_GrayBlue),
     onSecondary: Color(licentaColors.opacity | licentaColors.colorBlack),
 
+    tertiary: Color(licentaColors.opacity | licentaColors.colorWhite),
+    onTertiary: Color(licentaColors.opacity | licentaColors.colorBlack),
+
 
 
 
@@ -32,5 +35,9 @@ final ThemeData darkTheme = ThemeData(
 
     secondary: Color(licentaColors.opacity | licentaColors.custom_l_GrayBlue),
     onSecondary: Color(licentaColors.opacity | licentaColors.colorBlack),
+
+    tertiary: Color(licentaColors.opacity | licentaColors.colorBlack),
+    onTertiary: Color(licentaColors.opacity | licentaColors.colorWhite),
+
   ),
 );

@@ -145,7 +145,7 @@ class _customDraggable extends State<customDraggable>{
             ),
             child: Container(
               decoration: BoxDecoration(
-                color: const Color(0xFFFFFFFF),
+                color: Color(theme.colorScheme.surface.value),
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(35),
                   topLeft: Radius.circular(35)
@@ -232,7 +232,7 @@ class _customDraggable extends State<customDraggable>{
                           style: TextStyle(
                             fontSize: screenD * 0.025,
                             fontWeight: FontWeight.w500,
-                            color: Color(theme.colorScheme.onSecondary.value).withOpacity(0.4),
+                            color: Color(theme.colorScheme.onSurface.value).withOpacity(0.4),
                             height: 0.8,
                           ),
                         ),
@@ -241,7 +241,7 @@ class _customDraggable extends State<customDraggable>{
                           style: TextStyle(
                             fontSize: screenD * 0.03,
                             fontWeight: FontWeight.w500,
-                            color: Color(theme.colorScheme.onSecondary.value),
+                            color: Color(theme.colorScheme.onTertiary.value),
                             height: 1,
                           ),
                         ),
@@ -300,7 +300,7 @@ class _customDraggable extends State<customDraggable>{
                           style: TextStyle(
                             fontSize: screenD * 0.025,
                             fontWeight: FontWeight.w500,
-                            color: Color(theme.colorScheme.onSecondary.value).withOpacity(0.4),
+                            color: Color(theme.colorScheme.onSurface.value).withOpacity(0.4),
                             height: 0.8,
                           ),
                         ),
@@ -309,7 +309,7 @@ class _customDraggable extends State<customDraggable>{
                           style: TextStyle(
                             fontSize: screenD * 0.03,
                             fontWeight: FontWeight.w500,
-                            color: Color(theme.colorScheme.onSecondary.value),
+                            color: Color(theme.colorScheme.onTertiary.value),
                             height: 1,
                           ),
                         ),

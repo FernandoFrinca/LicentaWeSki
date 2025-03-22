@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:weski/Api/skiSlopeAPI.dart';
+import 'package:weski/ConcretObjects/ChatObj.dart';
 
 import 'consts.dart';
 
@@ -81,7 +82,7 @@ class skiResortApi {
     return await createMarkers(finalList, mapController, updatePolylines);
   }
 
-  static Future<Set<Marker>?> fetchResorts(
+  static Future<Set<Marker>?> fetchResortsMarkers(
       Completer<GoogleMapController> mapController,
       Function(Set<Polyline>) updatePolylines
       ) async {
@@ -91,6 +92,56 @@ class skiResortApi {
       if (response.statusCode == 200) {
         final decodedBody = jsonDecode(response.body) as List<dynamic>;
         return await convertJson(decodedBody, mapController,updatePolylines);
+      } else {
+        print('Error: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      print('Exception: $e');
+      return null;
+    }
+  }
+
+  static Future<void> fetchResortsData() async {
+    final endpointUrl = Uri.parse('$url/getAll');
+    List<ResortBotData> finalList = [];
+    try {
+      final response = await http.get(endpointUrl);
+      if (response.statusCode == 200) {
+        final decodedBody = jsonDecode(response.body) as List<dynamic>;
+
+        for (var element in decodedBody) {
+          List<SlopeBotData> slopes = [];
+          if (element['slopes'] != null) {
+            for (var slopeElem in element['slopes']) {
+              final rawGeom = slopeElem['geom'] as List<dynamic>;
+              final geomData = rawGeom.map<List<double>>((coords) {
+                final coordList = coords as List<dynamic>;
+                return coordList.map<double>((val) => (val as num).toDouble()).toList();
+              }).toList();
+
+              SlopeBotData slope = SlopeBotData(
+                name: slopeElem['name'] as String,
+                difficulty: slopeElem['difficulty'] as String,
+                geom: geomData,
+              );
+
+              slopes.add(slope);
+            }
+
+          }
+
+          ResortBotData resort = new ResortBotData(
+              latitude: element['latitude'] as double,
+              longitude: element['longitude'] as double,
+              name: element['name'] as String,
+              slopes: slopes);
+
+          finalList.add(resort);
+        }
+
+        print(finalList);
+
       } else {
         print('Error: ${response.statusCode}');
         return null;

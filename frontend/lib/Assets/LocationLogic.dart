@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -42,6 +43,9 @@ void resetData(){
   isRecordingNotifier.value = false;
 }
 
+Future<LocationData> getCurrentLocation() async {
+  return currentLocation ?? LocationData.fromMap({"latitude": 0.0, "longitude": 0.0});
+}
 
 Future<void> getWeather() async {
   if (currentLocation != null) {
@@ -243,6 +247,3 @@ void startLocationUpdates(
   });
 }
 
-LocationData getCurrentLocation(){
-  return currentLocation!;
-}

@@ -68,20 +68,20 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide(
-                      color: Colors.grey.shade300,
+                      color: Color(widget.fillColor),
                       width: 1.0,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide(
-                      color: Colors.grey.shade300,
+                      color: Color(widget.fillColor),
                       width: .0,
                     ),
                   ),
                   hintText: "Search",
                   hintStyle: TextStyle(
-                    color: Colors.grey.shade600,
+                    color: widget.textColor == 0xFFFFFFFF ? Colors.grey.shade400 : Colors.grey.shade700,
                   ),
                   filled: true,
                   fillColor: Color( widget.fillColor),
@@ -93,7 +93,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                   ),
                   suffixIcon: Icon(
                     Icons.search,
-                    color: Colors.grey.shade600,
+                    color: widget.textColor == 0xFFFFFFFF ? Colors.grey.shade400 : Colors.grey.shade700,
                   ),
                 ),
                 onChanged: searchElements,

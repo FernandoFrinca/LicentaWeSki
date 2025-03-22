@@ -1,14 +1,20 @@
 import 'dart:collection';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:weski/Api/groupApi.dart';
 import 'package:weski/Api/locationApi.dart';
 import 'package:weski/Api/notificationApi.dart';
+import 'package:weski/Api/skiResortAPI.dart';
 import 'package:weski/Api/userApi.dart';
+import 'package:weski/Pages/ChatBotPage.dart';
 import 'package:weski/Pages/NotificationPage.dart';
 import 'package:weski/Pages/ProfilePage.dart';
 import 'package:weski/Widget/customButton.dart';
+import '../Assets/LocationLogic.dart';
 import '../ConcretObjects/User.dart';
 
 class customDrawer extends StatelessWidget {
@@ -25,6 +31,8 @@ class customDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    double screenDiagonal = sqrt(pow(screenWidth,2)+pow(screenHeight,2));
     return Drawer(
       width: screenWidth * 0.85,
       backgroundColor: Colors.white,
@@ -88,8 +96,8 @@ class customDrawer extends StatelessWidget {
                       paddingText: screenWidth * 0.03
                   ),
                   customButton(
-                      data: "Sensors",
-                      icon: Icons.sensors_rounded,
+                      data: "Chat Bot",
+                      icon: Icons.chat_outlined,
                       iconColor: 0xFF000000,
                       textColor: 0xFF000000,
                       textSize: screenWidth * 0.045,
@@ -98,18 +106,11 @@ class customDrawer extends StatelessWidget {
                       paddingWidth: 0.06,
                       paddingHeight: 0.01,
                       onTap: () async {
-                          //await groupApi.fetchGroup(21);
-                          //await groupApi.createGroup(groupName, userId);
-                          //await groupApi.fetchUserGroups(id);
-                          //await groupApi.addUserToGroup(userId, groupId);
-                          //await groupApi.addUsersToGroup(groupId, users);
-                          //await groupApi.removeUserFromGroup(groupId, userId);
-                          //await groupApi.removeGroup(groupId);
-                          //await notificationApi.fetchAvalibleNotifications();
-                          //await userApi.updateStatistics(1, 20, 20);
-                          //await locationApi.saveUserData(1,43.445, 45.667);
-                          //await locationApi.createUserPolylineTrack(1);
-                          //await locationApi.celarTrackData(1);
+                        LocationData currentLocation = await getCurrentLocation();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ChatBotPage(cuentLocation: currentLocation,)),
+                        );
                       },
                       iconSize: screenWidth * 0.08,
                       paddingText: screenWidth * 0.03
@@ -131,6 +132,31 @@ class customDrawer extends StatelessWidget {
                             builder: (context) => NotificationPage(curentUserId:user!.id,),
                           ),
                         );
+                      },
+                      iconSize: screenWidth * 0.08,
+                      paddingText: screenWidth * 0.03
+                  ),
+                  customButton(
+                      data: "test",
+                      icon: Icons.adb,
+                      iconColor: 0xFF000000,
+                      textColor: 0xFF000000,
+                      textSize: screenWidth * 0.045,
+                      screenWidth: screenWidth,
+                      screenHeight: screenHeight,
+                      paddingWidth: 0.06,
+                      paddingHeight: 0.01,
+                      onTap: () async {
+/*                        LocationData currentLocation = await getCurrentLocation();
+                        print("");
+                        print("locatie:");
+                        print(currentLocation.longitude);
+                        print(currentLocation.latitude);
+                        print("");
+                        print("");
+                        await skiResortApi.fetchResortsData();*/
+                        //print(await userApi.fetchProfilePicture(1));
+                        await userApi.updateProfilePicture(2,"url-prin-flutter");
                       },
                       iconSize: screenWidth * 0.08,
                       paddingText: screenWidth * 0.03

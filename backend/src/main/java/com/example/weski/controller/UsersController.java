@@ -99,4 +99,14 @@ public class UsersController {
         usersService.updateUser(idUser,usersDTO);
     }
 
+    @PatchMapping("{idUser}/updatePhoto")
+    public void updatePhoto(@PathVariable("idUser") Long idUser, @RequestBody Map<String, String> request) {
+        String url = request.get("url");
+        usersService.updateUserPhoto(idUser, url);
+    }
+
+    @GetMapping("{idUser}/getProfilePhoto")
+    public String getProfilePhoto(@PathVariable("idUser") Long idUser) {
+        return usersService.getProfilePicture(idUser);
+    }
 }

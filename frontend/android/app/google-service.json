@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "937225972229",
+    "project_id": "weskipofilephotos",
+    "storage_bucket": "weskipofilephotos.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:937225972229:android:7fef4a5b336fc0ec2aca6c",
+        "android_client_info": {
+          "package_name": "com.example.weski"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuCSpVfKJUJPSVlgQBcY27Vc9bZcIOZ7s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

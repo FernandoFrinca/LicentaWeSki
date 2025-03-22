@@ -20,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsersService {
@@ -142,5 +143,22 @@ public class UsersService {
             }
         }
         return  groupMembersStatistics;
+    }
+
+    public void updateUserPhoto(Long userId, String url){
+        Users user = usersRepository.findById(userId).orElse(null);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found");
+        }
+        user.setProfile_picture(url);
+        usersRepository.save(user);
+    }
+
+    public String getProfilePicture(Long userId) {
+        Users user = usersRepository.findById(userId).orElse(null);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found");
+        }
+        return user.getProfile_picture();
     }
 }
