@@ -4,6 +4,7 @@ import 'package:weski/Pages/EditProfilePage.dart';
 import 'package:weski/Widget/infoWidget.dart';
 import 'package:weski/Widget/profileAvatar.dart';
 
+import '../Api/userApi.dart';
 import '../ConcretObjects/User.dart';
 import '../Widget/customButton.dart';
 import '../Widget/customTriangle.dart';
@@ -19,6 +20,21 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
+  ValueNotifier<String?> profileImageNotifier = ValueNotifier("");
+  @override
+  void initState() {
+    super.initState();
+    fetchInitialProfilePicture();
+  }
+
+  void fetchInitialProfilePicture() async {
+    final url = await userApi.fetchProfilePicture(widget.curentUser!.id);
+    if (url != null && url.isNotEmpty) {
+      profileImageNotifier.value = url;
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -196,13 +212,17 @@ class _ProfilePageState extends State<ProfilePage> {
                         screenHeight: screenHeight,
                         paddingWidth: 0.03,
                         paddingHeight: 0.01,
-                        onTap: (){
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) =>
-                                  editProfilePage(curentUser: widget.curentUser),
-                              ),
+                        onTap: () async {
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => editProfilePage(curentUser: widget.curentUser, imageUpdateNotifie:profileImageNotifier),
+                            ),
                           );
+
+                          if (result == true) {
+                            setState(() {});
+                          }
                         },
                         iconSize: screenWidth * 0.08,
                         paddingText: screenWidth * 0.01
@@ -278,7 +298,7 @@ class _ProfilePageState extends State<ProfilePage> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              customProfileAvatar(screenWidth: screenWidth, screenHeight: screenHeight),
+              customProfileAvatar(screenWidth: screenWidth, screenHeight: screenHeight, userId: widget.curentUser!.id, profileImageNotifier: profileImageNotifier),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

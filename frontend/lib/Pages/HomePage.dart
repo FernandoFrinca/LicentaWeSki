@@ -18,7 +18,6 @@ import '../Widget/customDrawer.dart';
 import '../Widget/customGoogleMap.dart';
 import '../Widget/customSearch.dart';
 import 'FriendsPage.dart';
-import 'package:sensors_plus/sensors_plus.dart';
 
 class HomePage extends StatefulWidget {
   final User? curentUser;
@@ -68,7 +67,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _loadMarkers() async {
-    final markers = await skiResortApi.fetchResorts(_controller, _updatePolylines);
+    final markers = await skiResortApi.fetchResortsMarkers(_controller, _updatePolylines);
     if (markers != null) {
       setState(() {
         markers_list = markers;
@@ -123,8 +122,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    double screenDiagonal = sqrt(pow(screenWidth,2)+pow(screenHeight,2));
+
     return Scaffold(
       body:
       Stack(
@@ -169,30 +171,43 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.only(top: screenHeight * 0.01),
+                  padding: EdgeInsets.only(top: screenDiagonal * 0.01),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(left: screenWidth * 0.06),
+                        padding: EdgeInsets.only(left: screenDiagonal * 0.025),
                         child: Builder(
                           builder: (BuildContext context) {
-                            return RawMaterialButton(
-                              onPressed: () {
-                                Scaffold.of(context).openDrawer();
-                              },
-                              fillColor: Colors.white,
-                              shape: const CircleBorder(),
-                              elevation: 5,
-                              constraints: BoxConstraints(
-                                minWidth: screenWidth * 0.13,
-                                minHeight: screenWidth * 0.13,
+                            return Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Color(theme.colorScheme.onTertiary.value).withOpacity(0.3),
+                                    blurRadius: 10,
+                                    spreadRadius: 2,
+                                    offset: Offset(0, 3),
+                                  ),
+                                ],
                               ),
-                              child: Icon(
-                                Icons.menu,
-                                color: Colors.black,
-                                size: screenWidth * 0.07,
+                              child: RawMaterialButton(
+                                onPressed: () {
+                                  Scaffold.of(context).openDrawer();
+                                },
+                                fillColor: Color(theme.colorScheme.tertiary.value),
+                                shape: const CircleBorder(),
+                                elevation: 5,
+                                constraints: BoxConstraints(
+                                  minWidth: screenWidth * 0.13,
+                                  minHeight: screenWidth * 0.13,
+                                ),
+                                child: Icon(
+                                  Icons.menu,
+                                  color: Color(theme.colorScheme.onTertiary.value),
+                                  size: screenDiagonal * 0.03,
+                                ),
                               ),
                             );
                           },
@@ -202,8 +217,8 @@ class _HomePageState extends State<HomePage> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
                         child: CustomSearchBar(
-                          fillColor: 0xFFFFFFFF,
-                          textColor: 0xFF000000,
+                          fillColor: theme.colorScheme.tertiary.value,
+                          textColor: theme.colorScheme.onTertiary.value,
                           screenWidth: screenWidth,
                           screenHeight: screenHeight,
                           searchList: searchedElementsList,
@@ -212,27 +227,40 @@ class _HomePageState extends State<HomePage> {
                       ),
 
                       Padding(
-                        padding: EdgeInsets.only(right: screenWidth * 0.06),
-                        child: RawMaterialButton(
-                          onPressed: () async {
-                            List<Friend> friends = await userApi.fetchFriends(widget.curentUser!.id);
-                            List<Group> groups = await groupApi.fetchUserGroups(widget.curentUser!.id);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => FriendsPage(curentUserId:widget.curentUser!.id, friends: friends, groups: groups, )),
-                            );
-                          },
-                          fillColor: Colors.white,
-                          shape: const CircleBorder(),
-                          elevation: 5,
-                          constraints: BoxConstraints(
-                            minWidth: screenWidth * 0.13,
-                            minHeight: screenWidth * 0.13,
+                        padding: EdgeInsets.only(right: screenDiagonal * 0.025),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color(theme.colorScheme.onTertiary.value).withOpacity(0.3),
+                                blurRadius: 10,
+                                spreadRadius: 2,
+                                offset: Offset(0, 3),
+                              ),
+                            ],
                           ),
-                          child: Icon(
-                            Icons.groups,
-                            color: Colors.black,
-                            size: screenWidth * 0.07,
+                          child: RawMaterialButton(
+                            onPressed: () async {
+                              List<Friend> friends = await userApi.fetchFriends(widget.curentUser!.id);
+                              List<Group> groups = await groupApi.fetchUserGroups(widget.curentUser!.id);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => FriendsPage(curentUserId:widget.curentUser!.id, friends: friends, groups: groups, )),
+                              );
+                            },
+                            fillColor: Color(theme.colorScheme.tertiary.value),
+                            shape: const CircleBorder(),
+                            elevation: 5,
+                            constraints: BoxConstraints(
+                              minWidth: screenWidth * 0.13,
+                              minHeight: screenWidth * 0.13,
+                            ),
+                            child: Icon(
+                              Icons.groups,
+                              color: Color(theme.colorScheme.onTertiary.value),
+                              size: screenDiagonal * 0.03,
+                            ),
                           ),
                         ),
                       ),
@@ -244,74 +272,102 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Padding(
                       padding: EdgeInsets.only(right: screenWidth * 0.06, left: screenWidth * 0.06, bottom: screenHeight * 0.165),
-                      child: RawMaterialButton(
-                        onPressed: () {
-                            if(mapTypeIndex == 0){
-                              _currentMapType = MapType.normal;
-                              mapTypeIndex = 1;
-                            }
-                            else if(mapTypeIndex == 1){
-                              _currentMapType = MapType.terrain;
-                              mapTypeIndex = 2;
-                            }
-                            else{
-                              _currentMapType = MapType.satellite;
-                              mapTypeIndex = 0;
-                            }
-                        },
-                        fillColor: Colors.white,
-                        shape: const CircleBorder(),
-                        elevation: 5,
-                        constraints: BoxConstraints(
-                          minWidth: screenWidth * 0.13,
-                          minHeight: screenWidth * 0.13,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(theme.colorScheme.onTertiary.value).withOpacity(0.3),
+                              blurRadius: 10,
+                              spreadRadius: 2,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
                         ),
-                        child: Icon(
-                          Icons.layers_outlined,
-                          color: Colors.black,
-                          size: screenWidth * 0.07,
+                        child: RawMaterialButton(
+                          onPressed: () {
+                              if(mapTypeIndex == 0){
+                                _currentMapType = MapType.normal;
+                                mapTypeIndex = 1;
+                              }
+                              else if(mapTypeIndex == 1){
+                                _currentMapType = MapType.terrain;
+                                mapTypeIndex = 2;
+                              }
+                              else{
+                                _currentMapType = MapType.satellite;
+                                mapTypeIndex = 0;
+                              }
+                          },
+                          fillColor: Color(theme.colorScheme.tertiary.value),
+                          shape: const CircleBorder(),
+                          elevation: 5,
+                          constraints: BoxConstraints(
+                            minWidth: screenWidth * 0.13,
+                            minHeight: screenWidth * 0.13,
+                          ),
+                          child: Icon(
+                            Icons.layers_outlined,
+                            color: Color(theme.colorScheme.onTertiary.value),
+                            size: screenDiagonal * 0.03,
+                          ),
                         ),
                       ),
                     ),
                     const Spacer(),
                     Padding(
                       padding: EdgeInsets.only(right: screenWidth * 0.06, bottom: screenHeight * 0.165),
-                      child: RawMaterialButton(
-                        onPressed: () async {
-                          if(isTracking == false) {
-                            setIsTrackingTrue();
-                          }else{
-                            setIsTrackingFalse();
-                          }
-                          final googleMapController = await _controller.future;
-                          googleMapController.animateCamera(
-                            CameraUpdate.newCameraPosition(
-                              CameraPosition(
-                                target: LatLng(
-                                  currentLocation!.latitude!,
-                                  currentLocation!.longitude!,
-                                ),
-                                zoom: _currentZoom,
-                              ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(theme.colorScheme.onTertiary.value).withOpacity(0.3),
+                              blurRadius: 10,
+                              spreadRadius: 2,
+                              offset: Offset(0, 3),
                             ),
-                          );
-                        },
-                        fillColor: Colors.white,
-                        shape: const CircleBorder(),
-                        elevation: 5,
-                        constraints: BoxConstraints(
-                          minWidth: screenWidth * 0.13,
-                          minHeight: screenWidth * 0.13,
+                          ],
                         ),
-                        child: isTracking == true ? Icon(
-                          Icons.gps_fixed,
-                          color: Colors.black,
-                          size: screenWidth * 0.07,) : Icon(
-                          Icons.gps_off_outlined,
-                          color: Colors.red,
-                          size: screenWidth * 0.07,
+                        child: RawMaterialButton(
+                          onPressed: () async {
+                            if (isTracking == false) {
+                              setIsTrackingTrue();
+                            } else {
+                              setIsTrackingFalse();
+                            }
+                            final googleMapController = await _controller.future;
+                            googleMapController.animateCamera(
+                              CameraUpdate.newCameraPosition(
+                                CameraPosition(
+                                  target: LatLng(
+                                    currentLocation!.latitude!,
+                                    currentLocation!.longitude!,
+                                  ),
+                                  zoom: _currentZoom,
+                                ),
+                              ),
+                            );
+                          },
+                          fillColor: Color(theme.colorScheme.tertiary.value),
+                          shape: const CircleBorder(),
+                          constraints: BoxConstraints(
+                            minWidth: screenWidth * 0.13,
+                            minHeight: screenWidth * 0.13,
+                          ),
+                          child: isTracking
+                              ? Icon(
+                            Icons.gps_fixed,
+                            color: Color(theme.colorScheme.onTertiary.value),
+                            size: screenDiagonal * 0.03,
+                          )
+                              : Icon(
+                            Icons.gps_off_outlined,
+                            color: Colors.red,
+                            size: screenDiagonal * 0.03,
+                          ),
                         ),
-                      ),
+                      )
                     ),
                   ],
                 ),
@@ -331,7 +387,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       drawer: customDrawer(
-        user: widget.curentUser!,
+        user: widget.curentUser,
         screenHeight: screenHeight,
         screenWidth: screenWidth,
       ),

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:weski/Api/userApi.dart';
@@ -5,6 +7,7 @@ import 'package:weski/Pages/EditProfilePage.dart';
 import 'package:weski/Widget/infoWidget.dart';
 import 'package:weski/Widget/profileAvatar.dart';
 
+import '../Api/Firestore.dart';
 import '../ConcretObjects/User.dart';
 import '../Widget/customButton.dart';
 import '../Widget/customDropDownInfo.dart';
@@ -14,7 +17,12 @@ import '../Widget/editInfoWidget.dart';
 class editProfilePage extends StatefulWidget {
 
   final User? curentUser;
-  editProfilePage({Key? key, required this.curentUser}) : super(key: key);
+  final ValueNotifier<String?> imageUpdateNotifie;
+  editProfilePage({
+    Key? key,
+    required this.curentUser,
+    required this.imageUpdateNotifie
+  }) : super(key: key);
 
   @override
   State<editProfilePage> createState() => _editProfilePageState();
@@ -29,6 +37,7 @@ class _editProfilePageState extends State<editProfilePage> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController verifyPasswordController = TextEditingController();
   String? selectedCategory;
+  String? saveProfilePhotoUrl;
   int? gender;
   @override
   void initState() {
@@ -54,11 +63,51 @@ class _editProfilePageState extends State<editProfilePage> {
           "Edit Profile",
           style: TextStyle(fontSize: 32, color: Colors.white,fontWeight: FontWeight.bold),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(
+              right: 12,
+            ),
+            child: IconButton(onPressed:() async{
+              if(passwordController.text.isNotEmpty && verifyPasswordController.text.isNotEmpty){
+                await userApi.resetPassword(widget.curentUser!.id, passwordController.text, verifyPasswordController.text);
+              }
+              if (userController.text.isNotEmpty ||
+                  ageController.text.isNotEmpty ||
+                  emailController.text.isNotEmpty ||
+                  selectedCategory != null ||
+                  gender != null) {
+                User updateUser = new User();
+                updateUser.gender = gender;
+                updateUser.age = int.tryParse(ageController.text);
+                updateUser.category = selectedCategory ?? widget.curentUser!.getCategory();
+                updateUser.email = emailController.text.isNotEmpty
+                    ? emailController.text
+                    : widget.curentUser!.getEmail();
+                updateUser.username = userController.text.isNotEmpty
+                    ? userController.text
+                    : widget.curentUser!.getUsername();
+                await userApi.updateUser(widget.curentUser!.id, updateUser);
+              }
+              if(widget.imageUpdateNotifie.value != null && widget.imageUpdateNotifie.value!.startsWith('file://')){
+                File localImage = File(widget.imageUpdateNotifie.value!.replaceFirst('file://', ''));
+                String uploadedUrl = await addImageFireStore(localImage);
+                print("");
+                print(uploadedUrl);
+                print("");
+                await userApi.updateProfilePicture(widget.curentUser!.id, uploadedUrl);
+                widget.imageUpdateNotifie.value = uploadedUrl;
+              }
+
+              Navigator.pop(context,true);
+
+            }, icon: const Icon(Icons.save_outlined, size: 36,color: Color(0xFF00C200),)),
+          )
+        ],
       ),
       backgroundColor: Color(0xFF007EA7),
       body: Stack(
         children: [
-
           Positioned(
               right: screenWidth * 0.045,
               bottom: screenHeight * 0.665,
@@ -230,7 +279,7 @@ class _editProfilePageState extends State<editProfilePage> {
                         DropdownMenuItem(value: "Snowboarder", child: Text("Snowboarder")),
                       ],
                     ),
-                    //const Divider(),
+
                     editInfoWidget(
                       selectedData: "new password",
                       selectedI: Icons.password_rounded,
@@ -288,7 +337,17 @@ class _editProfilePageState extends State<editProfilePage> {
                                     : widget.curentUser!.getUsername();
                                 await userApi.updateUser(widget.curentUser!.id, updateUser);
                               }
+                              if(widget.imageUpdateNotifie.value != null && widget.imageUpdateNotifie.value!.startsWith('file://')){
+                                File localImage = File(widget.imageUpdateNotifie.value!.replaceFirst('file://', ''));
+                                String uploadedUrl = await addImageFireStore(localImage);
+                                print("");
+                                print(uploadedUrl);
+                                print("");
+                                await userApi.updateProfilePicture(widget.curentUser!.id, uploadedUrl);
+                                widget.imageUpdateNotifie.value = uploadedUrl;
+                              }
 
+                              Navigator.pop(context,true);
                             },
                             iconSize: screenWidth * 0.08,
                             paddingText: screenWidth * 0.01
@@ -306,7 +365,13 @@ class _editProfilePageState extends State<editProfilePage> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              customProfileAvatar(screenWidth: screenWidth, screenHeight: screenHeight),
+              customProfileAvatar(
+                  screenWidth: screenWidth,
+                  screenHeight: screenHeight,
+                  isForEdit: true,
+                  userId: widget.curentUser!.id,
+                  profileImageNotifier: widget.imageUpdateNotifie
+              ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -335,7 +400,3 @@ class _editProfilePageState extends State<editProfilePage> {
     );
   }
 }
-
-
-
-//mai trebuie sa fac logout cand salvezi datele si mai trebuie s afac logout in general

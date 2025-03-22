@@ -56,6 +56,8 @@ class userApi {
     final endpointUrl = Uri.parse('$url/login');
     var response;
 
+    print("intra");
+
     User user = User();
     try {
       Map<String, String> headers = {
@@ -66,11 +68,16 @@ class userApi {
         "password": password,
       };
 
+      print("intra2");
+
+
       response = await http.post(
         endpointUrl,
         headers: headers,
         body: jsonEncode(encodedBody),
       );
+
+      print("intra3");
 
       print("Response status: ${response.statusCode}");
       print("Response body: ${response.body}");
@@ -84,6 +91,7 @@ class userApi {
         user.gender = decodedResponse['gender'] ?? 2;
         user.category = decodedResponse['category'];
         print("User actualizat: $user");
+
         return user;
       } else {
           print("Status code diferit de 200, autentificare eșuată.");
@@ -266,4 +274,34 @@ class userApi {
     }
   }
 
+  static Future<String> fetchProfilePicture(int id)async {
+    final endpointUrl = Uri.parse('$url/$id/getProfilePhoto');
+    final response = await http.get(endpointUrl);
+    try {
+      String decodedBody = response.body;
+      return decodedBody;
+    }catch(e){
+      return '';
+    }
+  }
+
+  static Future<void> updateProfilePicture(int id, String urlPhoto) async {
+    final endpointUrl = Uri.parse('$url/$id/updatePhoto');
+    final body = jsonEncode({"url": urlPhoto});
+
+    try {
+      final response = await http.patch(
+        endpointUrl,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: body,
+      );
+      if (response.statusCode != 200) {
+        print("Error saving image: ${response.body}");
+      }
+    } catch (e) {
+      print("Exception when saving image: $e");
+    }
+  }
 }
