@@ -243,6 +243,7 @@ class _HomePageState extends State<HomePage> {
                           child: RawMaterialButton(
                             onPressed: () async {
                               List<Friend> friends = await userApi.fetchFriends(widget.curentUser!.id);
+                              print(friends);
                               List<Group> groups = await groupApi.fetchUserGroups(widget.curentUser!.id);
                               Navigator.push(
                                 context,

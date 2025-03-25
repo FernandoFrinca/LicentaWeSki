@@ -37,6 +37,11 @@ class _NotificationPageState extends State<NotificationPage> {
         notifications = fetchedNotifications;
       });
     });
+
+    for(var req in _requests){
+      print("user");
+      print(req.profile_picture);
+    }
   }
 
   void removeFriendFromList(int index) {
@@ -122,6 +127,7 @@ class _NotificationPageState extends State<NotificationPage> {
                         currentId: widget.curentUserId,
                         friendId: _requests[index].id,
                         requests: _requests,
+                        profilePhotoLink: _requests[index].profile_picture,
                         index: index,
                         isItRequest: true,
                         onRemove: () => removeFriendFromList(index),

@@ -15,4 +15,5 @@ public class GroupDTO {
     private String name;
     private List<UsersDTO> users;
     private Long creator_id;
+    private String group_picture;
 }

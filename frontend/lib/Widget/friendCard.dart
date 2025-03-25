@@ -11,6 +11,7 @@ class friendCard extends StatefulWidget {
   final int currentId;
   final List<Friend> requests;
   final int index;
+  final String profilePhotoLink;
   final VoidCallback onRemove;
   final isOnlyDisplay ;
 
@@ -23,6 +24,7 @@ class friendCard extends StatefulWidget {
     required this.friendId,
     required this.currentId,
     required this.requests,
+    required this.profilePhotoLink,
     required this.index,
     required this.onRemove,
      this.isOnlyDisplay = false,
@@ -59,8 +61,15 @@ class _friendCardState extends State<friendCard> {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15),
-                  child: Image.asset(
+                  child: widget.profilePhotoLink == "empty" || !widget.profilePhotoLink.isNotEmpty ?
+                  Image.asset(
                     "assets/ski.jpeg",
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
+                  ) :
+                  Image.network(
+                    widget.profilePhotoLink,
                     fit: BoxFit.cover,
                     width: double.infinity,
                     height: double.infinity,

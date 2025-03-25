@@ -34,6 +34,7 @@ public class FriendsService {
             friendDTO.setId(friend.getId());
             friendDTO.setUsername(friend.getUsername());
             friendDTO.setCategory(friend.getCategory());
+            friendDTO.setProfile_picture(friend.getProfile_picture());
             friendDTOs.add(friendDTO);
         }
         return friendDTOs;
@@ -47,6 +48,7 @@ public class FriendsService {
             friendDTO.setId(request.getId());
             friendDTO.setUsername(request.getUsername());
             friendDTO.setCategory(request.getCategory());
+            friendDTO.setProfile_picture(request.getProfile_picture());
             friendDTOs.add(friendDTO);
         }
         return friendDTOs;

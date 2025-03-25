@@ -5,6 +5,7 @@ class Group {
   late String name;
   late Set<Friend> groupMmembers;
   late int creator_id;
+  late String group_photo = "empty";
 
   int getId(){
     return id;

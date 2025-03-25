@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -30,7 +31,6 @@ public class GroupController {
     @GetMapping("/getUserGroups/{userId}")
     public List<GroupDTO> getUserGroups(@PathVariable Long userId) {
         return groupService.getGroupsWhereUserIsMember(userId);
-        //return null;
     }
 
     @GetMapping("/getGroupById/{id}")
@@ -65,5 +65,12 @@ public class GroupController {
     public ResponseEntity<?> deleteGroup(@PathVariable Long groupId, @PathVariable Long userId) {
         groupService.removeUserFromGroup(groupId, userId);
         return  ResponseEntity.ok("User removed from group");
+    }
+
+    @PatchMapping("{idgroup}/updateGroupPhoto")
+    public ResponseEntity<?> updateGroupPhoto(@PathVariable Long idgroup, @RequestBody Map<String, String> request) {
+        String url = request.get("url");
+        groupService.updateGroupPicture(idgroup, url);
+        return  ResponseEntity.ok("Group updated");
     }
 }

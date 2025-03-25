@@ -112,6 +112,14 @@ public class GroupService {
         usersRepository.saveAll(users);
     }
 
+    public void updateGroupPicture(Long groupId, String photoUrl){
+        Group group = groupRepository.findGroupById(groupId);
+        if(group == null) {
+            throw new NotFoundException("Group not found");
+        }
+        group.setGroup_picture(photoUrl);
+        groupRepository.save(group);
+    }
 
 }
 
