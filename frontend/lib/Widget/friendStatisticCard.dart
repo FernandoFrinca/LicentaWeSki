@@ -27,6 +27,9 @@ class friendStatisticCard extends StatefulWidget {
 class _friendStatisticCardState extends State<friendStatisticCard> {
   @override
   Widget build(BuildContext context) {
+    print("imaginea in group: ");
+    print("Profile pic for ${widget.name} = '${widget.imagePath}'");
+
     return Padding(
       padding: const EdgeInsets.all(7.0),
       child: Container(
@@ -44,8 +47,13 @@ class _friendStatisticCardState extends State<friendStatisticCard> {
                 margin: const EdgeInsets.only(bottom: 8.0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4.0),
-                  image: DecorationImage(
-                    image: AssetImage(widget.imagePath),
+                  image: widget.imagePath == "empty"
+                      ? DecorationImage(
+                    image: AssetImage("assets/ski.jpeg"),
+                    fit: BoxFit.cover,
+                  )
+                      : DecorationImage(
+                    image: NetworkImage(widget.imagePath),
                     fit: BoxFit.cover,
                   ),
                 ),

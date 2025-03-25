@@ -23,6 +23,7 @@ class groupApi {
         group.id = body['id'];
         group.creator_id = body['creator_id'];
         group.name = body['name'];
+        group.group_photo = body['group_picture'];
 
         Set<Friend> friendsSet = new HashSet();
         for (var user in body['users']) {
@@ -30,6 +31,7 @@ class groupApi {
           friend.id = user['id'];
           friend.username = user['username'];
           friend.category = user['category'];
+          friend.profile_picture = user['profile_picture'];
           friendsSet.add(friend);
         }
         group.groupMmembers = friendsSet;
@@ -58,6 +60,7 @@ class groupApi {
       group.id = decodedBody['id'];
       group.creator_id = decodedBody['creator_id'];
       group.name = decodedBody['name'];
+      group.group_photo = decodedBody['group_picture'];
 
       Set<Friend> friendsSet = HashSet<Friend>();
       for (var user in decodedBody['groupMembers']) {
@@ -65,6 +68,7 @@ class groupApi {
         friend.id = user['id'];
         friend.username = user['username'];
         friend.category = user['category'];
+        friend.profile_picture = user['profile_picture'];
         friendsSet.add(friend);
       }
       group.groupMmembers = friendsSet;
@@ -157,4 +161,22 @@ class groupApi {
     }
   }
 
+  static Future<void> updateGropuPicture(int idgroup, String urlPhoto) async {
+    final endpointUrl = Uri.parse('$url/$idgroup/updateGroupPhoto');
+    final body = jsonEncode({"url": urlPhoto});
+    try {
+      final response = await http.patch(
+        endpointUrl,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: body,
+      );
+      if (response.statusCode != 200) {
+        print("Error saving image: ${response.body}");
+      }
+    } catch (e) {
+      print("Exception when saving image: $e");
+    }
+  }
 }

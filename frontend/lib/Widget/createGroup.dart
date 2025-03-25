@@ -1,10 +1,14 @@
 import 'dart:collection';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:weski/Api/groupApi.dart';
 import 'package:weski/Api/userApi.dart';
 import 'package:weski/Widget/CustomTextField.dart';
 
+import '../Api/Firestore.dart';
 import '../ConcretObjects/Friend.dart';
 import 'friendCard.dart';
 import 'groupAddList.dart';
@@ -31,6 +35,23 @@ class createGroup extends StatefulWidget {
 class _createGroupState extends State<createGroup> {
   String? errorMessage;
   Set<int> createGroupFriendsList = new HashSet();
+  final ImagePicker imagePicker = ImagePicker();
+  late String selectedImagePath = "empty";
+
+  Future<void> selectImage() async {
+    var status = await Permission.photos.request();
+    if (status.isGranted) {
+      final XFile? pickedFile = await imagePicker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 100,
+      );
+      if (pickedFile != null) {
+        selectedImagePath = 'file://${pickedFile.path}';
+      }
+    } else if (status.isDenied || status.isPermanentlyDenied) {
+      openAppSettings();
+    }
+  }
 
   @override
   void dispose() {
@@ -57,16 +78,23 @@ class _createGroupState extends State<createGroup> {
             ),
             Container(
               width: 320,
-              child: CustomTextField(
-                label: "Group Name",
-                controller: widget.groupController,
-                icon: Icons.person_2_outlined,
-                borderColor: theme.colorScheme.onPrimary.value,
-                fillColor: theme.colorScheme.secondary.value,
-                iconColor: theme.colorScheme.primary.value,
-                texColor: theme.colorScheme.onSecondary.value,
-                borderRadius: 18,
-                errorState: false,
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  bottom: 10,
+                  left: 8,
+                  right: 8
+                ),
+                child: CustomTextField(
+                  label: "Group Name",
+                  controller: widget.groupController,
+                  icon: Icons.person_2_outlined,
+                  borderColor: theme.colorScheme.onPrimary.value,
+                  fillColor: theme.colorScheme.secondary.value,
+                  iconColor: theme.colorScheme.primary.value,
+                  texColor: theme.colorScheme.onSecondary.value,
+                  borderRadius: 18,
+                  errorState: false,
+                ),
               ),
             ),
             Expanded(
@@ -88,6 +116,30 @@ class _createGroupState extends State<createGroup> {
             Padding(
               padding: const EdgeInsets.only(
                 top: 10,
+              ),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: theme.colorScheme.primary,
+                ),
+                onPressed: () async {
+                  await selectImage();
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.camera_alt, color: Colors.white),
+                    SizedBox(width: 8),
+                    const Text(
+                      "Set group photo",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 10,
                 bottom: 10,
               ),
               child: ElevatedButton(
@@ -99,6 +151,13 @@ class _createGroupState extends State<createGroup> {
                       int newGroup = await groupApi.createGroup(widget.groupController.text, widget.currentUserId);
                       createGroupFriendsList.add(widget.currentUserId);
                       await groupApi.addUsersToGroup(newGroup,createGroupFriendsList);
+                      if(selectedImagePath.isNotEmpty && selectedImagePath != "empty"){
+                        if(selectedImagePath.startsWith('file://')){
+                          File localImage = File(selectedImagePath.replaceFirst('file://', ''));
+                          String uploadedUrl = await addImageFireStore(localImage);
+                          await groupApi.updateGropuPicture(newGroup,uploadedUrl);
+                        }
+                      }
                       Navigator.pop(context, newGroup);
                     }
                   },

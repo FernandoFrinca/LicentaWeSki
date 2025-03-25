@@ -25,6 +25,7 @@ public class GroupDTOMapper implements Function<Group, GroupDTO> {
         groupDTO.setCreator_id(group.getCreator_id());
         List<UsersDTO> userDTOList = group.getGroupMembers().stream().map(usersDTOMapper).toList();
         groupDTO.setUsers(userDTOList);
+        groupDTO.setGroup_picture(group.getGroup_picture());
         return groupDTO;
     }
 }

@@ -93,6 +93,7 @@ class _FriendsPageState extends State<FriendsPage> {
                     return groupCard(
                       cardHeight: cardHeight,
                       groupName: groups[index].name,
+                      groupPhoto: groups[index].group_photo,
                       onTap: () {
                         Navigator.push(context,MaterialPageRoute(builder:(context) => groupPage(group: groups[index], currentUser: widget.curentUserId,)));
                       },
@@ -119,6 +120,7 @@ class _FriendsPageState extends State<FriendsPage> {
                       category: widget.friends[index].category,
                       currentId: widget.curentUserId,
                       friendId: widget.friends[index].id,
+                      profilePhotoLink: widget.friends[index].profile_picture,
                       index: index,
                       requests: [],
                       isItRequest: false,

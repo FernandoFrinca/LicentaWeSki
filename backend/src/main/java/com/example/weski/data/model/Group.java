@@ -22,6 +22,9 @@ public class Group {
     private String name;
     @Column (name = "creator_id")
     private Long creator_id;
+    @Column(name = "group_picture")
+    @Builder.Default
+    private String group_picture = "empty";
 
     @ManyToMany(mappedBy = "groupsAssigned")
     private Set<Users> groupMembers = new HashSet<>();

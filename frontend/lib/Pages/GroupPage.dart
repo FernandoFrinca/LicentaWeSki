@@ -92,11 +92,11 @@ class _groupPageState extends State<groupPage> {
               right: 12,
             ),
             child: IconButton(onPressed:(){
-              /*showDialog(
+              //TO DO: fa ceva cu butonul asta. leave daca nu esti admin, adauga/sterge daca esti admin
+          /*    showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return null;
-                  //return addFriends(friendController: _friendController, currentUserId: widget.curentUserId,);
+                  return addFriends(friendController: _friendController, currentUserId: widget.curentUserId,);
                 },
               );*/
             }, icon: const Icon(Icons.person_add_outlined, size: 36, color: Colors.white)),
@@ -115,10 +115,12 @@ class _groupPageState extends State<groupPage> {
               child: CarouselSlider.builder(
                 itemCount: groupMembers.length,
                 itemBuilder: (context, index, realIndex) {
+                  print("imaginea inainte sa fie triisa din group page ${groupMembers.elementAt(index).username}:");
+                  print(groupMembers.elementAt(index).profile_picture);
                   return friendStatisticCard(
                     name: groupMembers.elementAt(index).username,
                     category: groupMembers.elementAt(index).category,
-                    imagePath: "assets/avatar.jpeg",
+                    imagePath: groupMembers.elementAt(index).profile_picture,
                     fillColor: userCardColor,
                     total_distance: groupMembers.elementAt(index).total_distance,
                     max_speed: groupMembers.elementAt(index).max_speed,
@@ -316,6 +318,7 @@ class _groupPageState extends State<groupPage> {
                                   category: groupMembers.elementAt(index).category,
                                   currentId: currentUser,
                                   friendId: groupMembers.elementAt(index).id,
+                                  profilePhotoLink: groupMembers.elementAt(index).profile_picture,
                                   index: index,
                                   requests: [],
                                   isItRequest: false,

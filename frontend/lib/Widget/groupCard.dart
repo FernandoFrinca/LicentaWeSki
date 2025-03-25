@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 class groupCard extends StatelessWidget {
   final double cardHeight;
   final String groupName;
+  final String groupPhoto;
   final VoidCallback onTap;
 
   const groupCard({
     Key? key,
     required this.cardHeight,
     required this.groupName,
+    required this.groupPhoto,
     required this.onTap,
   }) : super(key: key);
 
@@ -34,11 +36,17 @@ class groupCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             child: Stack(
               children: [
-                Image.asset(
-                  "assets/ski.jpeg",
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: double.infinity,
+                groupPhoto == "empty" ?
+                  Image.asset(
+                    "assets/ski.jpeg",
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
+                  ):
+                  Image.network(groupPhoto,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
                 ),
                 Container(
                   color: Colors.black.withOpacity(0.25),

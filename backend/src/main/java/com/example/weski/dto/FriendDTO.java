@@ -13,4 +13,5 @@ public class FriendDTO {
     Long id;
     String username;
     String category;
+    String profile_picture;
 }

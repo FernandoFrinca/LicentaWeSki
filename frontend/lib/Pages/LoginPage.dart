@@ -118,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () async {
                     currentUser = await loginLogic();
                     if(currentUser != null){
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => HomePage(curentUser: currentUser!),

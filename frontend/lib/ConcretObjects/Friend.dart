@@ -4,6 +4,7 @@ class Friend {
   late String category;
   late double max_speed;
   late double total_distance;
+  late String profile_picture = "empty";
 
   int getId(){
     return id;
@@ -17,8 +18,12 @@ class Friend {
     return category;
   }
 
+  String getProfilePicture(){
+    return profile_picture;
+  }
+
   @override
   String toString() {
-    return 'id: $id, username: $username, category: $category \n';
+    return 'id: $id, username: $username, category: $category, picture:  \n';
   }
 }

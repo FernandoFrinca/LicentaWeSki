@@ -16,6 +16,7 @@ import 'package:weski/Pages/ProfilePage.dart';
 import 'package:weski/Widget/customButton.dart';
 import '../Assets/LocationLogic.dart';
 import '../ConcretObjects/User.dart';
+import '../Pages/LoginPage.dart';
 
 class customDrawer extends StatelessWidget {
   final double screenWidth;
@@ -172,7 +173,52 @@ class customDrawer extends StatelessWidget {
                 bottom: screenHeight * 0.03,
               ),
               child: GestureDetector(
-                onTap: (){},
+                onTap: (){
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        content: Container(
+                          width: screenWidth * 0.2,
+                          height: screenHeight *0.1,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("Are you sure?", style: TextStyle(fontSize: 26),),
+                              customButton(
+                                data: "Logout",
+                                icon: Icons.logout,
+                                iconColor: 0xFFF20000,
+                                textColor: 0xFF000000,
+                                textSize: screenWidth * 0.04,
+                                screenWidth: screenWidth,
+                                screenHeight: screenHeight,
+                                paddingWidth: 0.13,
+                                paddingHeight: 0.01,
+                                onTap: () {
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => LoginPage()),
+                                        (Route<dynamic> route) => false,
+                                  );
+                                },
+                                iconSize: screenWidth * 0.08,
+                                paddingText: screenWidth * 0.01,
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [

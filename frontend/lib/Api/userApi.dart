@@ -156,6 +156,7 @@ class userApi {
         friend.id = body['id'];
         friend.username = body['username'];
         friend.category = body['category'];
+        friend.profile_picture = body['profile_picture'];
 
         //print(friend.username);
         friendsList.add(friend);
@@ -182,6 +183,7 @@ class userApi {
         request.id = body['id'];
         request.username = body['username'];
         request.category = body['category'];
+        request.profile_picture = body['profile_picture'];
 
         requestsList.add(request);
       }
