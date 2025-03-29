@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weski/Api/notificationApi.dart';
+import 'dart:math';
 
 class shortcutCard extends StatefulWidget {
   final String text1;
@@ -32,6 +33,9 @@ class shortcutCard extends StatefulWidget {
 class _shortcutCardState extends State<shortcutCard> {
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenDiagonal = sqrt(pow(screenWidth,2)+pow(screenHeight,2));
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
@@ -43,8 +47,8 @@ class _shortcutCardState extends State<shortcutCard> {
           clipBehavior: Clip.none,
           children: [
             Container(
-              width: 170,
-              height: 130,
+              width: screenWidth * 0.38,
+              height: screenHeight * 0.13,
               decoration: BoxDecoration(
                 color: Color(widget.fillcolor),
                 borderRadius: BorderRadius.circular(14),
@@ -52,35 +56,35 @@ class _shortcutCardState extends State<shortcutCard> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(widget.dataIcon, color: Colors.white, size: 56),
+                  Icon(widget.dataIcon, color: Colors.white, size: screenDiagonal * 0.052),
                   Text(
                     widget.text2,
-                    style: const TextStyle(
-                      fontSize: 15,
+                    style: TextStyle(
+                      fontSize: screenDiagonal * 0.014,
                       color: Colors.white70,
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: screenDiagonal * 0.004),
                   Text(
                     widget.text1,
-                    style: const TextStyle(
-                      fontSize: 18,
+                    style: TextStyle(
+                      fontSize: screenDiagonal * 0.017,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: screenDiagonal * 0.004),
                 ],
               ),
             ),
             Positioned(
-              top: 45,
-              right: widget.isleft ? -30 : 154,
+              top: screenHeight * 0.045,
+              right: widget.isleft ? -screenWidth * 0.067 : screenWidth * 0.345,
               child: Container(
-                width: 45,
-                height: 40,
+                width: screenWidth * 0.103,
+                height: screenHeight * 0.04,
                 decoration: BoxDecoration(
                   color: Color(widget.chipcolor),
                   borderRadius: BorderRadius.circular(180),

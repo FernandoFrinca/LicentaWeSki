@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../Assets/Colors.dart';
@@ -45,6 +47,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenDiagonal = sqrt(pow(screenWidth,2)+pow(screenHeight,2));
     return TextField(
       controller: widget.controller,
       obscureText: widget.isPasswordField && !_passwordVisible,
@@ -85,7 +90,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           },
         ) : null,
         hintText: widget.label,
-        hintStyle: TextStyle(color: Color(licentaColors.opacity | widget.texColor)),
+        hintStyle: TextStyle(color: Color(licentaColors.opacity | widget.texColor), fontSize: screenDiagonal * 0.02),
         filled: true,
         fillColor: Color(licentaColors.opacity | widget.fillColor),
         errorText: widget.errorState ? "Error" : null,

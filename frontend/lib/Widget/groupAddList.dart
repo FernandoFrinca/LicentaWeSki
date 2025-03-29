@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class groupAddList extends StatefulWidget {
@@ -28,15 +30,17 @@ class _groupAddListState extends State<groupAddList> {
   bool checkboxValue = false;
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    double screenDiagonal = sqrt(pow(screenWidth,2)+pow(screenHeight,2));
     return Card(
       child: Container(
         width: screenWidth * 0.7,
         height: screenHeight * 0.09,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: const Color(0xFFF8F8F8),
+          color: Color(theme.colorScheme.surfaceContainer.value),
         ),
         child: Row(
           children: [
@@ -49,14 +53,14 @@ class _groupAddListState extends State<groupAddList> {
                     padding: const EdgeInsets.only(top: 10.0, left: 10.0),
                     child: Text(
                       widget.username,
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: screenDiagonal * 0.017, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10.0, left: 10.0),
                     child: Text(
                       widget.category,
-                      style: const TextStyle(fontSize: 16, color: Colors.grey),
+                      style:  TextStyle(fontSize: screenDiagonal * 0.015, color: Colors.grey),
                     ),
                   ),
                 ],

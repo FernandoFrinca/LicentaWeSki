@@ -54,7 +54,7 @@ class _chartWidgetState extends State<chartWidget> {
         textStyle: TextStyle(
           fontSize: screenDiagonal * 0.02,
           fontWeight: FontWeight.w500,
-          color: Color(theme.colorScheme.onSecondary.value).withOpacity(0.4),
+          color: Color(theme.colorScheme.onSurface.value).withOpacity(0.4),
           height: 0.8,
         ),
       ),

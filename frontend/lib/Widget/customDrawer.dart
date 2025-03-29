@@ -15,6 +15,7 @@ import 'package:weski/Pages/NotificationPage.dart';
 import 'package:weski/Pages/ProfilePage.dart';
 import 'package:weski/Widget/customButton.dart';
 import '../Assets/LocationLogic.dart';
+import '../Assets/Theme.dart';
 import '../ConcretObjects/User.dart';
 import '../Pages/LoginPage.dart';
 
@@ -36,7 +37,7 @@ class customDrawer extends StatelessWidget {
     double screenDiagonal = sqrt(pow(screenWidth,2)+pow(screenHeight,2));
     return Drawer(
       width: screenWidth * 0.85,
-      backgroundColor: Colors.white,
+      backgroundColor: Color(theme.colorScheme.surface.value),
       child: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -59,7 +60,7 @@ class customDrawer extends StatelessWidget {
                     style: TextStyle(
                       fontSize: screenWidth * 0.06,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: Color(theme.colorScheme.onSurface.value),
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -68,7 +69,7 @@ class customDrawer extends StatelessWidget {
               ),
             ),
 
-            Divider(color: Colors.grey.shade300, thickness: 1.0),
+            Divider(color: theme.brightness == lightTheme.brightness? Colors.black26 : Colors.white24, thickness: 1.0),
 
             Expanded(
               child: Column(
@@ -78,8 +79,8 @@ class customDrawer extends StatelessWidget {
                   customButton(
                       data: "My profile",
                       icon: Icons.account_circle_sharp,
-                      iconColor: 0xFF000000,
-                      textColor: 0xFF000000,
+                      iconColor: theme.colorScheme.onSurface.value,
+                      textColor: theme.colorScheme.onSurface.value,
                       textSize: screenWidth * 0.045,
                       screenWidth: screenWidth,
                       screenHeight: screenHeight,
@@ -99,8 +100,8 @@ class customDrawer extends StatelessWidget {
                   customButton(
                       data: "Chat Bot",
                       icon: Icons.chat_outlined,
-                      iconColor: 0xFF000000,
-                      textColor: 0xFF000000,
+                      iconColor: theme.colorScheme.onSurface.value,
+                      textColor: theme.colorScheme.onSurface.value,
                       textSize: screenWidth * 0.045,
                       screenWidth: screenWidth,
                       screenHeight: screenHeight,
@@ -119,8 +120,8 @@ class customDrawer extends StatelessWidget {
                   customButton(
                       data: "Notifications",
                       icon: Icons.notifications_none,
-                      iconColor: 0xFF000000,
-                      textColor: 0xFF000000,
+                      iconColor: theme.colorScheme.onSurface.value,
+                      textColor: theme.colorScheme.onSurface.value,
                       textSize: screenWidth * 0.045,
                       screenWidth: screenWidth,
                       screenHeight: screenHeight,
@@ -140,8 +141,8 @@ class customDrawer extends StatelessWidget {
                   customButton(
                       data: "test",
                       icon: Icons.adb,
-                      iconColor: 0xFF000000,
-                      textColor: 0xFF000000,
+                      iconColor: theme.colorScheme.onSurface.value,
+                      textColor: theme.colorScheme.onSurface.value,
                       textSize: screenWidth * 0.045,
                       screenWidth: screenWidth,
                       screenHeight: screenHeight,
@@ -165,7 +166,7 @@ class customDrawer extends StatelessWidget {
                 ],
               ),
             ),
-            Divider(color: Colors.grey.shade300, thickness: 1.0),
+            Divider(color: theme.brightness == lightTheme.brightness? Colors.black26 : Colors.white24, thickness: 1.0),
             Padding(
               padding: EdgeInsets.only(
                 left: screenWidth * 0.06,
@@ -183,34 +184,40 @@ class customDrawer extends StatelessWidget {
                         ),
                         content: Container(
                           width: screenWidth * 0.2,
-                          height: screenHeight *0.1,
+                          height: screenHeight * 0.11,
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Color(theme.colorScheme.surface.value),
                           ),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text("Are you sure?", style: TextStyle(fontSize: 26),),
-                              customButton(
-                                data: "Logout",
-                                icon: Icons.logout,
-                                iconColor: 0xFFF20000,
-                                textColor: 0xFF000000,
-                                textSize: screenWidth * 0.04,
-                                screenWidth: screenWidth,
-                                screenHeight: screenHeight,
-                                paddingWidth: 0.13,
-                                paddingHeight: 0.01,
-                                onTap: () {
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => LoginPage()),
-                                        (Route<dynamic> route) => false,
-                                  );
-                                },
-                                iconSize: screenWidth * 0.08,
-                                paddingText: screenWidth * 0.01,
+                              Text("Are you sure?", style: TextStyle(fontSize: screenDiagonal * 0.025),),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left:screenWidth * 0.07
+                                ),
+                                child: customButton(
+                                  data: "Logout",
+                                  icon: Icons.logout,
+                                  iconColor: 0xFFF20000,
+                                  textColor: theme.colorScheme.onSurface.value,
+                                  textSize: screenWidth * 0.04,
+                                  screenWidth: screenWidth,
+                                  screenHeight: screenHeight,
+                                  paddingWidth: 0.13,
+                                  paddingHeight: 0.01,
+                                  onTap: () {
+                                    Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => LoginPage()),
+                                          (Route<dynamic> route) => false,
+                                    );
+                                  },
+                                  iconSize: screenWidth * 0.08,
+                                  paddingText: screenWidth * 0.01,
+                                ),
                               ),
                             ],
                           ),
@@ -232,7 +239,7 @@ class customDrawer extends StatelessWidget {
                       "Logout",
                       style: TextStyle(
                         fontSize: screenWidth * 0.04,
-                        color: Colors.black,
+                        color: Color(theme.colorScheme.onSurface.value),
                         fontWeight: FontWeight.w500,
                       ),
                     ),

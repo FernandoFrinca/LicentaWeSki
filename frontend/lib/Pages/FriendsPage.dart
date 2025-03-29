@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:weski/Api/groupApi.dart';
 import 'package:weski/Pages/GroupPage.dart';
@@ -43,22 +45,23 @@ class _FriendsPageState extends State<FriendsPage> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    double screenDiagonal = sqrt(pow(screenWidth,2)+pow(screenHeight,2));
+    double cardHeight = screenHeight * 0.21;
     final TextEditingController _friendController = TextEditingController();
     final TextEditingController _groupController = TextEditingController();
-    double cardHeight = screenHeight * 0.21;
     double friendsHeight = screenHeight * 0.1;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded),
+          icon: Icon(Icons.arrow_back_rounded, size: screenDiagonal * 0.035),
           onPressed: () => Navigator.pop(context, false),
         ),
         centerTitle: true,
-        title: const Text("Friends", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),),
+        title: Text("Friends", style: TextStyle(fontSize: screenDiagonal * 0.03, fontWeight: FontWeight.bold),),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(
-              right: 12,
+            padding: EdgeInsets.only(
+              right: screenWidth * 0.015,
             ),
             child: IconButton(onPressed:(){
               showDialog(
@@ -67,7 +70,7 @@ class _FriendsPageState extends State<FriendsPage> {
                   return addFriends(friendController: _friendController, currentUserId: widget.curentUserId,);
                 },
               );
-            }, icon: const Icon(Icons.person_add_outlined, size: 36,)),
+            }, icon: Icon(Icons.person_add_outlined, size: screenDiagonal * 0.035,)),
           )
         ],
       ),
@@ -76,11 +79,11 @@ class _FriendsPageState extends State<FriendsPage> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(
-                    left: 16.0
+                    left: screenDiagonal * 0.016
                 ),
-                child: Text("Your groups:", style: TextStyle(fontSize: 32),),
+                child: Text("Your groups:", style: TextStyle(fontSize: screenDiagonal * 0.032),),
               ),
               SizedBox(
                 height: cardHeight,
@@ -91,7 +94,7 @@ class _FriendsPageState extends State<FriendsPage> {
                   padding: const EdgeInsets.all(8.0),
                   itemBuilder: (context, index) {
                     return groupCard(
-                      cardHeight: cardHeight,
+                      //cardHeight: cardHeight,
                       groupName: groups[index].name,
                       groupPhoto: groups[index].group_photo,
                       onTap: () {
@@ -101,11 +104,11 @@ class _FriendsPageState extends State<FriendsPage> {
                   },
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(
-                    left: 16.0
+                    left: screenDiagonal * 0.016
                 ),
-                child: Text("Your friends:", style: TextStyle(fontSize: 32),),
+                child: Text("Your friends:", style: TextStyle(fontSize: screenDiagonal * 0.032),),
               ),
               Expanded(
                 child:

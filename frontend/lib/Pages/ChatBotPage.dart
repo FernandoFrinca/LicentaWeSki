@@ -6,6 +6,7 @@ import 'package:location/location.dart';
 import 'package:weski/Api/openAIApi.dart';
 import 'package:weski/Widget/customMessageDisplay.dart';
 
+import '../Assets/Theme.dart';
 import '../Widget/customTriangle.dart';
 
 
@@ -142,7 +143,7 @@ class ChatBotPageState extends State<ChatBotPage> {
                         itemCount: messages.length,
                         itemBuilder: (context, index) {
                           return CustomMessageDisplay(
-                            fillColor: 0xFFE8E8E8,
+                            fillColor: theme.brightness == lightTheme.brightness? 0xFFE8E8E8 : 0xFF414245,
                             textColor: 0XFFFFFFFF,
                             textContent: messages[index]["text"],
                             screenWidth: screenWidth,
@@ -160,9 +161,6 @@ class ChatBotPageState extends State<ChatBotPage> {
                 ),),
             ],
           ),
-
-
-
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -185,19 +183,20 @@ class ChatBotPageState extends State<ChatBotPage> {
                   maxLines: null,
                   keyboardType: TextInputType.multiline,
                   decoration: InputDecoration(
+                    hintStyle: TextStyle(color: Colors.grey),
                     hintText: "Type here..",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
                       borderSide: BorderSide.none,
                     ),
                     filled: true,
-                    fillColor: Colors.white,
+                    fillColor: Color(theme.colorScheme.surface.value),
                     contentPadding: EdgeInsets.all(10),
                     suffixIcon: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.black12,
+                        decoration: BoxDecoration(
+                          color: theme.brightness == lightTheme.brightness? Colors.black12 : Colors.white12,
                           shape: BoxShape.circle
                         ),
                         child: IconButton(

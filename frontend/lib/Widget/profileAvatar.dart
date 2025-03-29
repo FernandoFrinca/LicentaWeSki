@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,16 +13,12 @@ import '../Api/Firestore.dart';
 import '../Pages/ProfilePage.dart';
 
 class customProfileAvatar extends StatefulWidget{
-  final double screenHeight;
-  final double screenWidth;
   final bool isForEdit;
   final int userId;
   final ValueNotifier<String?> profileImageNotifier;
 
   const customProfileAvatar({
     super.key,
-    required this.screenWidth,
-    required this.screenHeight,
     required this.userId,
     required this.profileImageNotifier,
     this.isForEdit = false,
@@ -78,23 +75,26 @@ class _customProfileAvatar extends State<customProfileAvatar> {
 
   @override
   Widget build(BuildContext context) {
-    double screenW = widget.screenWidth;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenDiagonal = sqrt(pow(screenWidth,2)+pow(screenHeight,2));
+    final theme = Theme.of(context);
     return Padding(
-      padding: EdgeInsets.only(top: 10.0, left: 18),
+      padding: EdgeInsets.only(top: screenDiagonal * 0.009, left: screenDiagonal * 0.017),
       child: Stack(
         children: [
           Container(
-            width: screenW * 0.46,
-            height: screenW * 0.46,
-            decoration: const BoxDecoration(
+            width: screenDiagonal * 0.19,
+            height: screenDiagonal * 0.19,
+            decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Colors.white, Color(0xFF007EA7)],
-                stops: [0.5, 0.5],
+                colors: [Color(theme.colorScheme.surface.value), const Color(0xFF007EA7)],
+                stops: const [0.5, 0.5],
               ),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                   color: Colors.black26,
                   blurRadius: 5,
@@ -129,16 +129,16 @@ class _customProfileAvatar extends State<customProfileAvatar> {
               child: GestureDetector(
                 onTap: selectImage,
                 child: Container(
-                  width: 40,
-                  height: 40,
+                  width: screenDiagonal * 0.04,
+                  height: screenDiagonal * 0.04,
                   decoration: BoxDecoration(
                     color: Colors.black54,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.camera_alt,
                     color: Colors.white,
-                    size: 22,
+                    size: screenDiagonal * 0.025,
                   ),
                 ),
               ),

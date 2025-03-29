@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -76,16 +77,17 @@ class _groupPageState extends State<groupPage> {
     int backgroundcolor = theme.colorScheme.surface.value;
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    double screenDiagonal = sqrt(pow(screenWidth,2)+pow(screenHeight,2));
     double friendsHeight = screenHeight * 0.1;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(theme.colorScheme.primary.value,),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+          icon: Icon(Icons.arrow_back_rounded, color: Colors.white,size: screenDiagonal * 0.035),
           onPressed: () => Navigator.pop(context, false),
         ),
         centerTitle: true,
-        title: Text(currentGroup.name, style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),),
+        title: Text(currentGroup.name, style: TextStyle(fontSize: screenDiagonal * 0.03, fontWeight: FontWeight.bold, color: Colors.white),),
         actions: [
           Padding(
             padding: const EdgeInsets.only(
@@ -99,7 +101,7 @@ class _groupPageState extends State<groupPage> {
                   return addFriends(friendController: _friendController, currentUserId: widget.curentUserId,);
                 },
               );*/
-            }, icon: const Icon(Icons.person_add_outlined, size: 36, color: Colors.white)),
+            }, icon: Icon(Icons.person_add_outlined, size: screenDiagonal * 0.035, color: Colors.white)),
           )
         ],
       ),
@@ -107,11 +109,11 @@ class _groupPageState extends State<groupPage> {
       body: Stack(
         children: [
           Positioned(
-            top: 25,
+            top: screenHeight * 0.025,
             left: 0,
             right: 0,
             child: SizedBox(
-              height: 220,
+              height: screenHeight * 0.225,
               child: CarouselSlider.builder(
                 itemCount: groupMembers.length,
                 itemBuilder: (context, index, realIndex) {
