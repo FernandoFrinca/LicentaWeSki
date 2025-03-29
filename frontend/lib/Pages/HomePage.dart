@@ -196,7 +196,7 @@ class _HomePageState extends State<HomePage> {
                                 onPressed: () {
                                   Scaffold.of(context).openDrawer();
                                 },
-                                fillColor: Color(theme.colorScheme.tertiary.value),
+                                fillColor: Color(theme.colorScheme.surface.value),
                                 shape: const CircleBorder(),
                                 elevation: 5,
                                 constraints: BoxConstraints(
@@ -217,7 +217,7 @@ class _HomePageState extends State<HomePage> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
                         child: CustomSearchBar(
-                          fillColor: theme.colorScheme.tertiary.value,
+                          fillColor: theme.colorScheme.surface.value,
                           textColor: theme.colorScheme.onTertiary.value,
                           screenWidth: screenWidth,
                           screenHeight: screenHeight,
@@ -250,7 +250,7 @@ class _HomePageState extends State<HomePage> {
                                 MaterialPageRoute(builder: (context) => FriendsPage(curentUserId:widget.curentUser!.id, friends: friends, groups: groups, )),
                               );
                             },
-                            fillColor: Color(theme.colorScheme.tertiary.value),
+                            fillColor: Color(theme.colorScheme.surface.value),
                             shape: const CircleBorder(),
                             elevation: 5,
                             constraints: BoxConstraints(
@@ -300,7 +300,7 @@ class _HomePageState extends State<HomePage> {
                                 mapTypeIndex = 0;
                               }
                           },
-                          fillColor: Color(theme.colorScheme.tertiary.value),
+                          fillColor: Color(theme.colorScheme.surface.value),
                           shape: const CircleBorder(),
                           elevation: 5,
                           constraints: BoxConstraints(
@@ -350,7 +350,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                             );
                           },
-                          fillColor: Color(theme.colorScheme.tertiary.value),
+                          fillColor: Color(theme.colorScheme.surface.value),
                           shape: const CircleBorder(),
                           constraints: BoxConstraints(
                             minWidth: screenWidth * 0.13,

@@ -39,5 +39,7 @@ final ThemeData darkTheme = ThemeData(
     tertiary: Color(licentaColors.opacity | licentaColors.colorBlack),
     onTertiary: Color(licentaColors.opacity | licentaColors.colorWhite),
 
+    surfaceContainer: Color(licentaColors.opacity | licentaColors.licenta_dark_grey2),
+
   ),
 );

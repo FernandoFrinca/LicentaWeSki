@@ -9,8 +9,8 @@ class licentaColors {
 
   //001022
   //050425
-  static const int background_d = 0x05060F;
-  static const int licenta_dark_grey2 = 0x1C1D21;
+  static const int background_d = 0x1C1D21;
+  static const int licenta_dark_grey2 = 0x414245;
 
 
 }

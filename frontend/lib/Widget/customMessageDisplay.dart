@@ -70,7 +70,7 @@ class _CustomMessageDisplayState extends State<CustomMessageDisplay> {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              color: Color(widget.isFromUser ? widget.fillColor : 0xFFC1E0EA ),
+                color: Color(widget.isFromUser ? widget.fillColor : theme.brightness == lightTheme.brightness? 0xFFC1E0EA : 0xFF47879C ),
             ),
             constraints: BoxConstraints(
               minHeight: profileCircleSize,

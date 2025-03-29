@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
@@ -31,6 +33,7 @@ class _infoWidgetState extends State<infoWidget> {
   Widget build(BuildContext context) {
     double screenWidth = widget.screenW;
     double screenHeight = widget.screenW;
+    double screenDiagonal = sqrt(pow(screenWidth,2)+pow(screenHeight,2));
     String data = widget.selectedData;
     IconData selectedIcon = widget.selectedI;
     int iconColor = widget.selectediconColor;

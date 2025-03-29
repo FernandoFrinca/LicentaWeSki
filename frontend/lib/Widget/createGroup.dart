@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -33,6 +34,7 @@ class createGroup extends StatefulWidget {
 }
 
 class _createGroupState extends State<createGroup> {
+
   String? errorMessage;
   Set<int> createGroupFriendsList = new HashSet();
   final ImagePicker imagePicker = ImagePicker();
@@ -63,17 +65,20 @@ class _createGroupState extends State<createGroup> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenDiagonal = sqrt(pow(screenWidth,2)+pow(screenHeight,2));
     return Dialog(
       child: Container(
-        height: 600,
-        width: 600,
+        height: screenHeight * 0.75,
+        width: screenWidth * 0.9,
         child: Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.all(8.0),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
               child: Text(
                 "Create Group",
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: screenDiagonal * 0.03, fontWeight: FontWeight.bold),
               ),
             ),
             Container(
@@ -173,14 +178,3 @@ class _createGroupState extends State<createGroup> {
     );
   }
 }
-
-
-/*
-* imi ramane sa fac pagina de grup
-* dau leave la grup
-* sterg grupul
-* scriu ceva la grup maybe
-* notific grupul
-* sa dau fetch la o poza calumea
-* sa fac asta si la prieteni
-* */

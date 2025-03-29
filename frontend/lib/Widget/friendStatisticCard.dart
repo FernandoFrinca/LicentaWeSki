@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
@@ -27,13 +29,14 @@ class friendStatisticCard extends StatefulWidget {
 class _friendStatisticCardState extends State<friendStatisticCard> {
   @override
   Widget build(BuildContext context) {
-    print("imaginea in group: ");
-    print("Profile pic for ${widget.name} = '${widget.imagePath}'");
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenDiagonal = sqrt(pow(screenWidth,2)+pow(screenHeight,2));
 
     return Padding(
-      padding: const EdgeInsets.all(7.0),
+      padding: EdgeInsets.all(screenDiagonal * 0.007),
       child: Container(
-        width: 170,
+        //width: 170,
         decoration: BoxDecoration(
           color: Color(widget.fillColor),
           borderRadius: BorderRadius.circular(14),
@@ -42,13 +45,13 @@ class _friendStatisticCardState extends State<friendStatisticCard> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: 70,
-                height: 70,
-                margin: const EdgeInsets.only(bottom: 8.0),
+                width: screenDiagonal * 0.065,
+                height: screenDiagonal * 0.065,
+                margin: EdgeInsets.only(bottom: screenHeight * 0.008),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4.0),
                   image: widget.imagePath == "empty"
-                      ? DecorationImage(
+                      ? const DecorationImage(
                     image: AssetImage("assets/ski.jpeg"),
                     fit: BoxFit.cover,
                   )
@@ -60,8 +63,8 @@ class _friendStatisticCardState extends State<friendStatisticCard> {
               ),
               Text(
                 widget.name,
-                style: const TextStyle(
-                  fontSize: 16,
+                style: TextStyle(
+                  fontSize: screenDiagonal * 0.015,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
@@ -69,8 +72,8 @@ class _friendStatisticCardState extends State<friendStatisticCard> {
               ),
               Text(
                 widget.category,
-                style: const TextStyle(
-                  fontSize: 14,
+                style: TextStyle(
+                  fontSize: screenDiagonal * 0.013,
                   color: Colors.white70,
                 ),
                 textAlign: TextAlign.center,
@@ -88,11 +91,11 @@ class _friendStatisticCardState extends State<friendStatisticCard> {
                         style: TextStyle(color: Colors.white),
                         maxLines: 1,
                         minFontSize: 1,
-                        maxFontSize: 14,
+                        maxFontSize: 13,
                       ),
                     ],
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: screenWidth * 0.016),
                   Column(
                     children: [
                       Icon(widget.secondIcon, color: Colors.white),
@@ -103,7 +106,7 @@ class _friendStatisticCardState extends State<friendStatisticCard> {
                         style: TextStyle(color: Colors.white),
                         maxLines: 1,
                         minFontSize: 1,
-                        maxFontSize: 14,
+                        maxFontSize: 13,
                       ),
                     ],
                   ),

@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:weski/Api/notificationApi.dart';
 import 'package:weski/ConcretObjects/NotificationModel.dart';
 import 'package:weski/Widget/CustomSlider.dart';
 import 'package:weski/Widget/friendCard.dart';
 import '../Api/userApi.dart';
+import '../Assets/Theme.dart';
 import '../ConcretObjects/Friend.dart';
 import '../ConcretObjects/User.dart';
 import '../Widget/notificationCard.dart';
@@ -55,8 +58,8 @@ class _NotificationPageState extends State<NotificationPage> {
     final theme = Theme.of(context);
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    double screenDiagonal = sqrt(pow(screenWidth,2)+pow(screenHeight,2));
     double cardHeight = screenHeight * 0.1;
-    User? currentUser;
 
     return Scaffold(
       appBar: AppBar(
@@ -68,9 +71,9 @@ class _NotificationPageState extends State<NotificationPage> {
           },
         ),
         centerTitle: true,
-        title: const Text(
+        title: Text(
           "Notifications",
-          style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: screenDiagonal * 0.03, fontWeight: FontWeight.bold),
         ),
       ),
       body: Center(
@@ -87,7 +90,7 @@ class _NotificationPageState extends State<NotificationPage> {
                 });
               },
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: screenDiagonal * 0.02),
             selectedIndex == 0
                 ? Expanded(
               child: Container(
@@ -139,16 +142,16 @@ class _NotificationPageState extends State<NotificationPage> {
             ),
             SizedBox(
               width: screenWidth * 0.95,
-              child: const Divider(
+              child: Divider(
                 thickness: 2,
-                color: Colors.black26,
+                color: theme.brightness == lightTheme.brightness? Colors.black26 : Colors.white24,
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
+              padding: EdgeInsets.only(bottom: screenHeight * 0.01),
               child: Container(
                 width: screenWidth,
-                height: 60,
+                height: screenHeight * 0.065,
                 child: Center(
                   child: ElevatedButton.icon(
                     onPressed: () async {
@@ -160,8 +163,11 @@ class _NotificationPageState extends State<NotificationPage> {
                       });
                       await notificationApi.deleteNotifications(deletedNotifications);
                     },
-                    icon: const Icon(Icons.delete),
-                    label: const Text("Delete all notifications"),
+                    icon: Icon(Icons.delete, size: screenDiagonal * 0.025, color: Colors.white,),
+                    label: Text("Delete all notifications", style: TextStyle(
+                        fontSize: screenDiagonal * 0.017
+                      ),
+                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                       foregroundColor: Colors.white,

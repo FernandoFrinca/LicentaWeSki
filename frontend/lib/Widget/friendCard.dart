@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:weski/Api/userApi.dart';
 import 'package:weski/ConcretObjects/Friend.dart';
@@ -39,25 +41,25 @@ class _friendCardState extends State<friendCard> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-
+    double screenDiagonal = sqrt(pow(screenWidth,2)+pow(screenHeight,2));
+    final theme = Theme.of(context);
     return Card(
       child: Container(
         width: screenWidth * 0.8,
         height: widget.cardHeight,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: const Color(0xFFF8F8F8),
+          color: Color(theme.colorScheme.surfaceContainer.value),
         ),
         child: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 10.0, right: 5.0),
+              padding: EdgeInsets.only(left: screenDiagonal * 0.01, right: screenDiagonal * 0.005),
               child: Container(
                 width: widget.cardHeight * 0.8,
                 height: widget.cardHeight * 0.8,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
-                  color: Colors.white,
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15),
@@ -83,17 +85,17 @@ class _friendCardState extends State<friendCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 10.0, left: 10.0),
+                    padding:  EdgeInsets.only(top: screenDiagonal * 0.01, left: screenDiagonal * 0.01),
                     child: Text(
                       widget.username,
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: screenDiagonal * 0.016, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0, left: 10.0),
+                    padding: EdgeInsets.only(bottom: screenDiagonal * 0.01, left: screenDiagonal * 0.01),
                     child: Text(
                       widget.category,
-                      style: const TextStyle(fontSize: 16, color: Colors.grey),
+                      style: TextStyle(fontSize: screenDiagonal * 0.015, color: Colors.grey),
                     ),
                   ),
                 ],
@@ -137,11 +139,11 @@ class _friendCardState extends State<friendCard> {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: const Center(
+                            title: Center(
                               child: Padding(
                                 padding: EdgeInsets.all(2.0),
                                 child: Text("Confirm Removal", style: TextStyle(
-                                    fontSize: 26,
+                                    fontSize: screenDiagonal * 0.025,
                                     fontWeight: FontWeight.bold),),
                               ),
                             ),

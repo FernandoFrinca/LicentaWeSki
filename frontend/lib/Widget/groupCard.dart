@@ -1,14 +1,14 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class groupCard extends StatelessWidget {
-  final double cardHeight;
   final String groupName;
   final String groupPhoto;
   final VoidCallback onTap;
 
   const groupCard({
     Key? key,
-    required this.cardHeight,
     required this.groupName,
     required this.groupPhoto,
     required this.onTap,
@@ -16,7 +16,10 @@ class groupCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    double screenDiagonal = sqrt(pow(screenWidth,2)+pow(screenHeight,2));
+    double cardHeight = screenHeight * 0.21;
 
     return Card(
       shape: RoundedRectangleBorder(
@@ -57,8 +60,8 @@ class groupCard extends StatelessWidget {
                   right: 10,
                   child: Text(
                     "Group $groupName",
-                    style: const TextStyle(
-                      fontSize: 24,
+                    style: TextStyle(
+                      fontSize: screenDiagonal * 0.024,
                       color: Colors.white,
                     ),
                     textAlign: TextAlign.center,
