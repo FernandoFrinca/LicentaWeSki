@@ -6,6 +6,7 @@ import com.example.weski.data.model.Statistics;
 import com.example.weski.data.model.Users;
 import com.example.weski.dto.StatisticDTO;
 import com.example.weski.dto.UsersDTO;
+import com.example.weski.error.NotFoundException;
 import com.example.weski.mapper.to.dto.UserDTOMapper;
 import com.example.weski.mapper.to.entity.UserDTOtoEntityMapper;
 import com.example.weski.repository.GroupRepository;
@@ -66,9 +67,9 @@ public class UsersService {
         Users user = usersRepository.findByUsername(username).orElse(null);
 
         if (user == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found");
+            throw new NotFoundException("User not found");
         } else if (!passEncoder.matches(password, user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
+            throw new NotFoundException("Invalid credentials");
         }
 
         return usersMapper.apply(user);

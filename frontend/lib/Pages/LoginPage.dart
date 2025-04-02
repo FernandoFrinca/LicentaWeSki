@@ -18,12 +18,25 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  String errorMsg = "";
 
   Future<User?> loginLogic() async {
     String username = _usernameController.text;
     String password = _passwordController.text;
-    return userApi.userLoginValidation(username, password);
+    try {
+      errorMsg = "";
+      return await userApi.userLoginValidation(username, password);
+    } catch (e) {
+      setState(() {
+        errorMsg = e.toString();
+        while (errorMsg.startsWith('Exception: ')) {
+          errorMsg = errorMsg.replaceFirst('Exception: ', '');
+        }
+      });
+      return null;
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,15 +50,6 @@ class _LoginPageState extends State<LoginPage> {
     void dispose() {
       _usernameController.dispose();
       _passwordController.dispose();
-    }
-
-    Future<User?> loginLogic() async{
-      String username = _usernameController.text;
-      String password = _passwordController.text;
-
-      return userApi.userLoginValidation(username, password);
-
-      //dispose();
     }
 
     return Scaffold(
@@ -100,6 +104,18 @@ class _LoginPageState extends State<LoginPage> {
                   isPasswordField: true,
                 ),
               ),
+
+              if (errorMsg.isNotEmpty) ...[
+                SizedBox(height: screenHeight * 0.002),
+                Text(
+                  errorMsg,
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: screenHeight * 0.02,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
               SizedBox(
                 height: screenHeight * 0.04,
               ),
@@ -125,9 +141,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       );
                     }
-                    else{
-
-                    }
+                    else{}
                   },
                   child: const Text('Log In'),
                 ),
