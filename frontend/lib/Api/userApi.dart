@@ -56,8 +56,6 @@ class userApi {
     final endpointUrl = Uri.parse('$url/login');
     var response;
 
-    print("intra");
-
     User user = User();
     try {
       Map<String, String> headers = {
@@ -68,19 +66,11 @@ class userApi {
         "password": password,
       };
 
-      print("intra2");
-
-
       response = await http.post(
         endpointUrl,
         headers: headers,
         body: jsonEncode(encodedBody),
       );
-
-      print("intra3");
-
-      print("Response status: ${response.statusCode}");
-      print("Response body: ${response.body}");
 
       if (response.statusCode == 200) {
         final decodedResponse = jsonDecode(response.body);
@@ -94,12 +84,12 @@ class userApi {
 
         return user;
       } else {
-          print("Status code diferit de 200, autentificare eșuată.");
-          return null;
+          final errorResponse = jsonDecode(response.body);
+          final errorMessage = errorResponse['message'];
+          throw Exception(errorMessage);
         }
       } catch (e) {
-        print("Eroare la login: $e");
-        return null;
+        throw Exception(e.toString());
       }
   }
 

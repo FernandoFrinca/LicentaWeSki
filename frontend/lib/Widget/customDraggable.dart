@@ -13,6 +13,7 @@ import 'package:weski/Widget/statisticsCard.dart';
 
 
 import '../Api/locationApi.dart';
+import '../Api/userApi.dart';
 import '../Assets/LocationLogic.dart';
 import '../ConcretObjects/User.dart';
 import 'chartWidget.dart';
@@ -52,11 +53,13 @@ class _customDraggable extends State<customDraggable>{
 
   Timer? timer;
   Timer? timerHour;
+  Timer? timerMinute;
   DateTime? startTime;
   double currentDistance = 0.0;
   double lastDistance = 0.0;
 
   void startStopwatch() {
+    int updateStatistic = 0;
 
     startTime = DateTime.now();
     lastDistance = widget.totalDistanceNotifier.value;
@@ -66,7 +69,7 @@ class _customDraggable extends State<customDraggable>{
       stopwatch.value += const Duration(seconds: 1);
     });
 
-    timerHour = Timer.periodic(const Duration(minutes: 1), (timer) {
+    timerHour = Timer.periodic(const Duration(hours: 1), (timer) {
       DateTime currentTime = startTime!.add(stopwatch.value);
       double updatedTotalDistance = widget.totalDistanceNotifier.value;
       currentDistance = updatedTotalDistance - lastDistance;
@@ -80,6 +83,17 @@ class _customDraggable extends State<customDraggable>{
       distancePerHour.value.add(distanceHour);
       distancePerHour.notifyListeners();
     });
+
+    timerMinute = Timer.periodic(const Duration(minutes: 1), (Timer t) {
+      print("Minut:");
+      print(widget.speedNotifier.value);
+      print(widget.totalDistanceNotifier.value);
+      userApi.updateStatistics(
+          widget.currentUser.id,
+          double.parse((widget.speedNotifier.value).toStringAsFixed(2)),
+          double.parse((widget.totalDistanceNotifier.value).toStringAsFixed(2))
+      );
+    });
   }
 
 
@@ -90,6 +104,7 @@ class _customDraggable extends State<customDraggable>{
     stopLocationSaving();
     timer?.cancel();
     timerHour?.cancel();
+    timerMinute?.cancel();
     resetData();
   }
 

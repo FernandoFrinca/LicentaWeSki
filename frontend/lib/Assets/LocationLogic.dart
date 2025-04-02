@@ -20,6 +20,7 @@ double currentSpeed = 0.0;
 double totalSum = 0;
 int totalCount = 0;
 double sumSpeed = 0;
+double maxSpeed = 0.0;
 int count = 0;
 double averageSpeed = 0;
 double maxAltitude = 0.0;
@@ -40,6 +41,7 @@ void resetData(){
   count = 0;
   averageSpeed = 0;
   maxAltitude = 0.0;
+  maxSpeed = 0.0;
   isRecordingNotifier.value = false;
 }
 
@@ -211,6 +213,9 @@ void startLocationUpdates(
           _lastDistanceLocation = newPosition;
         }
         currentSpeed = speed;
+        if(currentSpeed > maxSpeed){
+          maxSpeed = currentSpeed;
+        }
         averageSpeedCalc();
 
         if (isRecordingNotifier.value && locationTimer == null) {
@@ -234,7 +239,7 @@ void startLocationUpdates(
 
       onLocationUpdate(
           newLoc,
-          isRecordingNotifier.value ? speed : 0.0,
+          isRecordingNotifier.value ? maxSpeed : 0.0,
           isRecordingNotifier.value ? totalDistance : 0.0,
           isRecordingNotifier.value ? averageSpeed : 0.0,
           isRecordingNotifier.value ? maxAltitude : 0.0
