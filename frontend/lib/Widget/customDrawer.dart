@@ -13,6 +13,7 @@ import 'package:weski/Api/userApi.dart';
 import 'package:weski/Pages/ChatBotPage.dart';
 import 'package:weski/Pages/NotificationPage.dart';
 import 'package:weski/Pages/ProfilePage.dart';
+import 'package:weski/Pages/SensorPage.dart';
 import 'package:weski/Widget/customButton.dart';
 import '../Assets/LocationLogic.dart';
 import '../Assets/Theme.dart';
@@ -132,6 +133,27 @@ class customDrawer extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) => NotificationPage(curentUserId:user!.id,),
+                          ),
+                        );
+                      },
+                      iconSize: screenWidth * 0.08,
+                      paddingText: screenWidth * 0.03
+                  ),
+                  customButton(
+                      data: "Sensors",
+                      icon: Icons.sensors_rounded,
+                      iconColor: theme.colorScheme.onSurface.value,
+                      textColor: theme.colorScheme.onSurface.value,
+                      textSize: screenWidth * 0.045,
+                      screenWidth: screenWidth,
+                      screenHeight: screenHeight,
+                      paddingWidth: 0.06,
+                      paddingHeight: 0.01,
+                      onTap: () async {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SensorPage(),
                           ),
                         );
                       },

@@ -66,7 +66,7 @@ class ChatBotPageState extends State<ChatBotPage> {
           onPressed: () => Navigator.pop(context, false),
         ),
         centerTitle: true,
-        title: const Text("Chat WeSki", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),),
+        title: Text("Chat WeSki", style: TextStyle(fontSize: screenDiagonal * 0.03, fontWeight: FontWeight.bold, color: Colors.white),),
 
       ),
       body: Stack(
