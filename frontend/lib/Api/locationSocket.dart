@@ -5,9 +5,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:stomp_dart_client/stomp_dart_client.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:weski/Api/userApi.dart';
 
+import '../ConcretObjects/Friend.dart';
 import 'consts.dart';
 
+late List<Friend> friends;
 final ValueNotifier<Map<int, Marker>> markersNotifier =
 ValueNotifier<Map<int, Marker>>({});
 
@@ -32,7 +35,8 @@ Future<String> getAddress() async {
   }
 }
 
-void initSocket() async {
+void initSocket(int UserId) async {
+  friends = await userApi.fetchFriends(UserId);
   String url = await getAddress();
   stompClient = StompClient(
     config: StompConfig(
@@ -47,32 +51,33 @@ void initSocket() async {
 
 
 void onConnect(StompFrame frame) {
-  print('conectat la WebSocket');
   stompClient?.subscribe(
     destination: '/location/updates',
     callback: (StompFrame frame) {
       if (frame.body != null) {
-
         final data = jsonDecode(frame.body!);
         final double lat = data['latitude'];
         final double lon = data['longitude'];
         final int userId = data['userId'];
 
-        print('primit: userId=$userId, lat=$lat, lon=$lon');
+        //print('primit: userId=$userId, lat=$lat, lon=$lon');
 
-        final newMarker = Marker(
-          markerId: MarkerId('user_$userId'),
-          position: LatLng(lat, lon),
-          infoWindow: InfoWindow(
-            title: 'User $userId',
-            snippet: 'location of friend',
-          ),
-        );
+        bool isFriend = friends.any((friend) => friend.id == userId);
+        if(isFriend){
+          final newMarker = Marker(
+            markerId: MarkerId('user_$userId'),
+            position: LatLng(lat, lon),
+            infoWindow: InfoWindow(
+              title: 'User $userId',
+              snippet: 'location of friend',
+            ),
+          );
 
-        final updatedMap = Map<int, Marker>.from(markersNotifier.value);
-        updatedMap[userId] = newMarker;
+          final updatedMap = Map<int, Marker>.from(markersNotifier.value);
+          updatedMap[userId] = newMarker;
 
-        markersNotifier.value = updatedMap;
+          markersNotifier.value = updatedMap;
+        }
       }
     },
   );
@@ -83,9 +88,14 @@ void sendLocation(double lat, double lon, int userId) {
     destination: '/app/newLocation',
     body: '{"latitude":$lat,"longitude":$lon,"userId":$userId}',
   );
-  print('Am trimis locația la server: lat=$lat, lon=$lon');
 }
 
 void initWebSocket() {
   stompClient?.activate();
 }
+
+void closeSocket() {
+  stompClient?.deactivate();
+  stompClient = null;
+}
+

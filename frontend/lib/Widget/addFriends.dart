@@ -79,6 +79,7 @@ class _AddFriendsState extends State<addFriends> {
                      setState(() {
                        widget.friendController.clear();
                      });
+                     Navigator.pop(context);
                    }
                  },
                  child: const Text(
