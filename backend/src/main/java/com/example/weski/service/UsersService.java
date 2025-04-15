@@ -7,6 +7,7 @@ import com.example.weski.data.model.Users;
 import com.example.weski.dto.StatisticDTO;
 import com.example.weski.dto.UsersDTO;
 import com.example.weski.error.NotFoundException;
+import com.example.weski.error.UnauthorizedException;
 import com.example.weski.mapper.to.dto.UserDTOMapper;
 import com.example.weski.mapper.to.entity.UserDTOtoEntityMapper;
 import com.example.weski.repository.GroupRepository;
@@ -79,7 +80,7 @@ public class UsersService {
         if (newPassword.equals(confirmPassword)) {
             Users user = usersRepository.findById(userId).orElse(null);
             if (user == null) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found");
+                throw new UnauthorizedException( "User not found");
             }
             user.setPassword(passEncoder.encode(newPassword));
             usersRepository.save(user);
@@ -89,7 +90,7 @@ public class UsersService {
     public void updateUser(Long userId, UsersDTO dto) {
         Users user = usersRepository.findById(userId).orElse(null);
         if (user == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found");
+            throw new UnauthorizedException( "User not found");
         }
 
         if (dto.getUsername() != null) {
@@ -126,14 +127,14 @@ public class UsersService {
         Users user = usersRepository.findById(userId).orElse(null);
         Statistics statistics = user.getStatistics();
         if(statistics == null) {
-            throw new RuntimeException("");
+            throw new NotFoundException("Statistics");
         }
         return new StatisticDTO(userId,statistics.getMax_speed(),statistics.getTotal_distance());
     }
 
     public List<StatisticDTO> getGroupStatistics(Long groupId){
         Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new RuntimeException("Group not found"));
+                .orElseThrow(() -> new NotFoundException("Group not found"));
         List<StatisticDTO> groupMembersStatistics = new ArrayList<>();
         for (Users user : group.getGroupMembers()) {
             Statistics statistics = user.getStatistics();
@@ -149,7 +150,7 @@ public class UsersService {
     public void updateUserPhoto(Long userId, String url){
         Users user = usersRepository.findById(userId).orElse(null);
         if (user == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found");
+            throw new UnauthorizedException( "User not found");
         }
         user.setProfile_picture(url);
         usersRepository.save(user);
@@ -158,7 +159,7 @@ public class UsersService {
     public String getProfilePicture(Long userId) {
         Users user = usersRepository.findById(userId).orElse(null);
         if (user == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found");
+            throw new UnauthorizedException( "User not found");
         }
         return user.getProfile_picture();
     }

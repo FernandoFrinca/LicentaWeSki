@@ -41,10 +41,10 @@ class _NotificationPageState extends State<NotificationPage> {
       });
     });
 
-    for(var req in _requests){
-      print("user");
-      print(req.profile_picture);
-    }
+    // for(var req in _requests){
+    //   print("user");
+    //   print(req.profile_picture);
+    // }
   }
 
   void removeFriendFromList(int index) {

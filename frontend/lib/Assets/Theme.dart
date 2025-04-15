@@ -18,9 +18,6 @@ final ThemeData lightTheme = ThemeData(
     tertiary: Color(licentaColors.opacity | licentaColors.colorWhite),
     onTertiary: Color(licentaColors.opacity | licentaColors.colorBlack),
 
-
-
-
   ),
 );
 

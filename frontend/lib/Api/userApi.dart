@@ -80,7 +80,7 @@ class userApi {
         user.age = decodedResponse['age'] ?? 0;
         user.gender = decodedResponse['gender'] ?? 2;
         user.category = decodedResponse['category'];
-        print("User actualizat: $user");
+        //print("User actualizat: $user");
 
         return user;
       } else {
@@ -188,10 +188,10 @@ class userApi {
     final response = await http.post(endpointUrl);
     try {
       if (response.statusCode == 200) {
-        print('Prieten adăugat cu succes!');
+        print('Prieten adaugat cu succes!');
         return true;
       } else {
-        print('Eroare la adăugarea prietenului.');
+        print('Eroare la adaugarea prietenului.');
         return false;
       }
     }

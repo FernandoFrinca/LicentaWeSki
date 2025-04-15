@@ -53,7 +53,6 @@ class skiSlopeApi {
     }
 
     if (slopes.length % 3 != 0) {
-      print("Structura datelor nu este corectă. Numărul de elemente nu este multiplu de 3.");
       return {};
     }
 

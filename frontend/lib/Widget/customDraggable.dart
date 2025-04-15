@@ -85,9 +85,9 @@ class _customDraggable extends State<customDraggable>{
     });
 
     timerMinute = Timer.periodic(const Duration(minutes: 1), (Timer t) {
-      print("Minut:");
-      print(widget.speedNotifier.value);
-      print(widget.totalDistanceNotifier.value);
+      // print("Minut:");
+      // print(widget.speedNotifier.value);
+      // print(widget.totalDistanceNotifier.value);
       userApi.updateStatistics(
           widget.currentUser.id,
           double.parse((widget.speedNotifier.value).toStringAsFixed(2)),
@@ -100,7 +100,7 @@ class _customDraggable extends State<customDraggable>{
   Future<void> stopStopwatch() async {
     widget.userTrackPolylineNotifier.value = await locationApi.createUserPolylineTrack(widget.currentUser.id);
     widget.userTrackPolylineNotifier.notifyListeners();
-    print("Polyline track Points: ${widget.userTrackPolylineNotifier.value.points}");
+    // print("Polyline track Points: ${widget.userTrackPolylineNotifier.value.points}");
     stopLocationSaving();
     timer?.cancel();
     timerHour?.cancel();
@@ -394,32 +394,32 @@ class _customDraggable extends State<customDraggable>{
                         ],
                       )
                   ),
-                  const Padding(
-                      padding: EdgeInsets.only(
-                          right: 16.0,
-                          left: 16.0,
-                          bottom: 8.0
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: statisticsCard(
-                              title: "Stop time",
-                              valueNotifier: null,
-                              iconData: Icons.hourglass_empty,
-                            ),
-                          ),
-                          SizedBox(width: 14),
-                          Expanded(
-                            child: statisticsCard(
-                              title: "Runs",
-                              valueNotifier: null,
-                              iconData: Icons.sync_alt,
-                            ),
-                          ),
-                        ],
-                      )
-                  ),
+                  // const Padding(
+                  //     padding: EdgeInsets.only(
+                  //         right: 16.0,
+                  //         left: 16.0,
+                  //         bottom: 8.0
+                  //     ),
+                  //     child: Row(
+                  //       children: [
+                  //         Expanded(
+                  //           child: statisticsCard(
+                  //             title: "Stop time",
+                  //             valueNotifier: null,
+                  //             iconData: Icons.hourglass_empty,
+                  //           ),
+                  //         ),
+                  //         SizedBox(width: 14),
+                  //         Expanded(
+                  //           child: statisticsCard(
+                  //             title: "Runs",
+                  //             valueNotifier: null,
+                  //             iconData: Icons.sync_alt,
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     )
+                  // ),
                 ],
               ),
             ),
