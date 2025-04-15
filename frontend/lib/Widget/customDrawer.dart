@@ -15,6 +15,7 @@ import 'package:weski/Pages/NotificationPage.dart';
 import 'package:weski/Pages/ProfilePage.dart';
 import 'package:weski/Pages/SensorPage.dart';
 import 'package:weski/Widget/customButton.dart';
+import '../Api/locationSocket.dart';
 import '../Assets/LocationLogic.dart';
 import '../Assets/Theme.dart';
 import '../ConcretObjects/User.dart';
@@ -160,31 +161,31 @@ class customDrawer extends StatelessWidget {
                       iconSize: screenWidth * 0.08,
                       paddingText: screenWidth * 0.03
                   ),
-                  customButton(
-                      data: "test",
-                      icon: Icons.adb,
-                      iconColor: theme.colorScheme.onSurface.value,
-                      textColor: theme.colorScheme.onSurface.value,
-                      textSize: screenWidth * 0.045,
-                      screenWidth: screenWidth,
-                      screenHeight: screenHeight,
-                      paddingWidth: 0.06,
-                      paddingHeight: 0.01,
-                      onTap: () async {
-/*                        LocationData currentLocation = await getCurrentLocation();
-                        print("");
-                        print("locatie:");
-                        print(currentLocation.longitude);
-                        print(currentLocation.latitude);
-                        print("");
-                        print("");
-                        await skiResortApi.fetchResortsData();*/
-                        //print(await userApi.fetchProfilePicture(1));
-                        await userApi.updateProfilePicture(2,"url-prin-flutter");
-                      },
-                      iconSize: screenWidth * 0.08,
-                      paddingText: screenWidth * 0.03
-                  ),
+//                   customButton(
+//                       data: "test",
+//                       icon: Icons.adb,
+//                       iconColor: theme.colorScheme.onSurface.value,
+//                       textColor: theme.colorScheme.onSurface.value,
+//                       textSize: screenWidth * 0.045,
+//                       screenWidth: screenWidth,
+//                       screenHeight: screenHeight,
+//                       paddingWidth: 0.06,
+//                       paddingHeight: 0.01,
+//                       onTap: () async {
+// /*                        LocationData currentLocation = await getCurrentLocation();
+//                         print("");
+//                         print("locatie:");
+//                         print(currentLocation.longitude);
+//                         print(currentLocation.latitude);
+//                         print("");
+//                         print("");
+//                         await skiResortApi.fetchResortsData();*/
+//                         //print(await userApi.fetchProfilePicture(1));
+//                         await userApi.updateProfilePicture(2,"url-prin-flutter");
+//                       },
+//                       iconSize: screenWidth * 0.08,
+//                       paddingText: screenWidth * 0.03
+//                   ),
                 ],
               ),
             ),
@@ -231,6 +232,7 @@ class customDrawer extends StatelessWidget {
                                   paddingWidth: 0.13,
                                   paddingHeight: 0.01,
                                   onTap: () {
+                                    closeSocket();
                                     Navigator.pushAndRemoveUntil(
                                       context,
                                       MaterialPageRoute(builder: (context) => LoginPage()),

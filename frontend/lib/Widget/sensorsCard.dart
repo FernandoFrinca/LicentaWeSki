@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:weski/Api/notificationApi.dart';
+
 
 class sensorsCard extends StatelessWidget {
   final String title;
@@ -36,7 +36,7 @@ class sensorsCard extends StatelessWidget {
             children: [
               Padding(
                 padding: EdgeInsets.only(
-                  top: screenDiagonal * 0.02,
+
                   left: screenDiagonal * 0.0155,
                 ),
                 child: Container(
@@ -53,7 +53,7 @@ class sensorsCard extends StatelessWidget {
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.only(
-                    top: screenDiagonal * 0.018,
+
                     left: screenDiagonal * 0.0055,
                   ),
                   child: Column(
@@ -89,14 +89,13 @@ class sensorsCard extends StatelessWidget {
                   padding: EdgeInsets.only(
                     top: screenDiagonal * 0.0055,
                     left: screenDiagonal * 0.0155,
-                    bottom: screenDiagonal * 0.0155,
                   ),
                   child:
                   ValueListenableBuilder(valueListenable: valueNotifier!, builder: (context,value,child){
                     return Text(
                       "$value",
                       style: TextStyle(
-                        fontSize: screenDiagonal * 0.035,
+                        fontSize: screenDiagonal * 0.025,
                         fontWeight: FontWeight.w500,
                         color: Colors.white,
                       ),

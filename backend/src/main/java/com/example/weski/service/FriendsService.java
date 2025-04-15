@@ -81,6 +81,13 @@ public class FriendsService {
             throw new NotFoundException("Already friends!");
         }
 
+        Users aux;
+        if (friendId < currentUserId) {
+            aux = friendUser_obj;
+            friendUser_obj = currentUser_obj;
+            currentUser_obj = aux;
+        }
+
         Friends friends_obj = Friends.builder()
                 .id(new FriendsId(currentUserId, friendId))
                 .userId1(currentUser_obj)

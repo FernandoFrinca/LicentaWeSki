@@ -6,6 +6,7 @@ import 'package:weski/Pages/EditProfilePage.dart';
 import 'package:weski/Widget/infoWidget.dart';
 import 'package:weski/Widget/profileAvatar.dart';
 
+import '../Api/locationSocket.dart';
 import '../Api/userApi.dart';
 import '../Assets/Theme.dart';
 import '../ConcretObjects/User.dart';
@@ -301,7 +302,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                             screenHeight: screenHeight,
                                             paddingWidth: 0.13,
                                             paddingHeight: 0.01,
-                                            onTap: () {
+                                            onTap: () async {
+                                              closeSocket();
+                                              await Future.delayed(Duration(milliseconds: 100));
                                               Navigator.pushAndRemoveUntil(
                                                 context,
                                                 MaterialPageRoute(builder: (context) => LoginPage()),

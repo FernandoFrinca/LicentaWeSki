@@ -1,1 +1,0 @@
- D:\\Projects\\Licenta\\WeSki\\frontend\\.dart_tool\\flutter_build\\920b3b38ec70b7666e309ef648ef2ca4\\native_assets.yaml: 

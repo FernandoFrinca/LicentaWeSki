@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
   final Completer<GoogleMapController> _controller = Completer();
 
   MapType _currentMapType = MapType.normal;
-  int mapTypeIndex = 0;
+  int mapTypeIndex = 1;
   LocationData? currentLocation;
   double _currentZoom = 15.0;
   Set<Polyline> set_polylines = {};
@@ -81,8 +81,6 @@ class _HomePageState extends State<HomePage> {
         searchedElementsList.add(aux);
       }
     }
-    print("test:");
-    print(searchedElementsList);
   }
 
   void onCameraMove(CameraPosition cameraPosition) {
@@ -108,7 +106,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    initSocket();
+    initSocket(widget.curentUser!.id);
     initWebSocket();
     _loadMarkers();
     startLocationUpdates((newLoc, speed, distance, avgSpeed, maxAltitude) {
@@ -243,7 +241,7 @@ class _HomePageState extends State<HomePage> {
                           child: RawMaterialButton(
                             onPressed: () async {
                               List<Friend> friends = await userApi.fetchFriends(widget.curentUser!.id);
-                              print(friends);
+                              //print(friends);
                               List<Group> groups = await groupApi.fetchUserGroups(widget.curentUser!.id);
                               Navigator.push(
                                 context,
