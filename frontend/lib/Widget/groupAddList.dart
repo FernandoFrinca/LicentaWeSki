@@ -81,7 +81,7 @@ class _groupAddListState extends State<groupAddList> {
                   } else {
                     widget.usersIds.remove(widget.friendId);
                   }
-                  print(widget.usersIds);
+                  //print(widget.usersIds);
                 });
               },
               ),

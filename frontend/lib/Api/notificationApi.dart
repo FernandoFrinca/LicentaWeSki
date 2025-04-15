@@ -12,11 +12,11 @@ class notificationApi {
       Map<String, String> headers = {
         "Content-Type": "application/json",
       };
-      print("\n");
-      print(notifId);
-      print(groupId);
-      print(currentUserId);
-      print("\n");
+      // print("\n");
+      // print(notifId);
+      // print(groupId);
+      // print(currentUserId);
+      // print("\n");
       final encodedBody = {
         "groupId": groupId,
         "senderId": currentUserId,

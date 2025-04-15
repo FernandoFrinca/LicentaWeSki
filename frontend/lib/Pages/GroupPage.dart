@@ -89,20 +89,20 @@ class _groupPageState extends State<groupPage> {
         centerTitle: true,
         title: Text(currentGroup.name, style: TextStyle(fontSize: screenDiagonal * 0.03, fontWeight: FontWeight.bold, color: Colors.white),),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(
-              right: 12,
-            ),
-            child: IconButton(onPressed:(){
-              //TO DO: fa ceva cu butonul asta. leave daca nu esti admin, adauga/sterge daca esti admin
-          /*    showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return addFriends(friendController: _friendController, currentUserId: widget.curentUserId,);
-                },
-              );*/
-            }, icon: Icon(Icons.person_add_outlined, size: screenDiagonal * 0.035, color: Colors.white)),
-          )
+          // Padding(
+          //   padding: const EdgeInsets.only(
+          //     right: 12,
+          //   ),
+          //   child: IconButton(onPressed:(){
+          //     //TO DO: fa ceva cu butonul asta. leave daca nu esti admin, adauga/sterge daca esti admin
+          // /*    showDialog(
+          //       context: context,
+          //       builder: (BuildContext context) {
+          //         return addFriends(friendController: _friendController, currentUserId: widget.curentUserId,);
+          //       },
+          //     );*/
+          //   }, icon: Icon(Icons.person_add_outlined, size: screenDiagonal * 0.035, color: Colors.white)),
+          // )
         ],
       ),
       backgroundColor: Color(0xFF007EA7),

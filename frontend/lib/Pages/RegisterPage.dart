@@ -35,11 +35,11 @@ class _RegisterPageState extends State<RegisterPage> {
     String email = _emailController.text;
     String category = selectedCategory;
 
-    print('Username: $username');
-    print('Password: $password');
-    print('Verify-Password: $verifypassword');
-    print('Email: $email');
-    print('Category: $category');
+    // print('Username: $username');
+    // print('Password: $password');
+    // print('Verify-Password: $verifypassword');
+    // print('Email: $email');
+    // print('Category: $category');
 
     userApi.registerUser(username, email, password, category);
     Navigator.pop(context);

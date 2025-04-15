@@ -59,7 +59,7 @@ public class GroupService {
 
     public void deleteGroup(Long groupId) {
         Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new RuntimeException("Group not found"));
+                .orElseThrow(() -> new NotFoundException("Group not found"));
         for (Users user : group.getGroupMembers()) {
             user.getGroupsAssigned().remove(group);
         }
@@ -74,10 +74,10 @@ public class GroupService {
         Users user = null;
         if (userId != null) {
             user = usersRepository.findById(userId)
-                    .orElseThrow(() -> new RuntimeException("User not found"));
+                    .orElseThrow(() -> new NotFoundException("User not found"));
 
             Group group = groupRepository.findById(groupId)
-                    .orElseThrow(() -> new RuntimeException("Group not found"));
+                    .orElseThrow(() -> new NotFoundException("Group not found"));
 
             user.getGroupsAssigned().add(group);
             group.getGroupMembers().add(user);
@@ -93,7 +93,7 @@ public class GroupService {
             throw new NotFoundException("No users provided");
         }
         Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new RuntimeException("Group not found"));
+                .orElseThrow(() -> new NotFoundException("Group not found"));
 
         Set<Long> existingUserIds = usersRepository.getAllUsersId();
         usersIds.retainAll(existingUserIds);
