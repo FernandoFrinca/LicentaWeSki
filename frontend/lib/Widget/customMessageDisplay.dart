@@ -2,12 +2,14 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:weski/ConcretObjects/User.dart';
 
 import '../Assets/Theme.dart';
 import '../ConcretObjects/SearchElement.dart';
 
 
 class CustomMessageDisplay extends StatefulWidget {
+  final String currentUserPhoto;
   final int fillColor;
   final int textColor;
   final String textContent;
@@ -23,6 +25,7 @@ class CustomMessageDisplay extends StatefulWidget {
     required this.screenWidth,
     required this.screenHeight,
     required this.isFromUser,
+    required this.currentUserPhoto,
   });
 
   @override
@@ -94,9 +97,13 @@ class _CustomMessageDisplayState extends State<CustomMessageDisplay> {
               height: profileCircleSize,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(180),
-                child: Image.asset(
-                  "assets/avatar.jpeg",
-                  fit: BoxFit.cover,
+                child:widget.currentUserPhoto.isNotEmpty?
+                  Image.network(widget.currentUserPhoto, fit: BoxFit.cover) :
+                  Image.asset(
+                  theme.brightness == lightTheme.brightness
+                      ? "assets/goggles_lightmode.png"
+                      : "assets/goggles_darkmode.png",
+                  fit: BoxFit.scaleDown,
                 ),
               ),
             ),
