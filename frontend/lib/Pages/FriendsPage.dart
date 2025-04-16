@@ -97,9 +97,14 @@ class _FriendsPageState extends State<FriendsPage> {
                       //cardHeight: cardHeight,
                       groupName: groups[index].name,
                       groupPhoto: groups[index].group_photo,
-                      onTap: () {
-                        Navigator.push(context,MaterialPageRoute(builder:(context) => groupPage(group: groups[index], currentUser: widget.curentUserId,)));
-                      },
+                      onTap: () async {
+                          final result = await Navigator.push(context,MaterialPageRoute(builder:(context) => groupPage(group: groups[index], currentUser: widget.curentUserId,)));
+                          if(result == "remove"){
+                            setState(() {
+                              groups.removeAt(index);
+                            });
+                          }
+                        },
                     );
                   },
                 ),

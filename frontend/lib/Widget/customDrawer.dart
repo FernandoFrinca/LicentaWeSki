@@ -113,7 +113,7 @@ class customDrawer extends StatelessWidget {
                         LocationData currentLocation = await getCurrentLocation();
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => ChatBotPage(cuentLocation: currentLocation,)),
+                          MaterialPageRoute(builder: (context) => ChatBotPage(cuentLocation: currentLocation, currentUser: user,)),
                         );
                       },
                       iconSize: screenWidth * 0.08,

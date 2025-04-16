@@ -20,7 +20,7 @@ class OpenAiApi {
           {
             'role': 'system',
             'content':
-            'Raspund doar la intrebari legate de ski, snowboard, sporturi de iarna, resorturi de ski, locatiile acestora, distante legate de partii, doar chestii specifice pentru echipamente de iarna si sporturi de iarna, indiferent de limba în care sunt puse întrebările.'
+            'Raspund doar la intrebari legate de ski, snowboard, sporturi de iarna, resorturi de ski, locatiile acestora, distante legate de partii, doar chestii specifice pentru echipamente de iarna si sporturi de iarna, conditiile meteo, indiferent de limba în care sunt puse întrebările.'
           },
           {'role': 'user', 'content': '$pronto'}
         ],

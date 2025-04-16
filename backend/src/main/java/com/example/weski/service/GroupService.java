@@ -68,6 +68,11 @@ public class GroupService {
 
     public void removeUserFromGroup(Long groupId, Long userId) {
         groupRepository.removeUserFromGroup(groupId, userId);
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new NotFoundException("Group not found"));
+        if (group.getGroupMembers().isEmpty()) {
+            groupRepository.delete(group);
+        }
     }
 
     public void addUserToGroup(Long userId, Long groupId) {

@@ -5,14 +5,20 @@ import 'package:location/location.dart';
 import 'package:weski/Api/openAIApi.dart';
 import 'package:weski/Widget/customMessageDisplay.dart';
 
+import '../Api/userApi.dart';
 import '../Assets/Theme.dart';
+import '../ConcretObjects/User.dart';
 import '../Widget/customTriangle.dart';
 
 
 class ChatBotPage extends StatefulWidget {
   final LocationData cuentLocation;
-
-  const ChatBotPage({super.key, required this.cuentLocation});
+  final User? currentUser;
+  const ChatBotPage({
+    super.key,
+    required this.cuentLocation,
+    required this.currentUser
+  });
 
   @override
   ChatBotPageState createState() => ChatBotPageState();
@@ -20,6 +26,7 @@ class ChatBotPage extends StatefulWidget {
 
 class ChatBotPageState extends State<ChatBotPage> {
   late String result;
+  late String url;
   final ScrollController scrollController = ScrollController();
   final TextEditingController messageController = TextEditingController();
   ValueNotifier<List<Map<String, dynamic>>> messagesNotifier = ValueNotifier<List<Map<String, dynamic>>>([]);
@@ -33,20 +40,35 @@ class ChatBotPageState extends State<ChatBotPage> {
   ];
 
 
-  void sendMessageRequestToBot(bool isFromUser) {
-    if (messageController.text.trim().isNotEmpty && isFromUser) {
-        messagesNotifier.value = [...messagesNotifier.value, {"text":messageController.value.text, "isFromUser":isFromUser}];
-        messageController.clear();
+  Future<void> getMessageResponseFromBot(bool isFromUser, String userMessage) async {
+    if (userMessage.isEmpty) return;
+    messagesNotifier.value = [
+      ...messagesNotifier.value,
+      {"text": userMessage, "isFromUser": isFromUser}
+    ];
+    messageController.clear();
+
+    result = await openAiApi.responseFromOpenAi(
+        "$userMessage, in caz ca ai nevoie de locatie, Coordonatele sunt:  ${widget.cuentLocation}"
+    );
+
+
+    if (result.isNotEmpty) {
+      messagesNotifier.value = [
+        ...messagesNotifier.value,
+        {"text": result, "isFromUser": false}
+      ];
     }
   }
 
-  void getMessageResponseFromBot(bool isFromUser, String response){
-    if (response.isNotEmpty && (isFromUser == false)) {
-      messagesNotifier.value = [...messagesNotifier.value, {"text":response, "isFromUser":isFromUser}];
-      messageController.clear();
-    }else{
-      print("eroare la mesaj");
-    }
+  void getUserPhoto() async{
+    url = await userApi.fetchProfilePicture(widget.currentUser!.id);
+  }
+
+  @override
+  void initState() {
+    getUserPhoto();
+    super.initState();
   }
 
   @override
@@ -142,6 +164,7 @@ class ChatBotPageState extends State<ChatBotPage> {
                         itemCount: messages.length,
                         itemBuilder: (context, index) {
                           return CustomMessageDisplay(
+                            currentUserPhoto: url,
                             fillColor: theme.brightness == lightTheme.brightness? 0xFFE8E8E8 : 0xFF414245,
                             textColor: 0XFFFFFFFF,
                             textContent: messages[index]["text"],
@@ -200,11 +223,11 @@ class ChatBotPageState extends State<ChatBotPage> {
                         ),
                         child: IconButton(
                           icon: Icon(Icons.send, color: Color(theme.colorScheme.primary.value), ),
-                          onPressed: () async {
-                            result = await openAiApi.responseFromOpenAi("${messageController.value.text} ,locatia curenta: ${widget.cuentLocation}");
-                            sendMessageRequestToBot(true);
-                            getMessageResponseFromBot(false, result);
-                          },
+                            onPressed: () async {
+                              final userMessage = messageController.text.trim();
+                              getMessageResponseFromBot(true, userMessage);
+                            }
+
                         ),
                       ),
                     ),
@@ -236,10 +259,8 @@ class ChatBotPageState extends State<ChatBotPage> {
                             title: Text(quickQuestions[index]),
                             onTap: () async {
                               Navigator.pop(context);
-                              messageController.text = quickQuestions[index];
-                              result = await openAiApi.responseFromOpenAi("${messageController.value.text},locatia curenta: ${widget.cuentLocation}");
-                              sendMessageRequestToBot(true);
-                              getMessageResponseFromBot(false, result);
+                              final userMessage = quickQuestions[index];
+                              getMessageResponseFromBot(true, userMessage);
                             },
                           );
                         },

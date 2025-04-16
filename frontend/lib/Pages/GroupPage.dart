@@ -89,21 +89,47 @@ class _groupPageState extends State<groupPage> {
         centerTitle: true,
         title: Text(currentGroup.name, style: TextStyle(fontSize: screenDiagonal * 0.03, fontWeight: FontWeight.bold, color: Colors.white),),
         actions: [
-          // Padding(
-          //   padding: const EdgeInsets.only(
-          //     right: 12,
-          //   ),
-          //   child: IconButton(onPressed:(){
-          //     //TO DO: fa ceva cu butonul asta. leave daca nu esti admin, adauga/sterge daca esti admin
-          // /*    showDialog(
-          //       context: context,
-          //       builder: (BuildContext context) {
-          //         return addFriends(friendController: _friendController, currentUserId: widget.curentUserId,);
-          //       },
-          //     );*/
-          //   }, icon: Icon(Icons.person_add_outlined, size: screenDiagonal * 0.035, color: Colors.white)),
-          // )
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      backgroundColor: Colors.white,
+                      title: Text(
+                        "Are you sure you want to leave this group?",
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            groupApi.removeUserFromGroup(currentGroup.id,currentUser);
+                            Navigator.pop(context);
+                            Future.delayed(Duration(milliseconds: 100), () {
+                              Navigator.pop(context, "remove");
+                            });
+                          },
+                          child: Text(
+                            "Yes",
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              icon: Icon(
+                Icons.exit_to_app_outlined,
+                size: screenDiagonal * 0.035,
+                color: Colors.white,
+              ),
+            ),
+          ),
         ],
+
       ),
       backgroundColor: Color(0xFF007EA7),
       body: Stack(
