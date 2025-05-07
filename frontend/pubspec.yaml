@@ -52,6 +52,7 @@ dependencies:
   firebase_storage: ^12.4.4
   permission_handler: ^11.4.0
   flutter_reactive_ble: ^5.1.1
+  #flutter_local_notifications: ^19.1.0
   get: ^4.7.2
 #  charts_flutter_new: ^0.12.0
 #  fl_chart:
