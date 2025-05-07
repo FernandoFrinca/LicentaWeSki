@@ -214,7 +214,7 @@ void startLocationUpdates(
         }
         currentSpeed = speed;
         if(currentSpeed > maxSpeed){
-          maxSpeed = currentSpeed;
+          maxSpeed = currentSpeed * 3.6;
         }
         averageSpeedCalc();
 
