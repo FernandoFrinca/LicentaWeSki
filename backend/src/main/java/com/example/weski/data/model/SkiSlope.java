@@ -26,6 +26,7 @@ public class SkiSlope {
     private Double length;
     private Double start_altitude;
     private Double end_altitude;
+
     @Column(columnDefinition = "geometry(LineString, 4326)")
     private LineString geom;
 }

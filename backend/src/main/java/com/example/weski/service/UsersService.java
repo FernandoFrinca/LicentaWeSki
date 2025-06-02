@@ -69,7 +69,7 @@ public class UsersService {
 
         if (user == null) {
             throw new NotFoundException("User not found");
-        } else if (!passEncoder.matches(password, user.getPassword())) {
+    } else if (!passEncoder.matches(password, user.getPassword())) {
             throw new NotFoundException("Invalid credentials");
         }
 

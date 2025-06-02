@@ -60,8 +60,6 @@ void onConnect(StompFrame frame) {
         final double lon = data['longitude'];
         final int userId = data['userId'];
 
-        //print('primit: userId=$userId, lat=$lat, lon=$lon');
-
         bool isFriend = friends.any((friend) => friend.id == userId);
         if(isFriend){
           final newMarker = Marker(

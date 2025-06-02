@@ -12,4 +12,9 @@ public class ControllerExceptionHandler {
     public final ResponseEntity<Error> exceptionHandler(NotFoundException e) {
         return new ResponseEntity<>(new Error(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public final ResponseEntity<Error> exceptionHandler(UnauthorizedException e) {
+        return new ResponseEntity<>(new Error(e.getMessage()), HttpStatus.UNAUTHORIZED);
+    }
 }

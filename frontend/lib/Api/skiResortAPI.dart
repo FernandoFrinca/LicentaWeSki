@@ -41,8 +41,8 @@ class skiResortApi {
           infoWindow: InfoWindow(title: name),
           icon: customMarkerIcon,
           onTap: () async {
-            // print("\n\n\nid poliline:");
-            // print(id);
+            print("\n\n\nid poliline:");
+            print(id);
             Set<Polyline> listPolylines = await skiSlopeApi.createPolyLines(id) as Set<Polyline>;
 
             updatePolylines(listPolylines);
