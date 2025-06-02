@@ -35,13 +35,4 @@ public class Users {
     private Statistics statistics;
 
     private String profile_picture;
-
-/*    @ManyToMany
-    @JoinTable(
-            name = "notification_user",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "notification_id")
-    )
-    @JsonIgnore
-    private Set<Notification> notificationsReceived = new HashSet<>();*/
 }

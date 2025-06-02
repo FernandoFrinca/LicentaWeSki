@@ -63,8 +63,14 @@ class skiSlopeApi {
         String difficulty = slopes[i + 2] as String;
 
         int color = 0xFF0000FF;
+        if (difficulty.toLowerCase() == "average") {
+          color = 0xFF000000;
+        }
         if (difficulty.toLowerCase() == "advanced") {
           color = 0xFF000000;
+        }
+        if (difficulty.toLowerCase() == "intemediate") {
+          color = 0xFFFF0000;
         }
 
         listPolylines.add(
@@ -81,7 +87,5 @@ class skiSlopeApi {
     }
     return listPolylines;
   }
-
-
 
 }

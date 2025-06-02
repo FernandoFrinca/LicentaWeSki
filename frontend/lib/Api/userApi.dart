@@ -148,13 +148,9 @@ class userApi {
         friend.category = body['category'];
         friend.profile_picture = body['profile_picture'];
 
-        //print(friend.username);
         friendsList.add(friend);
       }
 
-      /*for(var friend in friendsList){
-        print("${friend.username}, ${friend.category}, ${friend.id}");
-      }*/
       return friendsList;
     }catch(e){
       return [];

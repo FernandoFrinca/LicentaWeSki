@@ -146,7 +146,8 @@ void averageSpeedCalc() {
   }
 }
 
-Future<void> updateMap(LatLng newPosition, double currentZoom, Future<GoogleMapController> googleMapControllerFuture) async {
+Future<void> updateMap(LatLng newPosition, double currentZoom,
+    Future<GoogleMapController> googleMapControllerFuture) async {
   final googleMapController = await googleMapControllerFuture;
   googleMapController.animateCamera(
     CameraUpdate.newCameraPosition(

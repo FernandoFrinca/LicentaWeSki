@@ -8,7 +8,6 @@ public record Error(String message) {
     public Error(String message) {
         this.message = message;
     }
-
     @Override
     public String message() {
         return message;
