@@ -29,11 +29,15 @@ class userApi {
       Map<String, String> headers = {
         "Content-Type": "application/json",
       };
+
       final encodedBody = {
-        "username": username,
-        "email": email,
+        "username": username.trim(),
+        "email": email.trim(),
         "password": password,
         "category": category,
+        "age": 0,
+        "gender": 0,
+        "profile_picture": ""
       };
 
       final response = await http.post(
@@ -44,11 +48,11 @@ class userApi {
 
       print('Status code: ${response.statusCode}');
       print('Response body: ${response.body}');
-    }
-    catch (e) {
+    } catch (e) {
       print("Eroare la creare user: $e");
     }
   }
+
 
 
   static Future<User?> userLoginValidation(String username,
