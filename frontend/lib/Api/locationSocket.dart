@@ -17,22 +17,9 @@ ValueNotifier<Map<int, Marker>>({});
 final device = DeviceInfoPlugin();
 StompClient? stompClient;
 
+
 Future<String> getAddress() async {
-  if (Platform.isAndroid) {
-    final androidInfo = await device.androidInfo;
-    if(androidInfo.isPhysicalDevice){
-      return 'ws://${ipAddres}/weski';
-    }else{
-      return 'ws://10.0.2.2:8080/weski';
-    }
-  }else{
-    final iosInfo = await device.iosInfo;
-    if(iosInfo.isPhysicalDevice){
-      return 'ws://${ipAddres}/weski';
-    }else{
-      return 'ws://10.0.2.2:8080/weski';
-    }
-  }
+  return 'ws://$ipAddres/weski';
 }
 
 void initSocket(int UserId) async {

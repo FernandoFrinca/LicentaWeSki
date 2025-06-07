@@ -28,23 +28,37 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
-  void registerLogic() {
-    String username = _usernameController.text;
+  void registerLogic() async {
+    String username = _usernameController.text.trim();
+    String email = _emailController.text.trim();
     String password = _passwordController.text;
-    String verifypassword = _verifyPasswordController.text;
-    String email = _emailController.text;
+    String verifyPassword = _verifyPasswordController.text;
     String category = selectedCategory;
 
-    // print('Username: $username');
-    // print('Password: $password');
-    // print('Verify-Password: $verifypassword');
-    // print('Email: $email');
-    // print('Category: $category');
+    if ([username, email, password, verifyPassword].any((e) => e.isEmpty)) {
+      _showMessage("Empty fields!");
+      return;
+    }
 
-    userApi.registerUser(username, email, password, category);
-    Navigator.pop(context);
-    //dispose();
+    if (password != verifyPassword) {
+      _showMessage("Password are not the same!");
+      return;
+    }
+
+    try {
+      await userApi.registerUser(username, email, password, category);
+      _showMessage("Succes!");
+      Navigator.pop(context);
+    } catch (e) {
+      _showMessage("Eroare at connect: $e");
+    }
   }
+
+  void _showMessage(String text) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -188,7 +202,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 onPressed: () {
-                  registerLogic();
+                  //registerLogic();
                   if (_emailController.text.isNotEmpty &&
                       _usernameController.text.isNotEmpty &&
                       _passwordController.text.isNotEmpty &&

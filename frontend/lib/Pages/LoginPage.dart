@@ -170,29 +170,29 @@ class _LoginPageState extends State<LoginPage> {
                 child: Text('Register now'),
               ),
 
-              TextButton(
-                style: TextButton.styleFrom(
-                  foregroundColor: Color(licentaColors.opacity | theme.colorScheme.primary.value),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                onPressed: () {
-                  User testUser = User(
-                    id: 999,
-                    username: 'testUser',
-                    email: 'dummy@example.com',
-                    age: 30,
-                    gender: 1,
-                    category: 'Tester',
-                  );
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomePage(curentUser: testUser),
-                    ),
-                  );
-                },
-                child: Text('test->mainPage'),
-              ),
+              // TextButton(
+              //   style: TextButton.styleFrom(
+              //     foregroundColor: Color(licentaColors.opacity | theme.colorScheme.primary.value),
+              //     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              //   ),
+              //   onPressed: () {
+              //     User testUser = User(
+              //       id: 999,
+              //       username: 'testUser',
+              //       email: 'dummy@example.com',
+              //       age: 30,
+              //       gender: 1,
+              //       category: 'Tester',
+              //     );
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //         builder: (context) => HomePage(curentUser: testUser),
+              //       ),
+              //     );
+              //   },
+              //   child: Text('test->mainPage'),
+              // ),
             ],
           ),
         ),
