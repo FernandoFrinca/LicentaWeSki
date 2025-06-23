@@ -196,7 +196,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       screenW: screenWidth,
                     ),
                     infoWidget(
-                      selectedData: (widget.curentUser!.getGender() == 2)?'Not Set':widget.curentUser!.getGender().toString(),
+                      selectedData: (widget.curentUser!.getGender() == 2)?'Not Set':(widget.curentUser!.getGender())==1?"Female":"Male",
                       selectedI: Icons.supervised_user_circle_rounded,
                       selectediconColor: theme.colorScheme.onSurface.value,
                       selectedtextColor: theme.colorScheme.onSurface.value,
