@@ -1,0 +1,176 @@
+create table tests
+(
+	id bigint
+);
+
+alter table tests owner to postgres;
+
+create table spatial_ref_sys
+(
+	srid integer not null
+		primary key
+		constraint spatial_ref_sys_srid_check
+			check ((srid > 0) AND (srid <= 998999)),
+	auth_name varchar(256),
+	auth_srid integer,
+	srtext varchar(2048),
+	proj4text varchar(2048)
+);
+
+alter table spatial_ref_sys owner to postgres;
+
+grant select on spatial_ref_sys to public;
+
+create table ski_resorts
+(
+	id bigint default nextval('ski_resorts_id_seq'::regclass) not null
+		primary key,
+	name varchar(255),
+	skimap bytea,
+	latitude double precision,
+	longitude double precision
+);
+
+comment on table ski_resorts is 'Tabela care retine toate resorturile';
+
+alter table ski_resorts owner to postgres;
+
+create table skislopes
+(
+	id bigint default nextval('skislopes_id_seq'::regclass) not null
+		primary key,
+	resort_id bigint not null
+		constraint fk_skiresorts
+			references ski_resorts,
+	name varchar(255),
+	difficulty varchar(255),
+	length double precision,
+	start_altitude double precision,
+	end_altitude double precision,
+	geom geometry(LineString,4326)
+);
+
+alter table skislopes owner to postgres;
+
+create table users
+(
+	id bigint default nextval('user_id_seq'::regclass) not null
+		constraint user_pkey
+			primary key,
+	username varchar(255) not null
+		constraint unique_username
+			unique,
+	email varchar(255) not null
+		constraint unique_email
+			unique,
+	password varchar(255) not null,
+	category varchar(255),
+	gender integer default 2,
+	age integer default 0,
+	profile_picture varchar(255) default 'empty'::character varying
+);
+
+alter table users owner to postgres;
+
+create table friends
+(
+	user_id_1 bigint not null
+		constraint friends_user1_fk
+			references users
+				on delete cascade,
+	user_id_2 bigint not null
+		constraint friends_user2__fk
+			references users
+				on delete cascade,
+	request_status boolean default false not null,
+	sender bigint not null,
+	primary key (user_id_1, user_id_2)
+);
+
+alter table friends owner to postgres;
+
+create table friendgroups
+(
+	id bigint default nextval('groupfriend_id_seq'::regclass) not null
+		primary key,
+	name varchar(255),
+	creator_id bigint not null,
+	group_picture varchar(255) default 'empty'::character varying
+);
+
+alter table friendgroups owner to postgres;
+
+create table group_user
+(
+	group_id bigint not null
+		constraint group_fk
+			references friendgroups,
+	user_id bigint not null
+		constraint user___fk
+			references users,
+	constraint group_user_pk
+		primary key (group_id, user_id)
+);
+
+alter table group_user owner to postgres;
+
+create table notifications
+(
+	id bigint default nextval('notifications_id_seq'::regclass) not null
+		primary key,
+	content varchar(255) not null
+		unique
+);
+
+alter table notifications owner to postgres;
+
+create table sent_notifications
+(
+	id bigint default nextval('sent_notifications_id_seq'::regclass) not null
+		primary key,
+	sender_id bigint not null
+		constraint fk_sender
+			references users
+				on delete cascade,
+	receiver_id bigint not null
+		constraint fk_receiver
+			references users
+				on delete cascade,
+	notification_id bigint not null
+		constraint fk_notification
+			references notifications
+				on delete cascade,
+	group_id bigint
+		constraint fk_group
+			references friendgroups
+				on delete set null
+);
+
+alter table sent_notifications owner to postgres;
+
+create table statistics
+(
+	id bigint default nextval('statistics_id_seq'::regclass) not null
+		primary key,
+	user_id bigint
+		constraint fk_user
+			references users
+				on delete cascade,
+	max_speed double precision,
+	total_distance double precision
+);
+
+alter table statistics owner to postgres;
+
+create table locations
+(
+	id bigint default nextval('locations_id_seq'::regclass) not null
+		primary key,
+	user_id bigint not null,
+	point geometry(Point,4326),
+	recorded_time timestamp default now()
+);
+
+alter table locations owner to postgres;
+
+
