@@ -27,6 +27,16 @@ class FriendsPage extends StatefulWidget {
 class _FriendsPageState extends State<FriendsPage> {
 
   late List<Group> groups;
+  final TextEditingController _friendController = TextEditingController();
+  final TextEditingController _groupController = TextEditingController();
+
+  @override
+  void dispose() {
+    _friendController.dispose();
+    _groupController.dispose();
+    super.dispose();
+  }
+
 
   @override
   void initState() {
@@ -47,8 +57,7 @@ class _FriendsPageState extends State<FriendsPage> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenDiagonal = sqrt(pow(screenWidth,2)+pow(screenHeight,2));
     double cardHeight = screenHeight * 0.21;
-    final TextEditingController _friendController = TextEditingController();
-    final TextEditingController _groupController = TextEditingController();
+
     double friendsHeight = screenHeight * 0.1;
     return Scaffold(
       appBar: AppBar(

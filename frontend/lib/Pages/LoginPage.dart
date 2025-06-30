@@ -37,6 +37,12 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,12 +51,6 @@ class _LoginPageState extends State<LoginPage> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     User? currentUser;
-
-    @override
-    void dispose() {
-      _usernameController.dispose();
-      _passwordController.dispose();
-    }
 
     return Scaffold(
 
@@ -63,8 +63,6 @@ class _LoginPageState extends State<LoginPage> {
               Container(
                 width: screenWidth * 0.8,
                 height: screenHeight * 0.17,
-                //color: theme.colorScheme.primary,
-                //child: Image(image: AssetImage("assets/goggles_darkmode.png"),),
                 child: Image(image: AssetImage(theme.brightness == lightTheme.brightness? "assets/goggles_lightmode.png": "assets/goggles_darkmode.png")),
               ),
               SizedBox(
@@ -141,7 +139,6 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       );
                     }
-                    else{}
                   },
                   child: const Text('Log In'),
                 ),

@@ -64,52 +64,52 @@ class _ProfilePageState extends State<ProfilePage> {
         children: [
 
           Positioned(
-            right: screenWidth * 0.045,
-            bottom: screenHeight * 0.665,
-            child: ClipPath(
-              clipper: customTriangle(),
-              child: Container(
-                color: Color(theme.colorScheme.surface.value),
-                width: screenWidth * 0.35,
-                height: screenHeight * 0.105,
-              ),
-            )
+              right: screenWidth * 0.045,
+              bottom: screenHeight * 0.665,
+              child: ClipPath(
+                clipper: customTriangle(),
+                child: Container(
+                  color: Color(theme.colorScheme.surface.value),
+                  width: screenWidth * 0.35,
+                  height: screenHeight * 0.105,
+                ),
+              )
           ),
           Positioned(
-            right: screenWidth * 0.0004,
-            bottom: screenHeight * 0.682,
-            child: ClipPath(
-              clipper: customTriangle(),
-              child: Container(
-                color: Color(theme.colorScheme.surface.value),
-                width: screenWidth * 0.2,
-                height: screenHeight * 0.06,
-              ),
-            )
+              right: screenWidth * 0.0004,
+              bottom: screenHeight * 0.682,
+              child: ClipPath(
+                clipper: customTriangle(),
+                child: Container(
+                  color: Color(theme.colorScheme.surface.value),
+                  width: screenWidth * 0.2,
+                  height: screenHeight * 0.06,
+                ),
+              )
           ),
           Positioned(
-            right: screenWidth * 0.13,
-            bottom: screenHeight * 0.645,
-            child: ClipPath(
-              clipper: customTriangle(),
-              child: Container(
-                color: Color(theme.colorScheme.surface.value),
-                width: screenWidth * 0.35,
-                height: screenHeight * 0.105,
-              ),
-            )
+              right: screenWidth * 0.13,
+              bottom: screenHeight * 0.645,
+              child: ClipPath(
+                clipper: customTriangle(),
+                child: Container(
+                  color: Color(theme.colorScheme.surface.value),
+                  width: screenWidth * 0.35,
+                  height: screenHeight * 0.105,
+                ),
+              )
           ),
           Positioned(
-            right: screenWidth * 0.18,
-            bottom: screenHeight * 0.625,
-            child: ClipPath(
-              clipper: customTriangle(),
-              child: Container(
-                color: Color(theme.colorScheme.surface.value),
-                width: screenWidth * 0.37,
-                height: screenHeight * 0.105,
-              ),
-            )
+              right: screenWidth * 0.18,
+              bottom: screenHeight * 0.625,
+              child: ClipPath(
+                clipper: customTriangle(),
+                child: Container(
+                  color: Color(theme.colorScheme.surface.value),
+                  width: screenWidth * 0.37,
+                  height: screenHeight * 0.105,
+                ),
+              )
           ),
           Align(
             alignment: Alignment.bottomCenter,
@@ -131,45 +131,45 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 child: Column(
                   children: [
-                     Row(
-                       children: [
-                         Padding(
-                           padding:EdgeInsets.only(
-                             left: screenWidth * 0.03,
-                           ),
-                           child: Icon(
-                             Icons.dark_mode_sharp,
-                             size: screenWidth * 0.08,
-                             color: Colors.blueGrey,
-                           ),
-                         ),
-                         Padding(
-                           padding:EdgeInsets.only(
-                             left: screenWidth * 0.01,
-                           ),
-                           child: AutoSizeText(
-                             "DarkMode",
-                             style: TextStyle(
-                               fontSize: screenWidth * 0.045,
-                             ),
-                           ),
-                         ),
-                         Spacer(),
-                         Padding(
-                           padding:EdgeInsets.only(
-                             right: screenWidth * 0.03,
-                           ),
-                           child: Container(
-                             decoration: BoxDecoration(
-                               borderRadius: BorderRadius.circular(90),
-                               color: theme.brightness == lightTheme.brightness? Colors.red : Colors.green,
-                             ),
-                             width: screenDiagonal * 0.022,
-                             height: screenDiagonal * 0.022,
-                           ),
-                         )
-                       ],
-                     ),
+                    Row(
+                      children: [
+                        Padding(
+                          padding:EdgeInsets.only(
+                            left: screenWidth * 0.03,
+                          ),
+                          child: Icon(
+                            Icons.dark_mode_sharp,
+                            size: screenWidth * 0.08,
+                            color: Colors.blueGrey,
+                          ),
+                        ),
+                        Padding(
+                          padding:EdgeInsets.only(
+                            left: screenWidth * 0.01,
+                          ),
+                          child: AutoSizeText(
+                            "DarkMode",
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.045,
+                            ),
+                          ),
+                        ),
+                        Spacer(),
+                        Padding(
+                          padding:EdgeInsets.only(
+                            right: screenWidth * 0.03,
+                          ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(90),
+                              color: theme.brightness == lightTheme.brightness? Colors.red : Colors.green,
+                            ),
+                            width: screenDiagonal * 0.022,
+                            height: screenDiagonal * 0.022,
+                          ),
+                        )
+                      ],
+                    ),
                     Divider(color: Colors.grey.shade300, thickness: 1.0),
                     infoWidget(
                       selectedData: widget.curentUser!.getUsername(),
@@ -223,16 +223,29 @@ class _ProfilePageState extends State<ProfilePage> {
                         paddingWidth: 0.03,
                         paddingHeight: 0.01,
                         onTap: () async {
+
                           final result = await Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => editProfilePage(curentUser: widget.curentUser, imageUpdateNotifie:profileImageNotifier),
+                              builder: (context) => editProfilePage(
+                                curentUser: widget.curentUser,
+                                imageUpdateNotifie: profileImageNotifier,
+                              ),
                             ),
                           );
 
-                          if (result == true) {
-                            setState(() {});
+                          if (result != null && result is User) {
+                            setState(() {
+                              widget.curentUser!
+                                ..username = result.username
+                                ..email = result.email
+                                ..age = result.age
+                                ..gender = result.gender
+                                ..category = result.category;
+                            });
                           }
+
+
                         },
                         iconSize: screenWidth * 0.08,
                         paddingText: screenWidth * 0.01
@@ -310,7 +323,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 MaterialPageRoute(builder: (context) => LoginPage()),
                                                     (Route<dynamic> route) => false,
                                               );
-                                              },
+                                            },
                                             iconSize: screenWidth * 0.08,
                                             paddingText: screenWidth * 0.01,
                                           ),
@@ -350,7 +363,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   Padding(
                     padding: EdgeInsets.only(
-                        left: screenWidth * 0.02,
+                      left: screenWidth * 0.02,
                     ),
                     child:  Text(
                       widget.curentUser!.getCategory(),

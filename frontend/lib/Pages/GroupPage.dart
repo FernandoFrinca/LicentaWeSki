@@ -31,6 +31,12 @@ class _groupPageState extends State<groupPage> {
   int selectedIndex = 0;
 
   @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     currentGroup = widget.group;
