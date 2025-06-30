@@ -32,11 +32,11 @@ class ChatBotPageState extends State<ChatBotPage> {
   ValueNotifier<List<Map<String, dynamic>>> messagesNotifier = ValueNotifier<List<Map<String, dynamic>>>([]);
   final OpenAiApi openAiApi = OpenAiApi();
   List<String> quickQuestions = [
-    "Care este cea mai apropiata statiune? La cati km?",
-    "Pognoza meteo pe 5 zile la cel mai apropiat resort",
-    "Care sunt condițiile meteo pentru acest weekend?",
     "Cum aleg un snowboard potrivit?",
     "Cum aleg ski-uri potrivite?",
+    "Cum evit accidentele la ski?",
+    "Ce poti sa imi spui despre resortul Straja?",
+    "Care e temperatura perfecta pt ski?",
   ];
 
 
@@ -70,6 +70,14 @@ class ChatBotPageState extends State<ChatBotPage> {
     getUserPhoto();
     super.initState();
   }
+  @override
+  void dispose() {
+    messageController.dispose();
+    scrollController.dispose();
+    messagesNotifier.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {

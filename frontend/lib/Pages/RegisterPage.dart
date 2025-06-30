@@ -202,7 +202,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 onPressed: () {
-                  //registerLogic();
                   if (_emailController.text.isNotEmpty &&
                       _usernameController.text.isNotEmpty &&
                       _passwordController.text.isNotEmpty &&

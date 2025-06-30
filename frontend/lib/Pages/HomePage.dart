@@ -59,6 +59,18 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  @override
+  void dispose() {
+    speedNotifier.dispose();
+    totalDistanceNotifier.dispose();
+    averageSpeedNotifier.dispose();
+    maxAltitudeNotifier.dispose();
+    currentLocationNotifier.dispose();
+    userTrakNotifier.dispose();
+    super.dispose();
+  }
+
+
   void _updatePolylines(Set<Polyline> newPolylines) {
     setState(() {
       set_polylines = newPolylines;

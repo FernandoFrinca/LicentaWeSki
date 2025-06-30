@@ -49,6 +49,17 @@ class _editProfilePageState extends State<editProfilePage> {
         ? null
         : widget.curentUser!.gender;
   }
+  @override
+  void dispose() {
+    userController.dispose();
+    emailController.dispose();
+    ageController.dispose();
+    genderController.dispose();
+    passwordController.dispose();
+    verifyPasswordController.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -311,7 +322,15 @@ class _editProfilePageState extends State<editProfilePage> {
                                   widget.imageUpdateNotifie.value = uploadedUrl;
                                 }
 
-                                Navigator.pop(context,true);
+                                User updatedUser = User();
+                                updatedUser.id = widget.curentUser!.id;
+                                updatedUser.username = userController.text.isNotEmpty ? userController.text : widget.curentUser!.getUsername();
+                                updatedUser.email = emailController.text.isNotEmpty ? emailController.text : widget.curentUser!.getEmail();
+                                updatedUser.age = ageController.text.isNotEmpty ? int.tryParse(ageController.text) : widget.curentUser!.getAge();
+                                updatedUser.gender = gender ?? widget.curentUser!.getGender();
+                                updatedUser.category = selectedCategory ?? widget.curentUser!.getCategory();
+
+                                Navigator.pop(context, updatedUser);
                               },
                               iconSize: screenWidth * 0.08,
                               paddingText: screenWidth * 0.01
